@@ -1,5 +1,6 @@
 pragma solidity ^0.5.2;
 
+//import {Verifier as LiquidateNoteVerifier} from "./verifiers/LiquidateNoteVerifier.sol";
 import {Verifier as LiquidateNoteVerifier} from "./verifiers/LiquidateNoteVerifier.sol";
 import "./ZkDaiBase.sol";
 
@@ -73,7 +74,7 @@ contract LiquidateNotes is LiquidateNoteVerifier, ZkDaiBase {
         input[i] = submission.publicInput[i];
       }
       // zk circuit for mint and liquidate is same
-      if (!verifyTx(a, b, c, input)) {
+      if (!liquidateVerifyTx(a, b, c, input)) {
         // challenge passed
         delete submissions[proofHash];
         msg.sender.transfer(stake);

@@ -62,7 +62,7 @@ contract MintNotes is MintNoteVerifier, ZkDaiBase {
       for(uint i = 0; i < NUM_PUBLIC_INPUTS; i++) {
         input[i] = submission.publicInput[i];
       }
-      if (!verifyTx(a, b, c, input)) {
+      if (!mintVerifyTx(a, b, c, input)) {
         // challenge passed
         delete submissions[proofHash];
         msg.sender.transfer(stake);

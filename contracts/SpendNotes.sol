@@ -80,7 +80,7 @@ contract SpendNotes is SpendNoteVerifier, ZkDaiBase {
       for(uint i = 0; i < NUM_PUBLIC_INPUTS; i++) {
         input[i] = submission.publicInput[i];
       }
-      if (!verifyTx(a, b, c, input)) {
+      if (!spendVerifyTx(a, b, c, input)) {
         // challenge passed
         delete submissions[proofHash];
         msg.sender.transfer(stake);
