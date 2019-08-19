@@ -1,0 +1,14 @@
+import "hashes/sha256/512bitPacked.code" as sha256packed
+
+def main(field nh0, field nh1, field value, private field sk0, private field sk1, private field nonce) -> (field):
+  // compute pk0, pk1 from sk0, sk1
+  // get public key corresponding to secret key
+  // circuit for above hasn't been implemented as yet, so directly using the secret key for PoC
+  // field pk0 = sk0
+  // field pk1 = sk1
+  // h = sha256packed([pk0, pk1, oVal, oNonce])
+
+  h = sha256packed([sk0, sk1, value, nonce])
+  h[0] == nh0
+  h[1] == nh1
+  return 1
