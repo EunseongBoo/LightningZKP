@@ -1,1 +1,0 @@
-Lightning ZKP on ETH
