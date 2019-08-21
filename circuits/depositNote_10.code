@@ -1,0 +1,35 @@
+import "hashes/sha256/512bitPacked.code" as sha256packed
+
+def main(field oh0, field oh1, field sh00, field sh01, field sh10, field sh11, field rh00, field rh01, field rh10, field rh11, field ch00, field ch01 ,field noteNum, field nVal, private field sk0, private field sk1, private field oVal, private field oNonce, private field mpk0, private field mpk1, private field sNonce0, private field sNonce1, private field rpk0, private field rpk1, private field rNonce0, private field rNonce1, private field cNonce) -> (field):
+
+  1 == if oVal >= noteNum * nVal then 1 else 0 fi
+  field change = oVal - noteNum*nVal
+
+  h = sha256packed([sk0, sk1, oVal, oNonce])
+  oh0 == h[0]
+  oh1 == h[1]
+
+  //notes for sender
+  h = sha256packed([mpk0, mpk1, nVal, sNonce0])
+  sh00 == h[0]
+  sh01 == h[1]
+
+  h = sha256packed([mpk0, mpk1, nVal, sNonce1])
+  sh10 == h[0]
+  sh11 == h[1]
+
+  //notes for receiver
+  h = sha256packed([rpk0, rpk1, nVal, rNonce0])
+  rh00 == h[0]
+  rh01 == h[1]
+
+  h = sha256packed([rpk0, rpk1, nVal, rNonce1])
+  rh10 == h[0]
+  rh11 == h[1]
+
+  //A note for sender's change
+  h = sha256packed([sk0, sk1, change, cNonce])
+  ch00 == h[0]
+  ch01 == h[1]
+
+  return 1

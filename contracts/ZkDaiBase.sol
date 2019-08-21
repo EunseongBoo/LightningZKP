@@ -8,7 +8,7 @@ contract ZkDaiBase {
   uint256 public stake;
   ERC20 public dai;
 
-  enum SubmissionType {Invalid, Mint, Spend, Liquidate}
+  enum SubmissionType {Invalid, Mint, Spend, Liquidate, Deposit}
   struct Submission {
     address payable submitter;
     SubmissionType sType;
@@ -18,7 +18,7 @@ contract ZkDaiBase {
   // maps proofHash to Submission
   mapping(bytes32 => Submission) public submissions;
 
-  enum State {Invalid, Committed, Spent}
+  enum State {Invalid, Committed, Spent, Deposit}
   // maps note to State
   mapping(bytes32 => State) public notes;
 
