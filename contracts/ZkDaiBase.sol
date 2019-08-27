@@ -8,6 +8,24 @@ contract ZkDaiBase {
   uint256 public stake;
   ERC20 public dai;
 
+  //DepositNotes struct is for deposit function
+  //notes_num:
+  //last_nonce: If recevier submit a last signed message, then the last nonce will be updated to the signed message's nonce to prevent replay attack
+  //senderNotes:
+  //receiverNotes:
+  struct DepositPool {
+    address mpkAddress;
+    //address targetAddress;
+    uint expiredTime;
+    uint8 maxNotesNum;
+    uint8 lastNotesNum; // 0 ~ 255
+    //uint lastNonce;
+    bytes32[] senderNotes;
+    bytes32[] receiverNotes;
+  }
+  //maps poolID to DepositNotes
+  mapping(bytes32 => DepositPool) public depositPools;
+
   enum SubmissionType {Invalid, Mint, Spend, Liquidate, Deposit}
   struct Submission {
     address payable submitter;
