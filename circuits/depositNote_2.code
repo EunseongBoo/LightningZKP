@@ -1,35 +1,53 @@
 import "hashes/sha256/512bitPacked.code" as sha256packed
+import "hashes/sha256/1024bit.code" as sha256
+import "utils/pack/nonStrictUnpack256.code" as unpack256
+import "utils/pack/pack256.code" as pack256
+import "ecc/proofOfOwnership.code" as proofOfOwnership
+import "ecc/babyjubjubParams.code" as context
+import "utils/pack/unpack128.code" as unpack128
 
-def main(field mpk0, field mpk1, field noteNum, field nVal, field oh0, field oh1, field sh00, field sh01, field sh10, field sh11, field rh00, field rh01, field rh10, field rh11, field ch00, field ch01, private field sk0, private field sk1, private field oVal, private field oNonce, private field sNonce0, private field sNonce1, private field rpk0, private field rpk1, private field rNonce0, private field rNonce1, private field cNonce) -> (field):
+def main(field[2] oh, field[4] sh, field[4] rh, field[2] ch, field[4] mpk, field noteNum, field value, private field oValue, private field oNonce, private field[2] sNonce, private field[2] rNonce, private field cNonce, private field[4] pk, private field sk, private field[4] rpk) -> (field):
 
-  1 == if oVal >= noteNum * nVal then 1 else 0 fi
-  field change = oVal - noteNum*nVal
+  1 == if oValue >= noteNum * value then 1 else 0 fi
+  field change = oValue - noteNum * value
 
-  h = sha256packed([sk0, sk1, oVal, oNonce])
-  oh0 == h[0]
-  oh1 == h[1]
+  //prove the sender's pk
+  context = context()
+  a = unpack128(pk[0])
+  b = unpack128(pk[1])
+  c = unpack128(pk[2])
+  d = unpack128(pk[3])
+  proofOfOwnership([pack256([...a,...b]),pack256([...c,...d])],sk,context) == 1
 
-  //notes for sender
-  h = sha256packed([mpk0, mpk1, nVal, sNonce0])
-  sh00 == h[0]
-  sh01 == h[1]
+  h = sha256packed(pk)
+  h = sha256packed([h[0],h[1],oValue,oNonce])
+  h[0] == oh[0]
+  h[1] == oh[1]
 
-  h = sha256packed([mpk0, mpk1, nVal, sNonce1])
-  sh10 == h[0]
-  sh11 == h[1]
+  //deposit notes for sender
+  mpkHash = sha256packed(mpk)
+  h = sha256packed([mpkHash[0],mpkHash[1],value,sNonce[0]])
+  h[0] == sh[0]
+  h[1] == sh[1]
 
-  //notes for receiver
-  h = sha256packed([rpk0, rpk1, nVal, rNonce0])
-  rh00 == h[0]
-  rh01 == h[1]
+  h = sha256packed([mpkHash[0],mpkHash[1],value,sNonce[1]])
+  h[0] == sh[2]
+  h[1] == sh[3]
 
-  h = sha256packed([rpk0, rpk1, nVal, rNonce1])
-  rh10 == h[0]
-  rh11 == h[1]
+  //deposit notes for receiver
+  rpkHash = sha256packed(rpk)
+  h = sha256packed([rpkHash[0],rpkHash[1],value,rNonce[0]])
+  h[0] == rh[0]
+  h[1] == rh[1]
+
+  h = sha256packed([rpkHash[0],rpkHash[1],value,rNonce[1]])
+  h[0] == rh[2]
+  h[1] == rh[3]
 
   //A note for sender's change
-  h = sha256packed([sk0, sk1, change, cNonce])
-  ch00 == h[0]
-  ch01 == h[1]
+  pkHash = sha256packed(pk)
+  h = sha256packed([pkHash[0],pkHash[1],change,cNonce])
+  h[0] == ch[0]
+  h[1] == ch[1]
 
   return 1
