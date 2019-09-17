@@ -40,10 +40,21 @@ function getCreateNoteParams(_spk, _ssk, _mpk, _rpk, _ovalue, _nvalue, _notenum,
   console.log('rpk: ', rpk);
 
   //original note's value, new note's value, notenum
+  let _cvalue = _ovalue - _nvalue*_notenum;
+  let _test = "30";
   let ovalue = new BN(_ovalue, 16).mul(SCALING_FACTOR).toString(16, 32); // 16 bytes = 128 bits
-  let nvalue = new BN(_nvalue, 16).mul(SCALING_FACTOR).toString(16, 32); // new deposit note's value
-  let notenum = new BN(_notenum, 16).mul(SCALING_FACTOR).toString(16, 32);
-
+  let test = new BN(_test, 16).mul(SCALING_FACTOR).toString(16, 32);
+  //let nvalue = new BN(_nvalue, 16).mul(SCALING_FACTOR).toString(16, 32); // new deposit note's value
+  let nvalue = new BN(3, 16).mul(SCALING_FACTOR).toString(16, 32);
+  let notenum = new BN(_notenum, 16).toString(16, 32);
+  let cvalue = new BN(_cvalue, 16).mul(SCALING_FACTOR).toString(16, 32);
+  console.log("_ovalue:",_ovalue);
+  console.log("_nvalue:",_nvalue);
+  console.log("_notenum:",_notenum);
+  console.log("ovalue:",ovalue);
+  console.log("nvalue:",nvalue);
+  console.log("notenum:",notenum);
+  console.log("test:",test);
   //nonce
   let ononce = new BN(_ononce, 16).toString(16, 32); // 16 bytes = 128 bits, original note's nonce
   let snonce1 = new BN(_snonce0, 16).toString(16, 32); // sender note's nonce
@@ -56,9 +67,6 @@ function getCreateNoteParams(_spk, _ssk, _mpk, _rpk, _ovalue, _nvalue, _notenum,
   let spkHash = getPublicKeyHash(spk.slice(0, 32) + spk.slice(32, 64) + spk.slice(64,96) + spk.slice(96));
   let mpkHash = getPublicKeyHash(mpk.slice(0, 32) + mpk.slice(32, 64) + mpk.slice(64,96) + mpk.slice(96));
   let rpkHash = getPublicKeyHash(rpk.slice(0, 32) + rpk.slice(32, 64) + rpk.slice(64,96) + rpk.slice(96));
-
-  //calculate change
-  let cvalue = ovalue - nvalue*notenum;
 
   // create note
   let onote = spkHash + ovalue + ononce;
@@ -76,7 +84,8 @@ function getCreateNoteParams(_spk, _ssk, _mpk, _rpk, _ovalue, _nvalue, _notenum,
   let rh2 = getNoteHash(rnote2);
   let ch = getNoteHash(cnote);
 
-  let publicParams = [oh, sh1, sh2, rh1, rh2, ch, mpk.slice(0,32), mpk.slice(32, 64), mpk.slice(64, 96), mpk.slice(96), notenum, nvalue];
+  //let publicParams = [oh, sh1, sh2, rh1, rh2, ch, mpk.slice(0,32), mpk.slice(32, 64), mpk.slice(64, 96), mpk.slice(96), notenum, nvalue];
+  let publicParams = oh.concat(sh1, sh2, rh1, rh2, ch, [mpk.slice(0,32), mpk.slice(32, 64), mpk.slice(64, 96), mpk.slice(96), notenum, nvalue]);
   let privateParams = [ovalue, ononce, snonce1, snonce2, rnonce1, rnonce2, cnonce, spk.slice(0,32), spk.slice(32,64), spk.slice(64,96), spk.slice(96), ssk, rpk.slice(0,32), rpk.slice(32,64), rpk.slice(64,96), rpk.slice(96)]
   //let privateParams = [pubKey.slice(0, 32), pubKey.slice(32, 64), pubKey.slice(64,96), pubKey.slice(96), ononce, secKey];
   //let privateParams = [pubKey.slice(0, 64), pubKey.slice(64), nonce];
@@ -84,9 +93,13 @@ function getCreateNoteParams(_spk, _ssk, _mpk, _rpk, _ovalue, _nvalue, _notenum,
   //let onote = pubKeyHash + ovalue + ononce;
   //console.log('original note', onote);
   //let publicParams = getNoteHash(onote).concat(ovalue);
-  printZokratesCommand(publicParams.concat(privateParams));
+  //console.log("PublicParams length:", publicParams.length);
+  //console.log("Private length:", privateParams.length);
 
-  /*
+  printZokratesCommand(publicParams.concat(privateParams));
+  //console.log("oh:",oh);
+  //console.log("public[0]:",publicParams[0].length);
+    /*
   console.log('private', privateParams);
   let note = pubKey + value + nonce;
   console.log('note', note);
@@ -113,9 +126,9 @@ getCreateNoteParams(
   'f8f8a2f43c8376ccb0871305060d7b27b0554d2cc72bccf41b2705608452f315', // sk
   '6e145ccef1033dea239875dd00dfb4fee6e3348b84985c92f103444683bae07b83b5c38e5e2b0c8529d7fa3f64d46daa1ece2d9ac14cab9477d042c84c32ccd0', //mpk
   '6e145ccef1033dea239875dd00dfb4fee6e3348b84985c92f103444683bae07b83b5c38e5e2b0c8529d7fa3f64d46daa1ece2d9ac14cab9477d042c84c32ccd0', //rpk
-  '30', // oValue
-  '3', // Value
-  '2', // NoteNum
+  30, // oValue
+  3, // Value
+  2, // NoteNum
   'c517f646255d5492089b881965cbd3da', // oNonce
   'c517f646255d5492089b881965cbd3db', // sNonce[0]
   'c517f646255d5492089b881965cbd3dc', // sNonce[1]

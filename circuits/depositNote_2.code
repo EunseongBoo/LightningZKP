@@ -7,8 +7,8 @@ import "ecc/babyjubjubParams.code" as context
 import "utils/pack/unpack128.code" as unpack128
 
 def main(field[2] oh, field[4] sh, field[4] rh, field[2] ch, field[4] mpk, field noteNum, field value, private field oValue, private field oNonce, private field[2] sNonce, private field[2] rNonce, private field cNonce, private field[4] pk, private field sk, private field[4] rpk) -> (field):
-
-  1 == if oValue >= noteNum * value then 1 else 0 fi
+  
+  1 == if oValue >= (noteNum * value) then 1 else 0 fi
   field change = oValue - noteNum * value
 
   //prove the sender's pk
