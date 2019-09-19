@@ -5,8 +5,9 @@ import "./ZkDaiBase.sol";
 
 
 contract DepositNotes is DepositNoteVerifier, ZkDaiBase {
-  uint8 internal constant NUM_PUBLIC_INPUTS = 17;
+  uint8 internal constant NUM_PUBLIC_INPUTS = 19;
   uint8 internal constant NUM_DEPOSIT_NOTES = 4;
+  uint8 internal constant NUM_ALL_NOTES = 2 + NUM_DEPOSIT_NOTES; //original note + change note + deposit notes
   /**
   * @dev Hashes the submitted proof and adds it to the submissions mapping that tracks
   *      submission time, type, public inputs of the zkSnark and the submitter
@@ -35,12 +36,12 @@ contract DepositNotes is DepositNoteVerifier, ZkDaiBase {
     internal
   {
       Submission storage submission = submissions[proofHash];
-      bytes32[NUM_DEPOSIT_NOTES+1] memory _notes = getDepositNotes(submission.publicInput);
+      bytes32[NUM_ALL_NOTES] memory _notes = getAllNotes(submission.publicInput);
 
       // check that the first note (among public params) is committed and
       require(notes[_notes[0]] == State.Committed, "Note is either invalid or already spent");
       // check that the deposit notes is already minted.
-      for(uint i=1; i<NUM_DEPOSIT_NOTES; i++){
+      for(uint i=1; i<NUM_DEPOSIT_NOTES+2; i++){
         require(notes[_notes[i]] == State.Invalid, "output note is already minted");
       }
 
@@ -57,7 +58,7 @@ contract DepositNotes is DepositNoteVerifier, ZkDaiBase {
         emit NoteStateChange(_notes[i], State.Deposit);
       }
 
-      bytes32 poolId = keccak256(abi.encodePacked(_notes[0],now);
+      bytes32 poolId = keccak256(abi.encodePacked(_notes[0],now));
       address mpkAddress = submission.publicInput[0]+submission.publicInput[1];
       bytes32[] senderNotes = ;
       bytes32[] receiverNotes = ;
@@ -65,13 +66,13 @@ contract DepositNotes is DepositNoteVerifier, ZkDaiBase {
       depositPools[poolId] = DepositPool(mpkAddress, now + expectedTime, NUM_DEPOSIT_NOTES/2, 0, senderNotes, receiverNotes);
   }
 
-  function getDepositNotes(uint256[] memory input)
+  function getAllNotes(uint256[] memory input)
     internal
     pure
-    returns(bytes32[NUM_DEPOSIT_NOTES+1] memory notes)
+    returns(bytes32[NUM_ALL_NOTES] memory notes)
   {
-      for(uint i=0; i<NUM_DEPOSIT_NOTES; i++){
-        notes[i] = calcNoteHash(input[i*2+4], input[i*2+5]);
+      for(uint i=0; i<NUM_ALL_NOTES; i++){
+        notes[i] = calcNoteHash(input[i*2], input[i*2+1]);
       }
   }
 
