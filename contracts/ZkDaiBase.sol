@@ -8,7 +8,7 @@ contract ZkDaiBase {
   uint256 public stake;
   ERC20 public dai;
 
-  uint8 internal constant NUM_DEPOSIT_NOTES = 4; // sender's notes 0,1 and receiver's notes 0,1
+  //uint8 internal constant NUM_DEPOSIT_NOTES = 4; // sender's notes 0,1 and receiver's notes 0,1
   uint internal constant poolTime = 10 minutes;
   //DepositNotes struct is for deposit function
   //notes_num:
@@ -19,11 +19,11 @@ contract ZkDaiBase {
     address mpkAddress;
     //address targetAddress;
     uint expiredTime;
-    uint8 maxNotesNum;
-    uint8 lastNotesNum; // 0 ~ 255
+    uint8 maxNotesNum; //init: NUM_DEPOSIT_NOTES/2
+    uint8 lastNotesNum; // init:0
     //uint lastNonce;
-    bytes32[NUM_DEPOSIT_NOTES/2] senderNotes;
-    bytes32[NUM_DEPOSIT_NOTES/2] receiverNotes;
+    bytes32[] senderNotes;
+    bytes32[] receiverNotes;
   }
   //maps poolID to DepositNotes
   mapping(bytes32 => DepositPool) public depositPools;

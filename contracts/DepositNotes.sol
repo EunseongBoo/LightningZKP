@@ -8,6 +8,7 @@ contract DepositNotes is DepositNoteVerifier, ZkDaiBase {
   uint8 internal constant NUM_PUBLIC_INPUTS = 19;
   uint8 internal constant NUM_DEPOSIT_NOTES = 4;
   uint8 internal constant NUM_ALL_NOTES = 2 + NUM_DEPOSIT_NOTES; //original note + change note + deposit notes
+  uint8 internal constant MPK_INDEX = NUM_DEPOSIT_NOTES*2+2+2; //deposit_notes (2*deposit_notes_num) + original note (2) + change note (2)
   /**
   * @dev Hashes the submitted proof and adds it to the submissions mapping that tracks
   *      submission time, type, public inputs of the zkSnark and the submitter
@@ -41,14 +42,15 @@ contract DepositNotes is DepositNoteVerifier, ZkDaiBase {
       // check that the first note (among public params) is committed and
       require(notes[_notes[0]] == State.Committed, "Note is either invalid or already spent");
       // check that the deposit notes is already minted.
-      for(uint i=1; i<NUM_DEPOSIT_NOTES+2; i++){
-        require(notes[_notes[i]] == State.Invalid, "output note is already minted");
+      for(uint i=1; i<NUM_ALL_NOTES; i++){
+        require(notes[_notes[i]] == State.Invalid, "New note is already minted");
       }
 
-      notes[_notes[0]] = State.Spent;
+      notes[_notes[0]] = State.Spent; // Change the state of an original note.
       for(uint i=1; i<NUM_DEPOSIT_NOTES; i++){
         notes[_notes[i]] = State.Deposit;
       }
+      notes[_notes[NUM_ALL_NOTES-1]] = State.Committed; // Change the state of a "change note".
 
       delete submissions[proofHash];
       submission.submitter.transfer(stake);
@@ -57,12 +59,22 @@ contract DepositNotes is DepositNoteVerifier, ZkDaiBase {
       for(uint i=1; i<NUM_DEPOSIT_NOTES; i++){
         emit NoteStateChange(_notes[i], State.Deposit);
       }
+      emit NoteStateChange(_notes[NUM_ALL_NOTES-1], State.Committed);
 
       bytes32 poolId = keccak256(abi.encodePacked(_notes[0],now));
-      address mpkAddress = submission.publicInput[0]+submission.publicInput[1];
-      bytes32[] senderNotes = ;
-      bytes32[] receiverNotes = ;
 
+      //Testing for getMpkAddress function is needed.
+      address mpkAddress = getMpkAddress(submission.publicInput[MPK_INDEX],submission.publicInput[MPK_INDEX+1],submission.publicInput[MPK_INDEX+2],submission.publicInput[MPK_INDEX+3]); //needs to be modified
+
+      bytes32[] memory senderNotes = new bytes32[](NUM_DEPOSIT_NOTES/2);
+      for(uint i =0; i< NUM_DEPOSIT_NOTES/2; i++){
+        senderNotes[i] = _notes[i+1];
+      }
+      bytes32[] memory receiverNotes = new bytes32[](NUM_DEPOSIT_NOTES/2);
+      for(uint i = 0; i< NUM_DEPOSIT_NOTES/2; i++) {
+        receiverNotes[i] = _notes[i+NUM_DEPOSIT_NOTES/2+1];
+      }
+      uint expectedTime = 5 minutes;
       depositPools[poolId] = DepositPool(mpkAddress, now + expectedTime, NUM_DEPOSIT_NOTES/2, 0, senderNotes, receiverNotes);
   }
 
@@ -139,7 +151,7 @@ contract DepositNotes is DepositNoteVerifier, ZkDaiBase {
   }
 
   //check Pool is expired. If pool is expired, then change the remain sender notes' state to avaliable. Also change the remain reciever notes' state to spent(unavailable).
-  function checkPoolIsExpired(bytes32 poolId) public {
+  function ClaimExpiredPool(bytes32 poolId) public { //ClaimExpiredPool
 
     DepositPool storage dp = depositPools[poolId];
     require(dp.expiredTime < now, "Not expired yet");
