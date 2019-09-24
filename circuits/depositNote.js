@@ -41,10 +41,7 @@ function getCreateNoteParams(_spk, _ssk, _mpk, _rpk, _ovalue, _nvalue, _notenum,
 
   //original note's value, new note's value, notenum
   let _cvalue = _ovalue - _nvalue*_notenum;
-  let _test = "30";
   let ovalue = new BN(_ovalue, 16).mul(SCALING_FACTOR).toString(16, 32); // 16 bytes = 128 bits
-  let test = new BN(_test, 16).mul(SCALING_FACTOR).toString(16, 32);
-  //let nvalue = new BN(_nvalue, 16).mul(SCALING_FACTOR).toString(16, 32); // new deposit note's value
   let nvalue = new BN(3, 16).mul(SCALING_FACTOR).toString(16, 32);
   let notenum = new BN(_notenum, 16).toString(16, 32);
   let cvalue = new BN(_cvalue, 16).mul(SCALING_FACTOR).toString(16, 32);
@@ -54,7 +51,6 @@ function getCreateNoteParams(_spk, _ssk, _mpk, _rpk, _ovalue, _nvalue, _notenum,
   console.log("ovalue:",ovalue);
   console.log("nvalue:",nvalue);
   console.log("notenum:",notenum);
-  console.log("test:",test);
   //nonce
   let ononce = new BN(_ononce, 16).toString(16, 32); // 16 bytes = 128 bits, original note's nonce
   let snonce1 = new BN(_snonce0, 16).toString(16, 32); // sender note's nonce

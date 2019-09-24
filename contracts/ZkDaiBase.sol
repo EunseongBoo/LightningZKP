@@ -10,6 +10,7 @@ contract ZkDaiBase {
 
   //uint8 internal constant NUM_DEPOSIT_NOTES = 4; // sender's notes 0,1 and receiver's notes 0,1
   uint internal constant poolTime = 10 minutes;
+  
   //DepositNotes struct is for deposit function
   //notes_num:
   //last_nonce: If recevier submit a last signed message, then the last nonce will be updated to the signed message's nonce to prevent replay attack
