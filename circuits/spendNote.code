@@ -1,24 +1,34 @@
 import "hashes/sha256/512bitPacked.code" as sha256packed
+import "ecc/proofOfOwnership.code" as proofOfOwnership
+import "ecc/babyjubjubParams.code" as context
+import "utils/pack/unpack128.code" as unpack128
+import "utils/pack/pack256.code" as pack256
 
-def main(field oh0, field oh1, private field sk0, private field sk1, private field oVal, private field oNonce, field n0h0, field n0h1, private field rpk0, private field rpk1, private field n0Val, private field n0Nonce, field n1h0, field n1h1, private field n1rpk0, private field n1rpk1, private field n1Val, private field n1Nonce) -> (field):
+def main(field[2] oh, field[2] n0h, field[2] n1h, private field [4] spk, private field ssk, private field [4] rpk, private field oVal, private field oNonce, private field n0Val, private field n0Nonce, private field n1Val, private field n1Nonce) -> (field):
   oVal == n0Val + n1Val
 
-  // get public key corresponding to secret key
-  // circuit for above hasn't been implemented as yet, so directly using the secret key for PoC
-  // field pk0 = sk0
-  // field pk1 = sk1
-  // h = sha256packed([pk0, pk1, oVal, oNonce])
+  //check pk&sk
+  context = context()
+  a = unpack128(spk[0])
+  b = unpack128(spk[1])
+  c = unpack128(spk[2])
+  d = unpack128(spk[3])
+  proofOfOwnership([pack256([...a,...b]),pack256([...c,...d])],ssk,context) == 1
 
-  h = sha256packed([sk0, sk1, oVal, oNonce])
-  oh0 == h[0]
-  oh1 == h[1]
+  h = sha256packed(spk)
+  oh_ = sha256packed([h[0],h[1],oVal,oNonce])
+  oh[0] == oh_[0]
+  oh[1] == oh_[1]
 
-  h = sha256packed([rpk0, rpk1, n0Val, n0Nonce])
-  n0h0 == h[0]
-  n0h1 == h[1]
+  //for change note
+  n1h_ = sha256packed([h[0],h[1],n1Val,n1Nonce])
+  n1h[0] == n1h_[0]
+  n1h[1] == n1h_[1]
 
-  h = sha256packed([n1rpk0, n1rpk1, n1Val, n1Nonce])
-  n1h0 == h[0]
-  n1h1 == h[1]
+  //for receiver's note
+  h = sha256packed(rpk)
+  n0h_ = sha256packed([h[0],h[1],n0Val,n0Nonce])
+  n0h[0] == n0h_[0]
+  n0h[1] == n0h_[1]
 
   return 1

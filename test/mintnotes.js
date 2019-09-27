@@ -33,7 +33,7 @@ contract('mintNote', function(accounts) {
   })
 
   it('challenge fails for correct proof', async function() {
-    const proof = util.parseProof('./test/mintNoteProof.json');
+    const proof = util.parseProof('./mintNoteProof.json');
     await dai.approve(zkdai.address, 5 * SCALING_FACTOR);
     await zkdai.mint(...proof, {value: 10**18});
 
@@ -45,8 +45,8 @@ contract('mintNote', function(accounts) {
   })
 
   it('challenge passes for incorrect proof', async function() {
-    const proof = util.parseProof('./test/mintNoteProof.json');
-    const zkpHigherValue = util.parseProof('./test/mintNoteProof_invalid.json');
+    const proof = util.parseProof('./mintNoteProof.json');
+    const zkpHigherValue = util.parseProof('./mintNoteProof_invalid.json');
     await dai.approve(zkdai.address, 5 * SCALING_FACTOR);
 
     // try sending in a note hash of higher value (invalid proof)
@@ -63,7 +63,7 @@ contract('mintNote', function(accounts) {
 
   it('commit', async function() {
     zkdai = await ZkDai.new(0 /* low cooldown */, 10**18, dai.address);
-    const proof = util.parseProof('./test/mintNoteProof.json');
+    const proof = util.parseProof('./mintNoteProof.json');
     await dai.approve(zkdai.address, 5 * SCALING_FACTOR);
     const mint = await zkdai.mint(...proof, {value: 10**18});
     const proofHash = mint.logs[0].args.proofHash;
