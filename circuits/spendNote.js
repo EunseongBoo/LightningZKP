@@ -59,9 +59,9 @@ getCreateNoteParams(
   '6e145ccef1033dea239875dd00dfb4fee6e3348b84985c92f103444683bae07b83b5c38e5e2b0c8529d7fa3f64d46daa1ece2d9ac14cab9477d042c84c32ccd0', // pk
   'f8f8a2f43c8376ccb0871305060d7b27b0554d2cc72bccf41b2705608452f315', // sk
   '6e145ccef1033dea239875dd00dfb4fee6e3348b84985c92f103444683bae07b83b5c38e5e2b0c8529d7fa3f64d46daa1ece2d9ac14cab9477d042c84c32ccd0', //rpk
-  '10', // oValue
-  '5', //nValue
-  '5',  //nValue2
+  10, // oValue
+  5, //nValue
+  5,  //nValue2
   'c517f646255d5492089b881965cbd3da', // oNonce
   'c517f646255d5492089b881965cbd3da', // nNonce1
   'c517f646255d5492089b881965cbd3da' // nNonce2

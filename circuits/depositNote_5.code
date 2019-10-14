@@ -6,7 +6,7 @@ import "ecc/proofOfOwnership.code" as proofOfOwnership
 import "ecc/babyjubjubParams.code" as context
 import "utils/pack/unpack128.code" as unpack128
 
-def main(field[2] oh, field[4] sh, field[4] rh, field[2] ch, field[4] mpk, field noteNum, field value, private field oValue, private field oNonce, private field[2] sNonce, private field[2] rNonce, private field cNonce, private field[4] pk, private field sk, private field[4] rpk) -> (field):
+def main(field[2] oh, field[10] sh, field[10] rh, field[2] ch, field[4] mpk, field noteNum, field value, private field oValue, private field oNonce, private field[5] sNonce, private field[5] rNonce, private field cNonce, private field[4] pk, private field sk, private field[4] rpk) -> (field):
 
   1 == if oValue >= (noteNum * value) then 1 else 0 fi
   field change = oValue - noteNum * value
@@ -34,6 +34,18 @@ def main(field[2] oh, field[4] sh, field[4] rh, field[2] ch, field[4] mpk, field
   h[0] == sh[2]
   h[1] == sh[3]
 
+  h = sha256packed([mpkHash[0],mpkHash[1],value,sNonce[2]])
+  h[0] == sh[4]
+  h[1] == sh[5]
+
+  h = sha256packed([mpkHash[0],mpkHash[1],value,sNonce[3]])
+  h[0] == sh[6]
+  h[1] == sh[7]
+
+  h = sha256packed([mpkHash[0],mpkHash[1],value,sNonce[4]])
+  h[0] == sh[8]
+  h[1] == sh[9]
+
   //deposit notes for receiver
   rpkHash = sha256packed(rpk)
   h = sha256packed([rpkHash[0],rpkHash[1],value,rNonce[0]])
@@ -43,6 +55,18 @@ def main(field[2] oh, field[4] sh, field[4] rh, field[2] ch, field[4] mpk, field
   h = sha256packed([rpkHash[0],rpkHash[1],value,rNonce[1]])
   h[0] == rh[2]
   h[1] == rh[3]
+
+  h = sha256packed([rpkHash[0],rpkHash[1],value,rNonce[2]])
+  h[0] == rh[4]
+  h[1] == rh[5]
+
+  h = sha256packed([rpkHash[0],rpkHash[1],value,rNonce[3]])
+  h[0] == rh[6]
+  h[1] == rh[7]
+
+  h = sha256packed([rpkHash[0],rpkHash[1],value,rNonce[4]])
+  h[0] == rh[8]
+  h[1] == rh[9]
 
   //A note for sender's change
   h = sha256packed([pkHash[0],pkHash[1],change,cNonce])
