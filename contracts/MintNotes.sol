@@ -1,8 +1,8 @@
 pragma solidity ^0.5.2;
 
-import {Verifier as MintNoteVerifier} from "./verifiers/MintNoteVerifier.sol";
+//import {Verifier as MintNoteVerifier} from "./verifiers/MintNoteVerifier.sol";
 import "./ZkDaiBase.sol";
-
+import "./verifiers/MintNoteVerifier.sol";
 
 contract MintNotes is MintNoteVerifier, ZkDaiBase {
   uint8 internal constant NUM_PUBLIC_INPUTS = 4;

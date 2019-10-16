@@ -55,7 +55,7 @@ contract ZkDai is MintNotes, SpendNotes, LiquidateNotes {
       uint256[7] calldata input)
     external
     payable
-    validStake(msg.value)
+    //validStake(msg.value)
   {
       SpendNotes.submit(a, b, c, input);
   }
@@ -74,7 +74,7 @@ contract ZkDai is MintNotes, SpendNotes, LiquidateNotes {
       uint256[4] calldata input)
     external
     payable
-    validStake(msg.value)
+    //validStake(msg.value)
   {
       LiquidateNotes.submit(to, a, b, c,input);
   }

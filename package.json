@@ -14,7 +14,10 @@
   "license": "ISC",
   "dependencies": {
     "@openzeppelin/contracts": "^2.3.0",
+    "eth-gas-reporter": "^0.2.12",
     "ethereumjs-wallet": "^0.6.3",
+    "solc": "^0.5.12",
+    "truffle-flattener": "^1.4.2",
     "web3": "^1.2.1"
   }
 }
