@@ -43,12 +43,16 @@ function getCreateNoteParams(_pubKey, _secKey, _value, _nonce) {
 
   let publicParams = getNoteHash(note).concat(value);
   printZokratesCommand(publicParams.concat(privateParams));
+  console.log("original hash :" + getNoteHash(note));
+  console.log("pubKeyHash :" + pubKeyHash);
+  console.log("value: " + value);
+  console.log("nonce:" + nonce);
 }
 
 //create a secret note of value 10
 getCreateNoteParams(
   '6e145ccef1033dea239875dd00dfb4fee6e3348b84985c92f103444683bae07b83b5c38e5e2b0c8529d7fa3f64d46daa1ece2d9ac14cab9477d042c84c32ccd0', // pk
   'f8f8a2f43c8376ccb0871305060d7b27b0554d2cc72bccf41b2705608452f315', // sk
-  '30', // value
+  30, // value
   'c517f646255d5492089b881965cbd3da' // nonce
 )

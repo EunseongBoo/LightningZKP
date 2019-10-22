@@ -52,6 +52,11 @@ function getCreateNoteParams(_pubKey, _secKey, _rpubKey, _value, _value2, _value
 
   let publicParams = getNoteHash(note).concat(noteHash2).concat(noteHash3);
   printZokratesCommand(publicParams.concat(privateParams));
+  printZokratesCommand(publicParams.concat(privateParams));
+  console.log("original hash :" + getNoteHash(note));
+  console.log("pubKeyHash :" + pubKeyHash);
+  console.log("value: " + value);
+  console.log("nonce:" + nonce);
 }
 //(field[2] oh, field[2] n0h, field[2] n1h, private field [4] spk, private field ssk, private field [4] rpk, private field oVal, private field oNonce, private field n0Val, private field n0Nonce, private field n1Val, private field n1Nonce)
 // this will serve as an invalid proof

@@ -52,6 +52,8 @@ contract DepositNotes2 is DepositNote2Verifier, ZkDaiBase {
       }
       notes[_notes[NUM_ALL_NOTES-1]] = State.Committed; // Change the state of a "change note".
 
+      address mpkAddress = getMpkAddress(submission.publicInput[MPK_INDEX],submission.publicInput[MPK_INDEX+1],submission.publicInput[MPK_INDEX+2],submission.publicInput[MPK_INDEX+3]);
+
       delete submissions[proofHash];
       submission.submitter.transfer(stake);
 
@@ -62,9 +64,6 @@ contract DepositNotes2 is DepositNote2Verifier, ZkDaiBase {
       emit NoteStateChange(_notes[NUM_ALL_NOTES-1], State.Committed);
 
       bytes32 poolId = keccak256(abi.encodePacked(_notes[0],now));
-
-      //Testing for getMpkAddress function is needed.
-      address mpkAddress = getMpkAddress(submission.publicInput[MPK_INDEX],submission.publicInput[MPK_INDEX+1],submission.publicInput[MPK_INDEX+2],submission.publicInput[MPK_INDEX+3]); //needs to be modified
 
       bytes32[] memory senderNotes = new bytes32[](NUM_DEPOSIT_NOTES/2);
       for(uint i =0; i< NUM_DEPOSIT_NOTES/2; i++){
@@ -105,7 +104,7 @@ contract DepositNotes2 is DepositNote2Verifier, ZkDaiBase {
       for(uint i = 0; i < NUM_PUBLIC_INPUTS; i++) {
         input[i] = submission.publicInput[i];
       }
-      if (!depositVerifyTx(a, b, c, input))
+      if (!DepositNote2Verifier.depositVerifyTx(a, b, c, input))
       //bool a = false;
       //if(a)
       {

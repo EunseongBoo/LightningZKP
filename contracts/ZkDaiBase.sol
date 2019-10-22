@@ -48,6 +48,7 @@ contract ZkDaiBase {
   event Deposited(address mpkAddress, bytes32 poolId);
   event Challenged(address indexed challenger, bytes32 proofHash);
   event Calc(bytes32 notehash);
+  event TestAddress(address mpkAddress);
   /**
   * @dev Calculates the keccak256 of the zkSnark parameters
   * @return proofHash
@@ -69,6 +70,9 @@ contract ZkDaiBase {
   * @param _a Most significant 128 bits of the note hash
   * @param _b Least significant 128 bits of the note hash
   */
+
+  ///////////////The fucntion must be modified///////////////
+  ///////////////It can use only for testing in now/////////
   function calcNoteHash(uint256 _a, uint256 _b)
     internal
     pure
@@ -82,15 +86,16 @@ contract ZkDaiBase {
       return note;
   }
 
-  function getMpkAddress(uint _a, uint _b, uint _c, uint _d)
+  
+  function getMpkAddress(uint256 _a, uint256 _b, uint256 _c, uint256 _d)
     internal
     pure
     returns (address mpkAddress)
   {
-      bytes16 a = bytes16(bytes32(_a));
-      bytes16 b = bytes16(bytes32(_b));
-      bytes16 c = bytes16(bytes32(_c));
-      bytes16 d = bytes16(bytes32(_d));
+      bytes16 a = bytes16(uint128(_a));
+      bytes16 b = bytes16(uint128(_b));
+      bytes16 c = bytes16(uint128(_c));
+      bytes16 d = bytes16(uint128(_d));
       bytes memory _mpk = new bytes(64);
 
       for (uint i = 0; i < 16; i++) {
@@ -105,6 +110,8 @@ contract ZkDaiBase {
         mstore(0, mpkHash)
         mpkAddress := mload(0)
       }
+
+
   }
 
   function _bytesToBytes32(bytes memory b, uint offset)

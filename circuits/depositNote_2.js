@@ -95,6 +95,10 @@ function getCreateNoteParams(_spk, _ssk, _mpk, _rpk, _ovalue, _nvalue, _notenum,
   //console.log("Private length:", privateParams.length);
 
   printZokratesCommand(publicParams.concat(privateParams));
+  console.log("original hash :" + oh);
+  console.log("pubKeyHash :" + spkHash);
+  console.log("value: " + ovalue);
+  console.log("nonce:" + ononce);
   //console.log("oh:",oh);
   //console.log("public[0]:",publicParams[0].length);
     /*
@@ -127,7 +131,7 @@ getCreateNoteParams(
   30, // oValue
   5, // Value
   2, // NoteNum
-  'c517f646255d5492089b881965cbd3da', // oNonce
+  'c517f646255d5492089b881965cbd3da', // ononce
   'c517f646255d5492089b881965cbd3db', // sNonce[0]
   'c517f646255d5492089b881965cbd3dc', // sNonce[1]
   'c517f646255d5492089b881965cbd3dd', // rNonce[0]

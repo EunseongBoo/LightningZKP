@@ -38,25 +38,29 @@ contract('mintNote', function(accounts) {
 
 
 
-  it('Create and Send a secret note', async function() {
+  /*it('Create and Send a secret note', async function() {
     await dai.approve(zkdai.address, web3.utils.toBN(parseInt(30,16) * 10**18));
     const mint = await zkdai.mint(mint_proof.a, mint_proof.b, mint_proof.c, mint_inputs, {value:web3.utils.toBN(SCALING_FACTOR)});
     const challenge = await zkdai.challenge(mint_proof.a, mint_proof.b, mint_proof.c); // omit sending public params again
 
     assert.equal(challenge.logs[1].event, 'NoteStateChange')
-    // @todo assert on challenge.logs[1].args.note
+    //@todo assert on challenge.logs[1].args.note
     assert.equal(challenge.logs[1].args.state, 1 )
     const spend = await zkdai.spend(spend_proof.a, spend_proof.b, spend_proof.c, spend_inputs, {value:web3.utils.toBN(SCALING_FACTOR)});
     console.log(challenge.logs[1].event)
     const challenge_spend = await zkdai.challenge_spend(spend_proof.a, spend_proof.b, spend_proof.c);
     console.log(challenge_spend.logs[1])
 
-    const deposit = await zkdai.deposit_2(deposit2_proof.a, deposit2_proof.b, deposit2_proof.c, deposit2_inputs , {value:web3.utils.toBN(SCALING_FACTOR)});
-    const challenge_depoist = await zkdai.challenge_deposit_2(deposit2_proof.a, deposit2_proof.b, deposit2_proof.c, transact = params);
-    console.log(challenge_depoist);
+    //const deposit = await zkdai.deposit_2(deposit2_proof.a, deposit2_proof.b, deposit2_proof.c, deposit2_inputs , {value:web3.utils.toBN(SCALING_FACTOR)});
+    //const challenge_depoist = await zkdai.challenge_deposit_2(deposit2_proof.a, deposit2_proof.b, deposit2_proof.c);
+    //console.log(challenge_depoist);
+
+  //  const deposit10 = await zkdai.deposit_10(deposit10_proof.a, deposit10_proof.b, deposit10_proof.c, deposit10_inputs , {value:web3.utils.toBN(SCALING_FACTOR)});
+  //  const challenge_depoist10 = await zkdai.challenge_deposit_10(deposit10_proof.a, deposit10_proof.b, deposit10_proof.c);
+  //console.log(challenge_depoist10);
     //assert.equal(challenge_spend.logs[1].event, 'NoteStateChange')
     //assert.equal(challenge_spend.logs[1].args.state, 1 )
-  })
+  })*/
 
 /*  it('Create and deposit2', async function() {
     await dai.approve(zkdai.address, web3.utils.toBN(parseInt(30,16) * 10**18));
@@ -70,7 +74,7 @@ contract('mintNote', function(accounts) {
     //assert.equal(challenge_spend.logs[1].args.state, 1 )
   })*/
 
-/*
+
   it('Create and deposit5', async function() {
     await dai.approve(zkdai.address, web3.utils.toBN(parseInt(30,16) * 10**18));
     const mint = await zkdai.mint(mint_proof.a, mint_proof.b, mint_proof.c, mint_inputs, {value:web3.utils.toBN(SCALING_FACTOR)});
@@ -83,16 +87,16 @@ contract('mintNote', function(accounts) {
     //assert.equal(challenge_spend.logs[1].args.state, 1)
   })
 
-  it('Create and deposit10', async function() {
+  /*it('Create and deposit10', async function() {
     await dai.approve(zkdai.address, web3.utils.toBN(parseInt(30,16) * 10**18));
     const mint = await zkdai.mint(mint_proof.a, mint_proof.b, mint_proof.c, mint_inputs, {value:web3.utils.toBN(SCALING_FACTOR)});
     const challenge = await zkdai.challenge(mint_proof.a, mint_proof.b, mint_proof.c); // omit sending public params again
 
-    const spend = await zkdai.deposit_10(deposit10_proof.a, deposit10_proof.b, deposit10_proof.c, deposit10_inputs);
-    const challenge_spend = await zkdai.challenge_deposit_10(deposit10_proof.a, deposit10_proof.b, deposit10_proof.c);
-    console.log(challenge_spend.logs[1].args.state, 1);
-    //assert.equal(challenge_spend.logs[1].event, 'NoteStateChange')
-    //assert.equal(challenge_spend.logs[1].args.state, 1)
+    const deposit10 = await zkdai.deposit_10(deposit10_proof.a, deposit10_proof.b, deposit10_proof.c, deposit10_inputs, {value:web3.utils.toBN(SCALING_FACTOR)});
+    const challenge_deposit10 = await zkdai.challenge_deposit_10(deposit10_proof.a, deposit10_proof.b, deposit10_proof.c);
+    console.log(challenge_deposit10.logs[0]);
+    console.log(challenge_deposit10.logs[1]);
+    console.log(challenge_deposit10.logs[2]);
   })*/
 })
 
