@@ -42,7 +42,7 @@ function getCreateNoteParams(_spk, _ssk, _mpk, _rpk, _ovalue, _nvalue, _notenum,
   //original note's value, new note's value, notenum
   let _cvalue = _ovalue - _nvalue*_notenum;
   let ovalue = new BN(_ovalue, 16).mul(SCALING_FACTOR).toString(16, 32); // 16 bytes = 128 bits
-  let nvalue = new BN(3, 16).mul(SCALING_FACTOR).toString(16, 32);
+  let nvalue = new BN(_nvalue, 16).mul(SCALING_FACTOR).toString(16, 32);
   let notenum = new BN(_notenum, 16).toString(16, 32);
   let cvalue = new BN(_cvalue, 16).mul(SCALING_FACTOR).toString(16, 32);
   console.log("_ovalue:",_ovalue);
@@ -138,8 +138,8 @@ getCreateNoteParams(
   //'f8f8a2f43c8376ccb0871305060d7b27b0554d2cc72bccf41b2705608452f315',
   '6e145ccef1033dea239875dd00dfb4fee6e3348b84985c92f103444683bae07b83b5c38e5e2b0c8529d7fa3f64d46daa1ece2d9ac14cab9477d042c84c32ccd0', // pk
   'f8f8a2f43c8376ccb0871305060d7b27b0554d2cc72bccf41b2705608452f315', // sk
-  '6e145ccef1033dea239875dd00dfb4fee6e3348b84985c92f103444683bae07b83b5c38e5e2b0c8529d7fa3f64d46daa1ece2d9ac14cab9477d042c84c32ccd0', //mpk
-  '6e145ccef1033dea239875dd00dfb4fee6e3348b84985c92f103444683bae07b83b5c38e5e2b0c8529d7fa3f64d46daa1ece2d9ac14cab9477d042c84c32ccd0', //rpk
+  '6c9a44419b52ff7f7e02406def3b41fa57d8482c01ed04e56b6475c8e04466f11f2b61d057d73066a78a684a3099a4df6d2defbc3844d4dd72a2e545a4ebc595', //mpk
+  '4d65845c7426d420f8618b052ccba1e9d819ade834c9acd933f023bd1cb8bf67509e3c79b8d9aae49bd9316fe9d8fd3e8863a444a97731e12fe8d573b2f34789', //rpk
   30, // oValue
   3, // Value
   5, // NoteNum

@@ -10,7 +10,7 @@ contract ZkDaiBase {
 
   //uint8 internal constant NUM_DEPOSIT_NOTES = 4; // sender's notes 0,1 and receiver's notes 0,1
   uint internal constant poolTime = 10 minutes;
-  
+
   //DepositNotes struct is for deposit function
   //notes_num:
   //last_nonce: If recevier submit a last signed message, then the last nonce will be updated to the signed message's nonce to prevent replay attack
@@ -47,7 +47,7 @@ contract ZkDaiBase {
   event Submitted(address submitter, bytes32 proofHash);
   event Deposited(address mpkAddress, bytes32 poolId);
   event Challenged(address indexed challenger, bytes32 proofHash);
-
+  event Calc(bytes32 notehash);
   /**
   * @dev Calculates the keccak256 of the zkSnark parameters
   * @return proofHash
@@ -69,20 +69,17 @@ contract ZkDaiBase {
   * @param _a Most significant 128 bits of the note hash
   * @param _b Least significant 128 bits of the note hash
   */
-  function calcNoteHash(uint _a, uint _b)
+  function calcNoteHash(uint256 _a, uint256 _b)
     internal
     pure
     returns(bytes32 note)
   {
-      bytes16 a = bytes16(bytes32(_a));
-      bytes16 b = bytes16(bytes32(_b));
-      bytes memory _note = new bytes(32);
-
-      for (uint i = 0; i < 16; i++) {
-        _note[i] = a[i];
-        _note[16 + i] = b[i];
-      }
-      note = _bytesToBytes32(_note, 0);
+      //bytes32 a = bytes32(_a);
+      //bytes32 b = bytes32(_b);
+      //bytes32 memory _note;
+      //assembly { mstore(add(note, 16), _a) }
+      note = bytes32(_a);
+      return note;
   }
 
   function getMpkAddress(uint _a, uint _b, uint _c, uint _d)

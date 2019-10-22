@@ -266,7 +266,7 @@
         "id": 1139,
         "nodeType": "ImportDirective",
         "scope": 1375,
-        "sourceUnit": 2428,
+        "sourceUnit": 2441,
         "src": "106:25:3",
         "symbolAliases": [],
         "unitAlias": ""
@@ -277,7 +277,7 @@
         "id": 1140,
         "nodeType": "ImportDirective",
         "scope": 1375,
-        "sourceUnit": 4003,
+        "sourceUnit": 4016,
         "src": "132:42:3",
         "symbolAliases": [],
         "unitAlias": ""
@@ -291,10 +291,10 @@
               "id": 1141,
               "name": "MintNoteVerifier",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 4002,
+              "referencedDeclaration": 4015,
               "src": "198:16:3",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_MintNoteVerifier_$4002",
+                "typeIdentifier": "t_contract$_MintNoteVerifier_$4015",
                 "typeString": "contract MintNoteVerifier"
               }
             },
@@ -309,10 +309,10 @@
               "id": 1143,
               "name": "ZkDaiBase",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 2427,
+              "referencedDeclaration": 2440,
               "src": "216:9:3",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_ZkDaiBase_$2427",
+                "typeIdentifier": "t_contract$_ZkDaiBase_$2440",
                 "typeString": "contract ZkDaiBase"
               }
             },
@@ -322,9 +322,9 @@
           }
         ],
         "contractDependencies": [
-          7091,
-          4002,
-          2427
+          2440,
+          4015,
+          7104
         ],
         "contractKind": "contract",
         "documentation": null,
@@ -332,9 +332,9 @@
         "id": 1374,
         "linearizedBaseContracts": [
           1374,
-          2427,
-          4002,
-          7091
+          2440,
+          4015,
+          7104
         ],
         "name": "MintNotes",
         "nodeType": "ContractDefinition",
@@ -483,7 +483,7 @@
                       "name": "getProofHash",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 2207,
+                      "referencedDeclaration": 2220,
                       "src": "632:12:3",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_pure$_t_array$_t_uint256_$2_memory_ptr_$_t_array$_t_array$_t_uint256_$2_memory_$2_memory_ptr_$_t_array$_t_uint256_$2_memory_ptr_$returns$_t_bytes32_$",
@@ -889,10 +889,10 @@
                         "name": "submissions",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 2143,
+                        "referencedDeclaration": 2156,
                         "src": "812:11:3",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_Submission_$2139_storage_$",
+                          "typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_Submission_$2152_storage_$",
                           "typeString": "mapping(bytes32 => struct ZkDaiBase.Submission storage ref)"
                         }
                       },
@@ -917,7 +917,7 @@
                       "nodeType": "IndexAccess",
                       "src": "812:22:3",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_struct$_Submission_$2139_storage",
+                        "typeIdentifier": "t_struct$_Submission_$2152_storage",
                         "typeString": "struct ZkDaiBase.Submission storage ref"
                       }
                     },
@@ -934,7 +934,7 @@
                             "name": "msg",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 7705,
+                            "referencedDeclaration": 7718,
                             "src": "848:3:3",
                             "typeDescriptions": {
                               "typeIdentifier": "t_magic_message",
@@ -963,10 +963,10 @@
                             "name": "SubmissionType",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 2129,
+                            "referencedDeclaration": 2142,
                             "src": "860:14:3",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_type$_t_enum$_SubmissionType_$2129_$",
+                              "typeIdentifier": "t_type$_t_enum$_SubmissionType_$2142_$",
                               "typeString": "type(enum ZkDaiBase.SubmissionType)"
                             }
                           },
@@ -980,7 +980,7 @@
                           "referencedDeclaration": null,
                           "src": "860:19:3",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_enum$_SubmissionType_$2129",
+                            "typeIdentifier": "t_enum$_SubmissionType_$2142",
                             "typeString": "enum ZkDaiBase.SubmissionType"
                           }
                         },
@@ -990,7 +990,7 @@
                           "name": "now",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 7707,
+                          "referencedDeclaration": 7720,
                           "src": "881:3:3",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -1018,7 +1018,7 @@
                             "typeString": "address payable"
                           },
                           {
-                            "typeIdentifier": "t_enum$_SubmissionType_$2129",
+                            "typeIdentifier": "t_enum$_SubmissionType_$2142",
                             "typeString": "enum ZkDaiBase.SubmissionType"
                           },
                           {
@@ -1034,10 +1034,10 @@
                         "name": "Submission",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 2139,
+                        "referencedDeclaration": 2152,
                         "src": "837:10:3",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_type$_t_struct$_Submission_$2139_storage_ptr_$",
+                          "typeIdentifier": "t_type$_t_struct$_Submission_$2152_storage_ptr_$",
                           "typeString": "type(struct ZkDaiBase.Submission storage pointer)"
                         }
                       },
@@ -1051,13 +1051,13 @@
                       "nodeType": "FunctionCall",
                       "src": "837:61:3",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_struct$_Submission_$2139_memory",
+                        "typeIdentifier": "t_struct$_Submission_$2152_memory",
                         "typeString": "struct ZkDaiBase.Submission memory"
                       }
                     },
                     "src": "812:86:3",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_struct$_Submission_$2139_storage",
+                      "typeIdentifier": "t_struct$_Submission_$2152_storage",
                       "typeString": "struct ZkDaiBase.Submission storage ref"
                     }
                   },
@@ -1077,7 +1077,7 @@
                           "name": "msg",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 7705,
+                          "referencedDeclaration": 7718,
                           "src": "921:3:3",
                           "typeDescriptions": {
                             "typeIdentifier": "t_magic_message",
@@ -1127,7 +1127,7 @@
                       "name": "Submitted",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 2164,
+                      "referencedDeclaration": 2177,
                       "src": "911:9:3",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_event_nonpayable$_t_address_$_t_bytes32_$returns$__$",
@@ -1440,7 +1440,7 @@
                       "stateVariable": false,
                       "storageLocation": "storage",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_struct$_Submission_$2139_storage_ptr",
+                        "typeIdentifier": "t_struct$_Submission_$2152_storage_ptr",
                         "typeString": "struct ZkDaiBase.Submission"
                       },
                       "typeName": {
@@ -1448,10 +1448,10 @@
                         "id": 1231,
                         "name": "Submission",
                         "nodeType": "UserDefinedTypeName",
-                        "referencedDeclaration": 2139,
+                        "referencedDeclaration": 2152,
                         "src": "1164:10:3",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_Submission_$2139_storage_ptr",
+                          "typeIdentifier": "t_struct$_Submission_$2152_storage_ptr",
                           "typeString": "struct ZkDaiBase.Submission"
                         }
                       },
@@ -1468,10 +1468,10 @@
                       "name": "submissions",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 2143,
+                      "referencedDeclaration": 2156,
                       "src": "1196:11:3",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_Submission_$2139_storage_$",
+                        "typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_Submission_$2152_storage_$",
                         "typeString": "mapping(bytes32 => struct ZkDaiBase.Submission storage ref)"
                       }
                     },
@@ -1496,7 +1496,7 @@
                     "nodeType": "IndexAccess",
                     "src": "1196:22:3",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_struct$_Submission_$2139_storage",
+                      "typeIdentifier": "t_struct$_Submission_$2152_storage",
                       "typeString": "struct ZkDaiBase.Submission storage ref"
                     }
                   },
@@ -1552,7 +1552,7 @@
                             "referencedDeclaration": 1232,
                             "src": "1333:10:3",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_Submission_$2139_storage_ptr",
+                              "typeIdentifier": "t_struct$_Submission_$2152_storage_ptr",
                               "typeString": "struct ZkDaiBase.Submission storage pointer"
                             }
                           },
@@ -1563,7 +1563,7 @@
                           "lValueRequested": false,
                           "memberName": "publicInput",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 2138,
+                          "referencedDeclaration": 2151,
                           "src": "1333:22:3",
                           "typeDescriptions": {
                             "typeIdentifier": "t_array$_t_uint256_$dyn_storage",
@@ -1613,7 +1613,7 @@
                             "referencedDeclaration": 1232,
                             "src": "1360:10:3",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_Submission_$2139_storage_ptr",
+                              "typeIdentifier": "t_struct$_Submission_$2152_storage_ptr",
                               "typeString": "struct ZkDaiBase.Submission storage pointer"
                             }
                           },
@@ -1624,7 +1624,7 @@
                           "lValueRequested": false,
                           "memberName": "publicInput",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 2138,
+                          "referencedDeclaration": 2151,
                           "src": "1360:22:3",
                           "typeDescriptions": {
                             "typeIdentifier": "t_array$_t_uint256_$dyn_storage",
@@ -1677,7 +1677,7 @@
                       "name": "calcNoteHash",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 2277,
+                      "referencedDeclaration": 2290,
                       "src": "1320:12:3",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_pure$_t_uint256_$_t_uint256_$returns$_t_bytes32_$",
@@ -1708,7 +1708,7 @@
                       {
                         "argumentTypes": null,
                         "commonType": {
-                          "typeIdentifier": "t_enum$_State_$2148",
+                          "typeIdentifier": "t_enum$_State_$2161",
                           "typeString": "enum ZkDaiBase.State"
                         },
                         "id": 1256,
@@ -1724,10 +1724,10 @@
                             "name": "notes",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 2152,
+                            "referencedDeclaration": 2165,
                             "src": "1402:5:3",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_mapping$_t_bytes32_$_t_enum$_State_$2148_$",
+                              "typeIdentifier": "t_mapping$_t_bytes32_$_t_enum$_State_$2161_$",
                               "typeString": "mapping(bytes32 => enum ZkDaiBase.State)"
                             }
                           },
@@ -1752,7 +1752,7 @@
                           "nodeType": "IndexAccess",
                           "src": "1402:11:3",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_enum$_State_$2148",
+                            "typeIdentifier": "t_enum$_State_$2161",
                             "typeString": "enum ZkDaiBase.State"
                           }
                         },
@@ -1766,10 +1766,10 @@
                             "name": "State",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 2148,
+                            "referencedDeclaration": 2161,
                             "src": "1417:5:3",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_type$_t_enum$_State_$2148_$",
+                              "typeIdentifier": "t_type$_t_enum$_State_$2161_$",
                               "typeString": "type(enum ZkDaiBase.State)"
                             }
                           },
@@ -1783,7 +1783,7 @@
                           "referencedDeclaration": null,
                           "src": "1417:13:3",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_enum$_State_$2148",
+                            "typeIdentifier": "t_enum$_State_$2161",
                             "typeString": "enum ZkDaiBase.State"
                           }
                         },
@@ -1827,10 +1827,10 @@
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        7708,
-                        7709
+                        7721,
+                        7722
                       ],
-                      "referencedDeclaration": 7709,
+                      "referencedDeclaration": 7722,
                       "src": "1394:7:3",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
@@ -1871,10 +1871,10 @@
                         "name": "notes",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 2152,
+                        "referencedDeclaration": 2165,
                         "src": "1466:5:3",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_mapping$_t_bytes32_$_t_enum$_State_$2148_$",
+                          "typeIdentifier": "t_mapping$_t_bytes32_$_t_enum$_State_$2161_$",
                           "typeString": "mapping(bytes32 => enum ZkDaiBase.State)"
                         }
                       },
@@ -1899,7 +1899,7 @@
                       "nodeType": "IndexAccess",
                       "src": "1466:11:3",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_enum$_State_$2148",
+                        "typeIdentifier": "t_enum$_State_$2161",
                         "typeString": "enum ZkDaiBase.State"
                       }
                     },
@@ -1913,10 +1913,10 @@
                         "name": "State",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 2148,
+                        "referencedDeclaration": 2161,
                         "src": "1480:5:3",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_type$_t_enum$_State_$2148_$",
+                          "typeIdentifier": "t_type$_t_enum$_State_$2161_$",
                           "typeString": "type(enum ZkDaiBase.State)"
                         }
                       },
@@ -1930,13 +1930,13 @@
                       "referencedDeclaration": null,
                       "src": "1480:15:3",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_enum$_State_$2148",
+                        "typeIdentifier": "t_enum$_State_$2161",
                         "typeString": "enum ZkDaiBase.State"
                       }
                     },
                     "src": "1466:29:3",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_enum$_State_$2148",
+                      "typeIdentifier": "t_enum$_State_$2161",
                       "typeString": "enum ZkDaiBase.State"
                     }
                   },
@@ -1964,10 +1964,10 @@
                         "name": "submissions",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 2143,
+                        "referencedDeclaration": 2156,
                         "src": "1511:11:3",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_Submission_$2139_storage_$",
+                          "typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_Submission_$2152_storage_$",
                           "typeString": "mapping(bytes32 => struct ZkDaiBase.Submission storage ref)"
                         }
                       },
@@ -1992,7 +1992,7 @@
                       "nodeType": "IndexAccess",
                       "src": "1511:22:3",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_struct$_Submission_$2139_storage",
+                        "typeIdentifier": "t_struct$_Submission_$2152_storage",
                         "typeString": "struct ZkDaiBase.Submission storage ref"
                       }
                     },
@@ -2015,7 +2015,7 @@
                         "name": "stake",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 2099,
+                        "referencedDeclaration": 2112,
                         "src": "1571:5:3",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
@@ -2041,7 +2041,7 @@
                           "referencedDeclaration": 1232,
                           "src": "1541:10:3",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_struct$_Submission_$2139_storage_ptr",
+                            "typeIdentifier": "t_struct$_Submission_$2152_storage_ptr",
                             "typeString": "struct ZkDaiBase.Submission storage pointer"
                           }
                         },
@@ -2052,7 +2052,7 @@
                         "lValueRequested": false,
                         "memberName": "submitter",
                         "nodeType": "MemberAccess",
-                        "referencedDeclaration": 2131,
+                        "referencedDeclaration": 2144,
                         "src": "1541:20:3",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address_payable",
@@ -2116,10 +2116,10 @@
                           "name": "State",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 2148,
+                          "referencedDeclaration": 2161,
                           "src": "1612:5:3",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_type$_t_enum$_State_$2148_$",
+                            "typeIdentifier": "t_type$_t_enum$_State_$2161_$",
                             "typeString": "type(enum ZkDaiBase.State)"
                           }
                         },
@@ -2133,7 +2133,7 @@
                         "referencedDeclaration": null,
                         "src": "1612:15:3",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_enum$_State_$2148",
+                          "typeIdentifier": "t_enum$_State_$2161",
                           "typeString": "enum ZkDaiBase.State"
                         }
                       }
@@ -2145,7 +2145,7 @@
                           "typeString": "bytes32"
                         },
                         {
-                          "typeIdentifier": "t_enum$_State_$2148",
+                          "typeIdentifier": "t_enum$_State_$2161",
                           "typeString": "enum ZkDaiBase.State"
                         }
                       ],
@@ -2153,10 +2153,10 @@
                       "name": "NoteStateChange",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 2158,
+                      "referencedDeclaration": 2171,
                       "src": "1590:15:3",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_function_event_nonpayable$_t_bytes32_$_t_enum$_State_$2148_$returns$__$",
+                        "typeIdentifier": "t_function_event_nonpayable$_t_bytes32_$_t_enum$_State_$2161_$returns$__$",
                         "typeString": "function (bytes32,enum ZkDaiBase.State)"
                       }
                     },
@@ -2253,7 +2253,7 @@
                       "stateVariable": false,
                       "storageLocation": "storage",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_struct$_Submission_$2139_storage_ptr",
+                        "typeIdentifier": "t_struct$_Submission_$2152_storage_ptr",
                         "typeString": "struct ZkDaiBase.Submission"
                       },
                       "typeName": {
@@ -2261,10 +2261,10 @@
                         "id": 1306,
                         "name": "Submission",
                         "nodeType": "UserDefinedTypeName",
-                        "referencedDeclaration": 2139,
+                        "referencedDeclaration": 2152,
                         "src": "1974:10:3",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_Submission_$2139_storage_ptr",
+                          "typeIdentifier": "t_struct$_Submission_$2152_storage_ptr",
                           "typeString": "struct ZkDaiBase.Submission"
                         }
                       },
@@ -2281,10 +2281,10 @@
                       "name": "submissions",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 2143,
+                      "referencedDeclaration": 2156,
                       "src": "2006:11:3",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_Submission_$2139_storage_$",
+                        "typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_Submission_$2152_storage_$",
                         "typeString": "mapping(bytes32 => struct ZkDaiBase.Submission storage ref)"
                       }
                     },
@@ -2309,7 +2309,7 @@
                     "nodeType": "IndexAccess",
                     "src": "2006:22:3",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_struct$_Submission_$2139_storage",
+                      "typeIdentifier": "t_struct$_Submission_$2152_storage",
                       "typeString": "struct ZkDaiBase.Submission storage ref"
                     }
                   },
@@ -2444,7 +2444,7 @@
                                 "referencedDeclaration": 1307,
                                 "src": "2148:10:3",
                                 "typeDescriptions": {
-                                  "typeIdentifier": "t_struct$_Submission_$2139_storage_ptr",
+                                  "typeIdentifier": "t_struct$_Submission_$2152_storage_ptr",
                                   "typeString": "struct ZkDaiBase.Submission storage pointer"
                                 }
                               },
@@ -2455,7 +2455,7 @@
                               "lValueRequested": false,
                               "memberName": "publicInput",
                               "nodeType": "MemberAccess",
-                              "referencedDeclaration": 2138,
+                              "referencedDeclaration": 2151,
                               "src": "2148:22:3",
                               "typeDescriptions": {
                                 "typeIdentifier": "t_array$_t_uint256_$dyn_storage",
@@ -2727,7 +2727,7 @@
                         "name": "mintVerifyTx",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 4001,
+                        "referencedDeclaration": 4014,
                         "src": "2194:12:3",
                         "typeDescriptions": {
                           "typeIdentifier": "t_function_internal_nonpayable$_t_array$_t_uint256_$2_memory_ptr_$_t_array$_t_array$_t_uint256_$2_memory_$2_memory_ptr_$_t_array$_t_uint256_$2_memory_ptr_$_t_array$_t_uint256_$4_memory_ptr_$returns$_t_bool_$",
@@ -2842,10 +2842,10 @@
                               "name": "submissions",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 2143,
+                              "referencedDeclaration": 2156,
                               "src": "2269:11:3",
                               "typeDescriptions": {
-                                "typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_Submission_$2139_storage_$",
+                                "typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_Submission_$2152_storage_$",
                                 "typeString": "mapping(bytes32 => struct ZkDaiBase.Submission storage ref)"
                               }
                             },
@@ -2870,7 +2870,7 @@
                             "nodeType": "IndexAccess",
                             "src": "2269:22:3",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_Submission_$2139_storage",
+                              "typeIdentifier": "t_struct$_Submission_$2152_storage",
                               "typeString": "struct ZkDaiBase.Submission storage ref"
                             }
                           },
@@ -2893,7 +2893,7 @@
                               "name": "stake",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 2099,
+                              "referencedDeclaration": 2112,
                               "src": "2321:5:3",
                               "typeDescriptions": {
                                 "typeIdentifier": "t_uint256",
@@ -2916,7 +2916,7 @@
                                 "name": "msg",
                                 "nodeType": "Identifier",
                                 "overloadedDeclarations": [],
-                                "referencedDeclaration": 7705,
+                                "referencedDeclaration": 7718,
                                 "src": "2301:3:3",
                                 "typeDescriptions": {
                                   "typeIdentifier": "t_magic_message",
@@ -2981,7 +2981,7 @@
                                 "name": "msg",
                                 "nodeType": "Identifier",
                                 "overloadedDeclarations": [],
-                                "referencedDeclaration": 7705,
+                                "referencedDeclaration": 7718,
                                 "src": "2353:3:3",
                                 "typeDescriptions": {
                                   "typeIdentifier": "t_magic_message",
@@ -3031,7 +3031,7 @@
                             "name": "Challenged",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 2176,
+                            "referencedDeclaration": 2189,
                             "src": "2342:10:3",
                             "typeDescriptions": {
                               "typeIdentifier": "t_function_event_nonpayable$_t_address_$_t_bytes32_$returns$__$",
@@ -3333,7 +3333,7 @@
         "id": 1139,
         "nodeType": "ImportDirective",
         "scope": 1375,
-        "sourceUnit": 2428,
+        "sourceUnit": 2441,
         "src": "106:25:3",
         "symbolAliases": [],
         "unitAlias": ""
@@ -3344,7 +3344,7 @@
         "id": 1140,
         "nodeType": "ImportDirective",
         "scope": 1375,
-        "sourceUnit": 4003,
+        "sourceUnit": 4016,
         "src": "132:42:3",
         "symbolAliases": [],
         "unitAlias": ""
@@ -3358,10 +3358,10 @@
               "id": 1141,
               "name": "MintNoteVerifier",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 4002,
+              "referencedDeclaration": 4015,
               "src": "198:16:3",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_MintNoteVerifier_$4002",
+                "typeIdentifier": "t_contract$_MintNoteVerifier_$4015",
                 "typeString": "contract MintNoteVerifier"
               }
             },
@@ -3376,10 +3376,10 @@
               "id": 1143,
               "name": "ZkDaiBase",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 2427,
+              "referencedDeclaration": 2440,
               "src": "216:9:3",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_ZkDaiBase_$2427",
+                "typeIdentifier": "t_contract$_ZkDaiBase_$2440",
                 "typeString": "contract ZkDaiBase"
               }
             },
@@ -3389,9 +3389,9 @@
           }
         ],
         "contractDependencies": [
-          7091,
-          4002,
-          2427
+          2440,
+          4015,
+          7104
         ],
         "contractKind": "contract",
         "documentation": null,
@@ -3399,9 +3399,9 @@
         "id": 1374,
         "linearizedBaseContracts": [
           1374,
-          2427,
-          4002,
-          7091
+          2440,
+          4015,
+          7104
         ],
         "name": "MintNotes",
         "nodeType": "ContractDefinition",
@@ -3550,7 +3550,7 @@
                       "name": "getProofHash",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 2207,
+                      "referencedDeclaration": 2220,
                       "src": "632:12:3",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_pure$_t_array$_t_uint256_$2_memory_ptr_$_t_array$_t_array$_t_uint256_$2_memory_$2_memory_ptr_$_t_array$_t_uint256_$2_memory_ptr_$returns$_t_bytes32_$",
@@ -3956,10 +3956,10 @@
                         "name": "submissions",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 2143,
+                        "referencedDeclaration": 2156,
                         "src": "812:11:3",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_Submission_$2139_storage_$",
+                          "typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_Submission_$2152_storage_$",
                           "typeString": "mapping(bytes32 => struct ZkDaiBase.Submission storage ref)"
                         }
                       },
@@ -3984,7 +3984,7 @@
                       "nodeType": "IndexAccess",
                       "src": "812:22:3",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_struct$_Submission_$2139_storage",
+                        "typeIdentifier": "t_struct$_Submission_$2152_storage",
                         "typeString": "struct ZkDaiBase.Submission storage ref"
                       }
                     },
@@ -4001,7 +4001,7 @@
                             "name": "msg",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 7705,
+                            "referencedDeclaration": 7718,
                             "src": "848:3:3",
                             "typeDescriptions": {
                               "typeIdentifier": "t_magic_message",
@@ -4030,10 +4030,10 @@
                             "name": "SubmissionType",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 2129,
+                            "referencedDeclaration": 2142,
                             "src": "860:14:3",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_type$_t_enum$_SubmissionType_$2129_$",
+                              "typeIdentifier": "t_type$_t_enum$_SubmissionType_$2142_$",
                               "typeString": "type(enum ZkDaiBase.SubmissionType)"
                             }
                           },
@@ -4047,7 +4047,7 @@
                           "referencedDeclaration": null,
                           "src": "860:19:3",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_enum$_SubmissionType_$2129",
+                            "typeIdentifier": "t_enum$_SubmissionType_$2142",
                             "typeString": "enum ZkDaiBase.SubmissionType"
                           }
                         },
@@ -4057,7 +4057,7 @@
                           "name": "now",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 7707,
+                          "referencedDeclaration": 7720,
                           "src": "881:3:3",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -4085,7 +4085,7 @@
                             "typeString": "address payable"
                           },
                           {
-                            "typeIdentifier": "t_enum$_SubmissionType_$2129",
+                            "typeIdentifier": "t_enum$_SubmissionType_$2142",
                             "typeString": "enum ZkDaiBase.SubmissionType"
                           },
                           {
@@ -4101,10 +4101,10 @@
                         "name": "Submission",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 2139,
+                        "referencedDeclaration": 2152,
                         "src": "837:10:3",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_type$_t_struct$_Submission_$2139_storage_ptr_$",
+                          "typeIdentifier": "t_type$_t_struct$_Submission_$2152_storage_ptr_$",
                           "typeString": "type(struct ZkDaiBase.Submission storage pointer)"
                         }
                       },
@@ -4118,13 +4118,13 @@
                       "nodeType": "FunctionCall",
                       "src": "837:61:3",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_struct$_Submission_$2139_memory",
+                        "typeIdentifier": "t_struct$_Submission_$2152_memory",
                         "typeString": "struct ZkDaiBase.Submission memory"
                       }
                     },
                     "src": "812:86:3",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_struct$_Submission_$2139_storage",
+                      "typeIdentifier": "t_struct$_Submission_$2152_storage",
                       "typeString": "struct ZkDaiBase.Submission storage ref"
                     }
                   },
@@ -4144,7 +4144,7 @@
                           "name": "msg",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 7705,
+                          "referencedDeclaration": 7718,
                           "src": "921:3:3",
                           "typeDescriptions": {
                             "typeIdentifier": "t_magic_message",
@@ -4194,7 +4194,7 @@
                       "name": "Submitted",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 2164,
+                      "referencedDeclaration": 2177,
                       "src": "911:9:3",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_event_nonpayable$_t_address_$_t_bytes32_$returns$__$",
@@ -4507,7 +4507,7 @@
                       "stateVariable": false,
                       "storageLocation": "storage",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_struct$_Submission_$2139_storage_ptr",
+                        "typeIdentifier": "t_struct$_Submission_$2152_storage_ptr",
                         "typeString": "struct ZkDaiBase.Submission"
                       },
                       "typeName": {
@@ -4515,10 +4515,10 @@
                         "id": 1231,
                         "name": "Submission",
                         "nodeType": "UserDefinedTypeName",
-                        "referencedDeclaration": 2139,
+                        "referencedDeclaration": 2152,
                         "src": "1164:10:3",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_Submission_$2139_storage_ptr",
+                          "typeIdentifier": "t_struct$_Submission_$2152_storage_ptr",
                           "typeString": "struct ZkDaiBase.Submission"
                         }
                       },
@@ -4535,10 +4535,10 @@
                       "name": "submissions",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 2143,
+                      "referencedDeclaration": 2156,
                       "src": "1196:11:3",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_Submission_$2139_storage_$",
+                        "typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_Submission_$2152_storage_$",
                         "typeString": "mapping(bytes32 => struct ZkDaiBase.Submission storage ref)"
                       }
                     },
@@ -4563,7 +4563,7 @@
                     "nodeType": "IndexAccess",
                     "src": "1196:22:3",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_struct$_Submission_$2139_storage",
+                      "typeIdentifier": "t_struct$_Submission_$2152_storage",
                       "typeString": "struct ZkDaiBase.Submission storage ref"
                     }
                   },
@@ -4619,7 +4619,7 @@
                             "referencedDeclaration": 1232,
                             "src": "1333:10:3",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_Submission_$2139_storage_ptr",
+                              "typeIdentifier": "t_struct$_Submission_$2152_storage_ptr",
                               "typeString": "struct ZkDaiBase.Submission storage pointer"
                             }
                           },
@@ -4630,7 +4630,7 @@
                           "lValueRequested": false,
                           "memberName": "publicInput",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 2138,
+                          "referencedDeclaration": 2151,
                           "src": "1333:22:3",
                           "typeDescriptions": {
                             "typeIdentifier": "t_array$_t_uint256_$dyn_storage",
@@ -4680,7 +4680,7 @@
                             "referencedDeclaration": 1232,
                             "src": "1360:10:3",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_Submission_$2139_storage_ptr",
+                              "typeIdentifier": "t_struct$_Submission_$2152_storage_ptr",
                               "typeString": "struct ZkDaiBase.Submission storage pointer"
                             }
                           },
@@ -4691,7 +4691,7 @@
                           "lValueRequested": false,
                           "memberName": "publicInput",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 2138,
+                          "referencedDeclaration": 2151,
                           "src": "1360:22:3",
                           "typeDescriptions": {
                             "typeIdentifier": "t_array$_t_uint256_$dyn_storage",
@@ -4744,7 +4744,7 @@
                       "name": "calcNoteHash",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 2277,
+                      "referencedDeclaration": 2290,
                       "src": "1320:12:3",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_pure$_t_uint256_$_t_uint256_$returns$_t_bytes32_$",
@@ -4775,7 +4775,7 @@
                       {
                         "argumentTypes": null,
                         "commonType": {
-                          "typeIdentifier": "t_enum$_State_$2148",
+                          "typeIdentifier": "t_enum$_State_$2161",
                           "typeString": "enum ZkDaiBase.State"
                         },
                         "id": 1256,
@@ -4791,10 +4791,10 @@
                             "name": "notes",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 2152,
+                            "referencedDeclaration": 2165,
                             "src": "1402:5:3",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_mapping$_t_bytes32_$_t_enum$_State_$2148_$",
+                              "typeIdentifier": "t_mapping$_t_bytes32_$_t_enum$_State_$2161_$",
                               "typeString": "mapping(bytes32 => enum ZkDaiBase.State)"
                             }
                           },
@@ -4819,7 +4819,7 @@
                           "nodeType": "IndexAccess",
                           "src": "1402:11:3",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_enum$_State_$2148",
+                            "typeIdentifier": "t_enum$_State_$2161",
                             "typeString": "enum ZkDaiBase.State"
                           }
                         },
@@ -4833,10 +4833,10 @@
                             "name": "State",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 2148,
+                            "referencedDeclaration": 2161,
                             "src": "1417:5:3",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_type$_t_enum$_State_$2148_$",
+                              "typeIdentifier": "t_type$_t_enum$_State_$2161_$",
                               "typeString": "type(enum ZkDaiBase.State)"
                             }
                           },
@@ -4850,7 +4850,7 @@
                           "referencedDeclaration": null,
                           "src": "1417:13:3",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_enum$_State_$2148",
+                            "typeIdentifier": "t_enum$_State_$2161",
                             "typeString": "enum ZkDaiBase.State"
                           }
                         },
@@ -4894,10 +4894,10 @@
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        7708,
-                        7709
+                        7721,
+                        7722
                       ],
-                      "referencedDeclaration": 7709,
+                      "referencedDeclaration": 7722,
                       "src": "1394:7:3",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
@@ -4938,10 +4938,10 @@
                         "name": "notes",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 2152,
+                        "referencedDeclaration": 2165,
                         "src": "1466:5:3",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_mapping$_t_bytes32_$_t_enum$_State_$2148_$",
+                          "typeIdentifier": "t_mapping$_t_bytes32_$_t_enum$_State_$2161_$",
                           "typeString": "mapping(bytes32 => enum ZkDaiBase.State)"
                         }
                       },
@@ -4966,7 +4966,7 @@
                       "nodeType": "IndexAccess",
                       "src": "1466:11:3",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_enum$_State_$2148",
+                        "typeIdentifier": "t_enum$_State_$2161",
                         "typeString": "enum ZkDaiBase.State"
                       }
                     },
@@ -4980,10 +4980,10 @@
                         "name": "State",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 2148,
+                        "referencedDeclaration": 2161,
                         "src": "1480:5:3",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_type$_t_enum$_State_$2148_$",
+                          "typeIdentifier": "t_type$_t_enum$_State_$2161_$",
                           "typeString": "type(enum ZkDaiBase.State)"
                         }
                       },
@@ -4997,13 +4997,13 @@
                       "referencedDeclaration": null,
                       "src": "1480:15:3",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_enum$_State_$2148",
+                        "typeIdentifier": "t_enum$_State_$2161",
                         "typeString": "enum ZkDaiBase.State"
                       }
                     },
                     "src": "1466:29:3",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_enum$_State_$2148",
+                      "typeIdentifier": "t_enum$_State_$2161",
                       "typeString": "enum ZkDaiBase.State"
                     }
                   },
@@ -5031,10 +5031,10 @@
                         "name": "submissions",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 2143,
+                        "referencedDeclaration": 2156,
                         "src": "1511:11:3",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_Submission_$2139_storage_$",
+                          "typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_Submission_$2152_storage_$",
                           "typeString": "mapping(bytes32 => struct ZkDaiBase.Submission storage ref)"
                         }
                       },
@@ -5059,7 +5059,7 @@
                       "nodeType": "IndexAccess",
                       "src": "1511:22:3",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_struct$_Submission_$2139_storage",
+                        "typeIdentifier": "t_struct$_Submission_$2152_storage",
                         "typeString": "struct ZkDaiBase.Submission storage ref"
                       }
                     },
@@ -5082,7 +5082,7 @@
                         "name": "stake",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 2099,
+                        "referencedDeclaration": 2112,
                         "src": "1571:5:3",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
@@ -5108,7 +5108,7 @@
                           "referencedDeclaration": 1232,
                           "src": "1541:10:3",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_struct$_Submission_$2139_storage_ptr",
+                            "typeIdentifier": "t_struct$_Submission_$2152_storage_ptr",
                             "typeString": "struct ZkDaiBase.Submission storage pointer"
                           }
                         },
@@ -5119,7 +5119,7 @@
                         "lValueRequested": false,
                         "memberName": "submitter",
                         "nodeType": "MemberAccess",
-                        "referencedDeclaration": 2131,
+                        "referencedDeclaration": 2144,
                         "src": "1541:20:3",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address_payable",
@@ -5183,10 +5183,10 @@
                           "name": "State",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 2148,
+                          "referencedDeclaration": 2161,
                           "src": "1612:5:3",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_type$_t_enum$_State_$2148_$",
+                            "typeIdentifier": "t_type$_t_enum$_State_$2161_$",
                             "typeString": "type(enum ZkDaiBase.State)"
                           }
                         },
@@ -5200,7 +5200,7 @@
                         "referencedDeclaration": null,
                         "src": "1612:15:3",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_enum$_State_$2148",
+                          "typeIdentifier": "t_enum$_State_$2161",
                           "typeString": "enum ZkDaiBase.State"
                         }
                       }
@@ -5212,7 +5212,7 @@
                           "typeString": "bytes32"
                         },
                         {
-                          "typeIdentifier": "t_enum$_State_$2148",
+                          "typeIdentifier": "t_enum$_State_$2161",
                           "typeString": "enum ZkDaiBase.State"
                         }
                       ],
@@ -5220,10 +5220,10 @@
                       "name": "NoteStateChange",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 2158,
+                      "referencedDeclaration": 2171,
                       "src": "1590:15:3",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_function_event_nonpayable$_t_bytes32_$_t_enum$_State_$2148_$returns$__$",
+                        "typeIdentifier": "t_function_event_nonpayable$_t_bytes32_$_t_enum$_State_$2161_$returns$__$",
                         "typeString": "function (bytes32,enum ZkDaiBase.State)"
                       }
                     },
@@ -5320,7 +5320,7 @@
                       "stateVariable": false,
                       "storageLocation": "storage",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_struct$_Submission_$2139_storage_ptr",
+                        "typeIdentifier": "t_struct$_Submission_$2152_storage_ptr",
                         "typeString": "struct ZkDaiBase.Submission"
                       },
                       "typeName": {
@@ -5328,10 +5328,10 @@
                         "id": 1306,
                         "name": "Submission",
                         "nodeType": "UserDefinedTypeName",
-                        "referencedDeclaration": 2139,
+                        "referencedDeclaration": 2152,
                         "src": "1974:10:3",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_Submission_$2139_storage_ptr",
+                          "typeIdentifier": "t_struct$_Submission_$2152_storage_ptr",
                           "typeString": "struct ZkDaiBase.Submission"
                         }
                       },
@@ -5348,10 +5348,10 @@
                       "name": "submissions",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 2143,
+                      "referencedDeclaration": 2156,
                       "src": "2006:11:3",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_Submission_$2139_storage_$",
+                        "typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_Submission_$2152_storage_$",
                         "typeString": "mapping(bytes32 => struct ZkDaiBase.Submission storage ref)"
                       }
                     },
@@ -5376,7 +5376,7 @@
                     "nodeType": "IndexAccess",
                     "src": "2006:22:3",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_struct$_Submission_$2139_storage",
+                      "typeIdentifier": "t_struct$_Submission_$2152_storage",
                       "typeString": "struct ZkDaiBase.Submission storage ref"
                     }
                   },
@@ -5511,7 +5511,7 @@
                                 "referencedDeclaration": 1307,
                                 "src": "2148:10:3",
                                 "typeDescriptions": {
-                                  "typeIdentifier": "t_struct$_Submission_$2139_storage_ptr",
+                                  "typeIdentifier": "t_struct$_Submission_$2152_storage_ptr",
                                   "typeString": "struct ZkDaiBase.Submission storage pointer"
                                 }
                               },
@@ -5522,7 +5522,7 @@
                               "lValueRequested": false,
                               "memberName": "publicInput",
                               "nodeType": "MemberAccess",
-                              "referencedDeclaration": 2138,
+                              "referencedDeclaration": 2151,
                               "src": "2148:22:3",
                               "typeDescriptions": {
                                 "typeIdentifier": "t_array$_t_uint256_$dyn_storage",
@@ -5794,7 +5794,7 @@
                         "name": "mintVerifyTx",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 4001,
+                        "referencedDeclaration": 4014,
                         "src": "2194:12:3",
                         "typeDescriptions": {
                           "typeIdentifier": "t_function_internal_nonpayable$_t_array$_t_uint256_$2_memory_ptr_$_t_array$_t_array$_t_uint256_$2_memory_$2_memory_ptr_$_t_array$_t_uint256_$2_memory_ptr_$_t_array$_t_uint256_$4_memory_ptr_$returns$_t_bool_$",
@@ -5909,10 +5909,10 @@
                               "name": "submissions",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 2143,
+                              "referencedDeclaration": 2156,
                               "src": "2269:11:3",
                               "typeDescriptions": {
-                                "typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_Submission_$2139_storage_$",
+                                "typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_Submission_$2152_storage_$",
                                 "typeString": "mapping(bytes32 => struct ZkDaiBase.Submission storage ref)"
                               }
                             },
@@ -5937,7 +5937,7 @@
                             "nodeType": "IndexAccess",
                             "src": "2269:22:3",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_Submission_$2139_storage",
+                              "typeIdentifier": "t_struct$_Submission_$2152_storage",
                               "typeString": "struct ZkDaiBase.Submission storage ref"
                             }
                           },
@@ -5960,7 +5960,7 @@
                               "name": "stake",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 2099,
+                              "referencedDeclaration": 2112,
                               "src": "2321:5:3",
                               "typeDescriptions": {
                                 "typeIdentifier": "t_uint256",
@@ -5983,7 +5983,7 @@
                                 "name": "msg",
                                 "nodeType": "Identifier",
                                 "overloadedDeclarations": [],
-                                "referencedDeclaration": 7705,
+                                "referencedDeclaration": 7718,
                                 "src": "2301:3:3",
                                 "typeDescriptions": {
                                   "typeIdentifier": "t_magic_message",
@@ -6048,7 +6048,7 @@
                                 "name": "msg",
                                 "nodeType": "Identifier",
                                 "overloadedDeclarations": [],
-                                "referencedDeclaration": 7705,
+                                "referencedDeclaration": 7718,
                                 "src": "2353:3:3",
                                 "typeDescriptions": {
                                   "typeIdentifier": "t_magic_message",
@@ -6098,7 +6098,7 @@
                             "name": "Challenged",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 2176,
+                            "referencedDeclaration": 2189,
                             "src": "2342:10:3",
                             "typeDescriptions": {
                               "typeIdentifier": "t_function_event_nonpayable$_t_address_$_t_bytes32_$returns$__$",
@@ -6378,8 +6378,8 @@
     "version": "0.5.2+commit.1df8f40c.Emscripten.clang"
   },
   "networks": {},
-  "schemaVersion": "3.0.11",
-  "updatedAt": "2019-10-15T14:10:28.852Z",
+  "schemaVersion": "3.0.16",
+  "updatedAt": "2019-10-16T17:12:19.144Z",
   "devdoc": {
     "methods": {}
   },

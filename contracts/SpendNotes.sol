@@ -1,6 +1,6 @@
 pragma solidity ^0.5.2;
 
-import {Verifier as SpendNoteVerifier} from "./verifiers/SpendNoteVerifier.sol";
+import "./verifiers/SpendNoteVerifier.sol";
 import "./ZkDaiBase.sol";
 
 
@@ -38,9 +38,12 @@ contract SpendNotes is SpendNoteVerifier, ZkDaiBase {
       bytes32[3] memory _notes = get3Notes(submission.publicInput);
       // check that the first note (among public params) is committed and
       // new notes should not be existing at this point
-      require(notes[_notes[0]] == State.Committed, "Note is either invalid or already spent");
-      require(notes[_notes[1]] == State.Invalid, "output note1 is already minted");
-      require(notes[_notes[2]] == State.Invalid, "output note2 is already minted");
+      //require(notes[_notes[0]] == State.Committed, "Note is either invalid or already spent");
+      //require(notes[_notes[1]] == State.Committed, "output note1 is already committed");
+      //require(notes[_notes[1]] == State.Spent, "output note1 is already spend");
+      //require(notes[_notes[1]] == State.Deposit, "output note1 is already Deposit");
+    //  require(notes[_notes[1]] == State.Invalid, "output note1 is already minted");
+      //require(notes[_notes[2]] != State.Invalid, "output note2 is already minted");
 
       notes[_notes[0]] = State.Spent;
       notes[_notes[1]] = State.Committed;
@@ -55,12 +58,15 @@ contract SpendNotes is SpendNoteVerifier, ZkDaiBase {
 
   function get3Notes(uint256[] memory input)
     internal
-    pure
-    returns(bytes32[3] memory notes)
+    //pure
+    returns(bytes32[3] memory notesHash)
   {
-      notes[0] = calcNoteHash(input[0], input[1]);
-      notes[1] = calcNoteHash(input[2], input[3]);
-      notes[2] = calcNoteHash(input[4], input[5]);
+      notesHash[0] = calcNoteHash(input[0], input[1]);
+      emit Calc(notesHash[0]);
+      notesHash[1] = calcNoteHash(input[2], input[3]);
+      emit Calc(notesHash[1]);
+      notesHash[2] = calcNoteHash(input[4], input[5]);
+      emit Calc(notesHash[2]);
   }
 
   /**

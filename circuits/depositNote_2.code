@@ -20,6 +20,7 @@ def main(field[2] oh, field[4] sh, field[4] rh, field[2] ch, field[4] mpk, field
   proofOfOwnership([pack256([...a,...b]),pack256([...c,...d])],sk,context) == 1
 
   pkHash = sha256packed(pk)
+
   h = sha256packed([pkHash[0],pkHash[1],oValue,oNonce])
   h[0] == oh[0]
   h[1] == oh[1]

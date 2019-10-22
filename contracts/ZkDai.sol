@@ -4,9 +4,11 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "./MintNotes.sol";
 import "./SpendNotes.sol";
 import "./LiquidateNotes.sol";
+import "./DepositNotes2.sol";
+import "./DepositNotes5.sol";
+import "./DepositNotes10.sol";
 
-
-contract ZkDai is MintNotes, SpendNotes, LiquidateNotes {
+contract ZkDai is MintNotes, SpendNotes, DepositNotes2, DepositNotes5, DepositNotes10, LiquidateNotes {
 
   modifier validStake(uint256 _stake)
   {
@@ -55,9 +57,46 @@ contract ZkDai is MintNotes, SpendNotes, LiquidateNotes {
       uint256[7] calldata input)
     external
     payable
-    //validStake(msg.value)
+    validStake(msg.value)
   {
       SpendNotes.submit(a, b, c, input);
+  }
+
+
+  function deposit_2(
+    uint256[2] calldata a,
+    uint256[2][2] calldata b,
+    uint256[2] calldata c,
+    uint256[19] calldata input)
+  external
+  payable
+  validStake(msg.value)
+  {
+    DepositNotes2.submit(a, b, c, input);
+  }
+
+  function deposit_5(
+    uint256[2] calldata a,
+    uint256[2][2] calldata b,
+    uint256[2] calldata c,
+    uint256[31] calldata input)
+  external
+  payable
+  validStake(msg.value)
+  {
+    DepositNotes5.submit(a, b, c, input);
+  }
+
+  function deposit_10(
+    uint256[2] calldata a,
+    uint256[2][2] calldata b,
+    uint256[2] calldata c,
+    uint256[51] calldata input)
+  external
+  payable
+  validStake(msg.value)
+  {
+    DepositNotes10.submit(a, b, c, input);
   }
 
   /**
@@ -74,7 +113,7 @@ contract ZkDai is MintNotes, SpendNotes, LiquidateNotes {
       uint256[4] calldata input)
     external
     payable
-    //validStake(msg.value)
+    validStake(msg.value)
   {
       LiquidateNotes.submit(to, a, b, c,input);
   }
@@ -101,9 +140,70 @@ contract ZkDai is MintNotes, SpendNotes, LiquidateNotes {
         SpendNotes.challenge(a, b, c, proofHash);
       } else if (submission.sType == SubmissionType.Liquidate) {
         LiquidateNotes.challenge(a, b, c, proofHash);
+      } else if (submission.sType == SubmissionType.Deposit) {
+        DepositNotes2.challenge(a, b, c, proofHash);
       }
   }
 
+  function challenge_spend(
+      uint256[2] calldata a,
+      uint256[2][2] calldata b,
+      uint256[2] calldata c)
+    external
+  {
+      bytes32 proofHash = getProofHash(a, b, c);
+      Submission storage submission = submissions[proofHash];
+      require(submission.sType != SubmissionType.Invalid, "Corresponding hash of proof doesnt exist");
+      require(submission.submittedAt + cooldown >= now, "Note cannot be challenged anymore");
+      require(submission.sType == SubmissionType.Spend, "Submission Type is not Spend");
+
+      SpendNotes.challenge(a, b, c, proofHash);
+  }
+
+  function challenge_deposit_2(
+      uint256[2] calldata a,
+      uint256[2][2] calldata b,
+      uint256[2] calldata c)
+    external
+  {
+      bytes32 proofHash = getProofHash(a, b, c);
+      Submission storage submission = submissions[proofHash];
+      require(submission.sType != SubmissionType.Invalid, "Corresponding hash of proof doesnt exist");
+      require(submission.submittedAt + cooldown >= now, "Note cannot be challenged anymore");
+      require(submission.sType == SubmissionType.Deposit, "Submission Type is not deposit");
+
+      DepositNotes2.challenge(a, b, c, proofHash);
+  }
+
+  function challenge_deposit_5(
+      uint256[2] calldata a,
+      uint256[2][2] calldata b,
+      uint256[2] calldata c)
+    external
+  {
+      bytes32 proofHash = getProofHash(a, b, c);
+      Submission storage submission = submissions[proofHash];
+      require(submission.sType != SubmissionType.Invalid, "Corresponding hash of proof doesnt exist");
+      require(submission.submittedAt + cooldown >= now, "Note cannot be challenged anymore");
+      require(submission.sType == SubmissionType.Deposit, "Submission Type is not deposit");
+
+      DepositNotes5.challenge(a, b, c, proofHash);
+  }
+
+  function challenge_deposit_10(
+      uint256[2] calldata a,
+      uint256[2][2] calldata b,
+      uint256[2] calldata c)
+    external
+  {
+      bytes32 proofHash = getProofHash(a, b, c);
+      Submission storage submission = submissions[proofHash];
+      require(submission.sType != SubmissionType.Invalid, "Corresponding hash of proof doesnt exist");
+      require(submission.submittedAt + cooldown >= now, "Note cannot be challenged anymore");
+      require(submission.sType == SubmissionType.Deposit, "Submission Type is not deposit");
+
+      DepositNotes10.challenge(a, b, c, proofHash);
+  }
   /**
   * @dev Commit a particular proof once the challenge period has ended
   * @param proofHash Hash of the proof that needs to be committed
@@ -120,6 +220,8 @@ contract ZkDai is MintNotes, SpendNotes, LiquidateNotes {
         spendCommit(proofHash);
       } else if (submission.sType == SubmissionType.Liquidate) {
         liquidateCommit(proofHash);
+      } else if (submission.sType == SubmissionType.Deposit) {
+        DepositNotes2.depositCommit(proofHash);
       }
   }
 }

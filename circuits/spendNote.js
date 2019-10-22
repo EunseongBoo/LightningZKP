@@ -13,7 +13,7 @@ function getPublicKeyHash(pk) {
 function getNoteHash(encodedNote) {
   const buf = Buffer.from(encodedNote, 'hex');
   const digest = crypto.createHash('sha256').update(buf).digest('hex');
-  // console.log('digest', digest)
+  console.log('digest', digest)
   // split into 128 bits each
   return [digest.slice(0, 32), digest.slice(32)]
 }
@@ -58,11 +58,11 @@ function getCreateNoteParams(_pubKey, _secKey, _rpubKey, _value, _value2, _value
 getCreateNoteParams(
   '6e145ccef1033dea239875dd00dfb4fee6e3348b84985c92f103444683bae07b83b5c38e5e2b0c8529d7fa3f64d46daa1ece2d9ac14cab9477d042c84c32ccd0', // pk
   'f8f8a2f43c8376ccb0871305060d7b27b0554d2cc72bccf41b2705608452f315', // sk
-  '6e145ccef1033dea239875dd00dfb4fee6e3348b84985c92f103444683bae07b83b5c38e5e2b0c8529d7fa3f64d46daa1ece2d9ac14cab9477d042c84c32ccd0', //rpk
-  10, // oValue
+  '4d65845c7426d420f8618b052ccba1e9d819ade834c9acd933f023bd1cb8bf67509e3c79b8d9aae49bd9316fe9d8fd3e8863a444a97731e12fe8d573b2f34789', //rpk
+  30, // oValue
   5, //nValue
-  5,  //nValue2
+  25,  //nValue2
   'c517f646255d5492089b881965cbd3da', // oNonce
-  'c517f646255d5492089b881965cbd3da', // nNonce1
-  'c517f646255d5492089b881965cbd3da' // nNonce2
+  'c517f646255d5492089b881965cbd3db', // nNonce1
+  'c517f646255d5492089b881965cbd3dc' // nNonce2
 )

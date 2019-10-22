@@ -15,7 +15,7 @@ d = ["0x00000000000000000000000000000000de8b8ba213d01a5db0a4137f89a3b143","0x000
 
 contract('mintNote', function(accounts) {
   let dai, zkdai;
-  console.log(accounts);
+  
   // Initial setup
   before(async () => {
     dai = await TestDai.new();
@@ -25,7 +25,7 @@ contract('mintNote', function(accounts) {
     zkdai = await ZkDai.new(100000000, web3.utils.toBN(SCALING_FACTOR), dai.address);
   })
 
-  it('transfers dai and mints note', async function() {
+  /*it('transfers dai and mints note', async function() {
     // check dai balance and approve the zkdai contract to be able to move tokens
     var daiCoinBalance = (await dai.balanceOf.call(accounts[0])).toString();
     //assert.equal(daiCoinBalance, tokenAmount.toString() , '100 dai tokens were not assigned to the 1st accounct ');
@@ -37,7 +37,7 @@ contract('mintNote', function(accounts) {
     const mint = await zkdai.mint(proof.a, proof.b, proof.c, inputs,{value:web3.utils.toBN(SCALING_FACTOR)});
     assert.equal(await dai.balanceOf.call(zkdai.address), parseInt(30,16) * SCALING_FACTOR, 'Zkdai contract should have 30 dai tokens');
     assertEvent(mint.logs[0], 'Submitted', accounts[0], '0xec80f7dafd9151fd44130ebda16666171fe58d3d6c34ed5c71b805e89c21a5ea')
-  })
+  })*/
 
   it('challenge fails for correct proof', async function() {
     await dai.approve(zkdai.address, web3.utils.toBN(parseInt(30,16) * 10**18));
@@ -48,7 +48,7 @@ contract('mintNote', function(accounts) {
     // @todo assert on challenge.logs[1].args.note
     assert.equal(challenge.logs[1].args.state, 1 /* committed */)
   })
-
+ /*
   it('challenge passes for incorrect proof', async function() {
     await dai.approve(zkdai.address, web3.utils.toBN(parseInt(50,16) * 10**18));
     // try sending in a note hash of higher value (invalid proof)
@@ -61,7 +61,7 @@ contract('mintNote', function(accounts) {
   })
 
   it('commit', async function() {
-    zkdai = await ZkDai.new(0 /* low cooldown */, web3.utils.toBN(SCALING_FACTOR), dai.address);
+    zkdai = await ZkDai.new(0 , web3.utils.toBN(SCALING_FACTOR), dai.address); //low cool down
     await dai.approve(zkdai.address, web3.utils.toBN(parseInt(30,16) * 10**18));
     const mint = await zkdai.mint(proof.a, proof.b, proof.c, inputs, {value:web3.utils.toBN(SCALING_FACTOR)});
     const proofHash = mint.logs[0].args.proofHash;
@@ -69,11 +69,11 @@ contract('mintNote', function(accounts) {
     await util.sleep(1);
     const commit = await zkdai.commit(proofHash);
     assert.equal(commit.logs[0].event, 'NoteStateChange')
-    assert.equal(commit.logs[0].args.state, 1 /* committed */)
+    assert.equal(commit.logs[0].args.state, 1) //committed
   })
 
   it('can not be challenged after cooldown period');
-  it('can not be committed before cooldown period');
+  it('can not be committed before cooldown period');*/
 })
 
 function assertEvent(event, type, ...args) {
