@@ -144,7 +144,7 @@ contract ZkDai is MintNotes, SpendNotes, DepositNotes2, DepositNotes5, DepositNo
         DepositNotes2.challenge(a, b, c, proofHash);
       }
   }
-
+  
   function challenge_spend(
       uint256[2] calldata a,
       uint256[2][2] calldata b,
@@ -221,7 +221,7 @@ contract ZkDai is MintNotes, SpendNotes, DepositNotes2, DepositNotes5, DepositNo
       } else if (submission.sType == SubmissionType.Liquidate) {
         liquidateCommit(proofHash);
       } else if (submission.sType == SubmissionType.Deposit) {
-        DepositNotes2.depositCommit(proofHash);
+        DepositNotes2.depositCommit_2(proofHash);
       }
   }
 }

@@ -3,7 +3,7 @@ import "./VerifierBase.sol";
 // This file is LGPL3 Licensed
 contract DepositNote10Verifier is VerifierBase {
 
-    function depositVerifyingKey() pure internal returns (VerifyingKey memory vk) {
+    function depositVerifyingKey() pure private returns (VerifyingKey memory vk) {
         vk.a = Pairing.G1Point(uint256(0x1ed79da9946f11b56739eebd69715bbd2e25ff5729f22a5c6a66a05da13a191a), uint256(0x0f3d7d3562bfae7b9b182baa31378442818c53518f236af47bea7d226309b95a));
         vk.b = Pairing.G2Point([uint256(0x199eaea01c7a80c7746193d62144b95f3fb5c33724eb3e49e1b2f8ba73a486b3), uint256(0x0b4d84af9184c3252ca02f5f971b90fe93900efdf808b03ed696e727fea82fbf)], [uint256(0x21e933dc2a5e984ca69f8452383ea2f06d8f9ff9eab57b68340238777dc0ab54), uint256(0x2d68b9a794081f851ab546e7b12d40425ecbd004c24b4f97901ec13d335cb37b)]);
         vk.gamma = Pairing.G2Point([uint256(0x14b3178b6f48c2d5ed825dd5fca853fec5155deda001ca7520ba1cb315014db8), uint256(0x2840fb55a8f2d80c5c16c4258fbbd7cf5526a80d264c1fa8ad778ef8c65954a0)], [uint256(0x18b08b3fa2e6be9f2da59155492c6ec8a6bb7fd35e2c3498fa5d244a8809042c), uint256(0x2d7ca6923359022ceabc8cc34f9191594363413b9c29269d3d95698c653f637a)]);
@@ -62,7 +62,7 @@ contract DepositNote10Verifier is VerifierBase {
         vk.gamma_abc[50] = Pairing.G1Point(uint256(0x1f14ca2c3bb374f6a3ef621c8e59bd3dc6c4cbb000000b0de43f8035447a01fe), uint256(0x0092f7fad599d907361fcb11b044093faa60cba3dbc2daea72091777735e1ee2));
         vk.gamma_abc[51] = Pairing.G1Point(uint256(0x1b9b405f3d1ee1417be36dfb2c60cd72272f2caf67c40fc15e9569bc30edc937), uint256(0x0cbe7a4459cfc4eb517693a3d7016f1b5fe3906960fe520286219d8c98544750));
     }
-    function depositVerify(uint[] memory input, Proof memory proof) internal returns (uint) {
+    function depositVerify(uint[] memory input, Proof memory proof) private returns (uint) {
         uint256 snark_scalar_field = 21888242871839275222246405745257275088548364400416034343698204186575808495617;
         VerifyingKey memory vk = depositVerifyingKey();
         require(input.length + 1 == vk.gamma_abc.length, "error occcurs in deposit in DepositNote10Verifier.sol");
@@ -80,7 +80,7 @@ contract DepositNote10Verifier is VerifierBase {
              Pairing.negate(vk.a), vk.b)) return 1;
         return 0;
     }
-    event DepositVerified(string s);
+    event DepositVerified_10(string s);
     function depositVerifyTx(
             uint[2] memory a,
             uint[2][2] memory b,
@@ -96,7 +96,7 @@ contract DepositNote10Verifier is VerifierBase {
             inputValues[i] = input[i];
         }
         if (depositVerify(inputValues, proof) == 0) {
-            emit DepositVerified("Transaction successfully verified.");
+            emit DepositVerified_10("Transaction successfully verified.");
             return true;
         } else {
             return false;

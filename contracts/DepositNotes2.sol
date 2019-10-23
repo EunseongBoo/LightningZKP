@@ -2,9 +2,9 @@ pragma solidity ^0.5.2;
 
 import "./verifiers/DepositNote2Verifier.sol";
 import "./ZkDaiBase.sol";
+import "./DepositBase.sol";
 
-
-contract DepositNotes2 is DepositNote2Verifier, ZkDaiBase {
+contract DepositNotes2 is DepositNote2Verifier, ZkDaiBase , DepositBase{
   uint8 internal constant NUM_PUBLIC_INPUTS = 19;
   uint8 internal constant NUM_DEPOSIT_NOTES = 2*2; //deposit_note_num * 2 (sender and receiver)
   uint8 internal constant NUM_ALL_NOTES = 2 + NUM_DEPOSIT_NOTES; //2 (original note + change note) + deposit notes
@@ -33,7 +33,7 @@ contract DepositNotes2 is DepositNote2Verifier, ZkDaiBase {
   * @dev Commits the proof i.e. Marks the input note as Spent and mints two new output notes that came with the proof.
   * @param proofHash Hash of the proof to be committed
   */
-  function depositCommit(bytes32 proofHash)
+  function depositCommit_2(bytes32 proofHash)
     internal
   {
       Submission storage submission = submissions[proofHash];
@@ -75,6 +75,7 @@ contract DepositNotes2 is DepositNote2Verifier, ZkDaiBase {
       }
       uint expectedTime = 5 minutes;
       depositPools[poolId] = DepositPool(mpkAddress, now + expectedTime, NUM_DEPOSIT_NOTES/2, 0, senderNotes, receiverNotes);
+      emit Deposited(mpkAddress, poolId);
   }
 
   function getALLNotes_2(uint256[] memory input)
@@ -105,8 +106,6 @@ contract DepositNotes2 is DepositNote2Verifier, ZkDaiBase {
         input[i] = submission.publicInput[i];
       }
       if (!DepositNote2Verifier.depositVerifyTx(a, b, c, input))
-      //bool a = false;
-      //if(a)
       {
         // challenge passed
         delete submissions[proofHash];
@@ -114,7 +113,7 @@ contract DepositNotes2 is DepositNote2Verifier, ZkDaiBase {
         emit Challenged(msg.sender, proofHash);
       } else {
         // challenge failed
-        //depositCommit(proofHash);
+        depositCommit_2(proofHash);
       }
   }
 

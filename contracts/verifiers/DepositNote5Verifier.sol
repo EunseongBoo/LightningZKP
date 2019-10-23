@@ -3,7 +3,7 @@ import "./VerifierBase.sol";
 // This file is LGPL3 Licensed
 contract DepositNote5Verifier is VerifierBase {
 
-    function depositVerifyingKey() pure internal returns (VerifyingKey memory vk) {
+    function depositVerifyingKey_5() pure internal returns (VerifyingKey memory vk) {
         vk.a = Pairing.G1Point(uint256(0x1f0d4ab681e60a0868d58f162d59df9f1b488777fa29c3e33ffa079e09b19658), uint256(0x094d3e1390a55cd2e111d11e0f597c9a1d1b8641a8e17836094292ce93a35aef));
         vk.b = Pairing.G2Point([uint256(0x01577a7077a3b575f61a47d0258570dc0895a7390d96e2f63ca93297903a804c), uint256(0x11877437f84a379d5e04dfd34b547c63ef454ed7aaf27cba127422dffec2a138)], [uint256(0x29549edfb52ddec31ca1fc740da801e2c1a778d7673e206c2621a051d335fb5f), uint256(0x2d74adf493c430b4ea75a6d4a66a538b52a8c4bad53dab7417e0b067083c1c1c)]);
         vk.gamma = Pairing.G2Point([uint256(0x27447b8d95c37e550c0ec3babbbfd5dd14e61e8d748f85bb1fe3b0917ae1e3c2), uint256(0x295df8a10e8301620b7cf3d054baba1d794867bdb8da7f8fb2ea716f781f3c15)], [uint256(0x060f28a3ff280debb78d02db46713f966cb292068755324704b709a2143ac44c), uint256(0x1bb9454a9e9495df0c1a7c09f6e4516cb56f6838d44eac8a0f6d5ce68bc9f00c)]);
@@ -42,10 +42,10 @@ contract DepositNote5Verifier is VerifierBase {
         vk.gamma_abc[30] = Pairing.G1Point(uint256(0x04916233590a4dd7a5344e4e4134b33c8deb88f6f3393f378f077b94a6f65e65), uint256(0x1fdb9236c0c0204bd43909c60c31f425c663a9cd917d4c7b9e0a9cac99a473de));
         vk.gamma_abc[31] = Pairing.G1Point(uint256(0x2085528fc3ab253e5fc937ef0038458a53af530ad299b77be6dfd84646d7d52f), uint256(0x0728c0336066383869709b8b3f4fca9ce15037066de972b7991cb14fb73312de));
     }
-    function depositVerify(uint[] memory input, Proof memory proof) internal returns (uint) {
+    function depositVerify_5(uint[] memory input, Proof memory proof) internal returns (uint) {
         uint256 snark_scalar_field = 21888242871839275222246405745257275088548364400416034343698204186575808495617;
-        VerifyingKey memory vk = depositVerifyingKey();
-        require(input.length + 1 == vk.gamma_abc.length);
+        VerifyingKey memory vk = depositVerifyingKey_5();
+        require(input.length + 1 == vk.gamma_abc.length, "error occcurs in deposit in DepositNote5Verifier.sol");
         // Compute the linear combination vk_x
         Pairing.G1Point memory vk_x = Pairing.G1Point(0, 0);
         for (uint i = 0; i < input.length; i++) {
@@ -60,7 +60,7 @@ contract DepositNote5Verifier is VerifierBase {
              Pairing.negate(vk.a), vk.b)) return 1;
         return 0;
     }
-    event DepositVerified(string s);
+    event DepositVerified_5(string s);
     function depositVerifyTx(
             uint[2] memory a,
             uint[2][2] memory b,
@@ -75,8 +75,8 @@ contract DepositNote5Verifier is VerifierBase {
         for(uint i = 0; i < input.length; i++){
             inputValues[i] = input[i];
         }
-        if (depositVerify(inputValues, proof) == 0) {
-            emit DepositVerified("Transaction successfully verified.");
+        if (depositVerify_5(inputValues, proof) == 0) {
+            emit DepositVerified_5("Transaction successfully verified.");
             return true;
         } else {
             return false;

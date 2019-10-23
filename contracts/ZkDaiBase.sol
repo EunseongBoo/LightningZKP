@@ -8,27 +8,6 @@ contract ZkDaiBase {
   uint256 public stake;
   ERC20 public dai;
 
-  //uint8 internal constant NUM_DEPOSIT_NOTES = 4; // sender's notes 0,1 and receiver's notes 0,1
-  uint internal constant poolTime = 10 minutes;
-
-  //DepositNotes struct is for deposit function
-  //notes_num:
-  //last_nonce: If recevier submit a last signed message, then the last nonce will be updated to the signed message's nonce to prevent replay attack
-  //senderNotes:
-  //receiverNotes:
-  struct DepositPool {
-    address mpkAddress;
-    //address targetAddress;
-    uint expiredTime;
-    uint8 maxNotesNum; //init: NUM_DEPOSIT_NOTES/2
-    uint8 lastNotesNum; // init:0
-    //uint lastNonce;
-    bytes32[] senderNotes;
-    bytes32[] receiverNotes;
-  }
-  //maps poolID to DepositNotes
-  mapping(bytes32 => DepositPool) public depositPools;
-
   enum SubmissionType {Invalid, Mint, Spend, Liquidate, Deposit}
   struct Submission {
     address payable submitter;
@@ -86,7 +65,7 @@ contract ZkDaiBase {
       return note;
   }
 
-  
+
   function getMpkAddress(uint256 _a, uint256 _b, uint256 _c, uint256 _d)
     internal
     pure
