@@ -67,7 +67,6 @@ def main(field[2] oh, field[40] sh, field[40] rh, field[2] ch, field[4] mpk, fie
   h[1] == sh[19]
 
   //
-
   h = sha256packed([mpkHash[0],mpkHash[1],value,sNonce[10]])
   h[0] == sh[20]
   h[1] == sh[21]

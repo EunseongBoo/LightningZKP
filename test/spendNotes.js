@@ -14,6 +14,8 @@ var deposit5_proof = require("./depositNote5Proof.json").proof;
 var deposit5_inputs = require("./depositNote5Proof.json").inputs;
 var deposit10_proof = require("./depositNote10Proof.json").proof;
 var deposit10_inputs = require("./depositNote10Proof.json").inputs;
+var deposit20_proof = require("./depositNote20Proof.json").proof;
+var deposit20_inputs = require("./depositNote20Proof.json").inputs;
 const SCALING_FACTOR = 10**18;
 const tokenAmount = web3.utils.toBN(100*10**18);
 
@@ -88,6 +90,18 @@ contract('mintNote', function(accounts) {
     console.log(challenge_deposit10.logs[0]);
     console.log(challenge_deposit10.logs[1]);
     console.log(challenge_deposit10.logs[2]);
+  })
+
+  it('Create and deposit20', async function() {
+    await dai.approve(zkdai.address, web3.utils.toBN(parseInt(30,16) * 10**18));
+    const mint = await zkdai.mint(mint_proof.a, mint_proof.b, mint_proof.c, mint_inputs, {value:web3.utils.toBN(SCALING_FACTOR)});
+    const challenge = await zkdai.challenge(mint_proof.a, mint_proof.b, mint_proof.c); // omit sending public params again
+
+    const deposit20 = await zkdai.deposit_20(deposit20_proof.a, deposit20_proof.b, deposit20_proof.c, deposit20_inputs, {value:web3.utils.toBN(SCALING_FACTOR)});
+    const challenge_deposit20 = await zkdai.challenge_deposit_20(deposit20_proof.a, deposit20_proof.b, deposit20_proof.c);
+    console.log(challenge_deposit20.logs[0]);
+    console.log(challenge_deposit20.logs[1]);
+    console.log(challenge_deposit20.logs[2]);
   })
 })
 

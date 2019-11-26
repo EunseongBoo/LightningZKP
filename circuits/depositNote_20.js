@@ -189,8 +189,8 @@ function getCreateNoteParams(_spk, _ssk, _mpk, _rpk, _ovalue, _nvalue, _notenum,
   let ch = getNoteHash(cnote);
 
   //let publicParams = [oh, sh1, sh2, rh1, rh2, ch, mpk.slice(0,32), mpk.slice(32, 64), mpk.slice(64, 96), mpk.slice(96), notenum, nvalue];
-  let publicParams = oh.concat(sh1, sh2, sh3, sh4, sh5, sh6,sh7,sh8,sh9,sh10, rh1, rh2, rh3, rh4, rh5, rh6, rh7, rh8, rh9,rh10, ch, [mpk.slice(0,32), mpk.slice(32, 64), mpk.slice(64, 96), mpk.slice(96), notenum, nvalue]);
-  let privateParams = [ovalue, ononce, snonce1, snonce2, snonce3, snonce4, snonce5, snonce6, snonce7, snonce8, snonce9, snonce10, rnonce1, rnonce2, rnonce3, rnonce4, rnonce5, rnonce6, rnonce7, rnonce8, rnonce9, rnonce10, cnonce, spk.slice(0,32), spk.slice(32,64), spk.slice(64,96), spk.slice(96), ssk, rpk.slice(0,32), rpk.slice(32,64), rpk.slice(64,96), rpk.slice(96)]
+  let publicParams = oh.concat(sh1, sh2, sh3, sh4, sh5, sh6,sh7,sh8,sh9,sh10, sh11, sh12, sh13, sh14, sh15, sh16, sh17, sh18, sh19, sh20, rh1, rh2, rh3, rh4, rh5, rh6, rh7, rh8, rh9,rh10, rh11, rh12, rh13, rh14, rh15, rh16, rh17, rh18, rh19, rh20, ch, [mpk.slice(0,32), mpk.slice(32, 64), mpk.slice(64, 96), mpk.slice(96), notenum, nvalue]);
+  let privateParams = [ovalue, ononce, snonce1, snonce2, snonce3, snonce4, snonce5, snonce6, snonce7, snonce8, snonce9, snonce10,  snonce11,  snonce12,  snonce13,  snonce14,  snonce15,  snonce16,  snonce17,  snonce18,  snonce19,  snonce20, rnonce1, rnonce2, rnonce3, rnonce4, rnonce5, rnonce6, rnonce7, rnonce8, rnonce9, rnonce10, rnonce11, rnonce12, rnonce13, rnonce14, rnonce15, rnonce16, rnonce17, rnonce18, rnonce19, rnonce20, cnonce, spk.slice(0,32), spk.slice(32,64), spk.slice(64,96), spk.slice(96), ssk, rpk.slice(0,32), rpk.slice(32,64), rpk.slice(64,96), rpk.slice(96)]
   //let privateParams = [pubKey.slice(0, 32), pubKey.slice(32, 64), pubKey.slice(64,96), pubKey.slice(96), ononce, secKey];
   //let privateParams = [pubKey.slice(0, 64), pubKey.slice(64), nonce];
   //let pubKeyHash = getPublicKeyHash(pubKey.slice(0, 32) + pubKey.slice(32, 64) + pubKey.slice(64,96) + pubKey.slice(96));

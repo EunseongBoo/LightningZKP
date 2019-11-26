@@ -7,8 +7,9 @@ import "./LiquidateNotes.sol";
 import "./DepositNotes2.sol";
 import "./DepositNotes5.sol";
 import "./DepositNotes10.sol";
+import "./DepositNotes20.sol";
 
-contract ZkDai is MintNotes, SpendNotes, DepositNotes2, DepositNotes5, DepositNotes10, LiquidateNotes {
+contract ZkDai is MintNotes, SpendNotes, DepositNotes2, DepositNotes5, DepositNotes10, DepositNotes20, LiquidateNotes {
 
   modifier validStake(uint256 _stake)
   {
@@ -99,6 +100,18 @@ contract ZkDai is MintNotes, SpendNotes, DepositNotes2, DepositNotes5, DepositNo
     DepositNotes10.submit(a, b, c, input);
   }
 
+  function deposit_20(
+    uint256[2] calldata a,
+    uint256[2][2] calldata b,
+    uint256[2] calldata c,
+    uint256[91] calldata input)
+  external
+  payable
+  validStake(msg.value)
+  {
+    DepositNotes20.submit(a, b, c, input);
+  }
+
   /**
   * @dev Liquidate a note to transfer the equivalent amount of dai to the recipient
   * @param to Recipient of the dai tokens
@@ -144,7 +157,7 @@ contract ZkDai is MintNotes, SpendNotes, DepositNotes2, DepositNotes5, DepositNo
         DepositNotes2.challenge(a, b, c, proofHash);
       }
   }
-  
+
   function challenge_spend(
       uint256[2] calldata a,
       uint256[2][2] calldata b,
@@ -203,6 +216,21 @@ contract ZkDai is MintNotes, SpendNotes, DepositNotes2, DepositNotes5, DepositNo
       require(submission.sType == SubmissionType.Deposit, "Submission Type is not deposit");
 
       DepositNotes10.challenge(a, b, c, proofHash);
+  }
+
+  function challenge_deposit_20(
+      uint256[2] calldata a,
+      uint256[2][2] calldata b,
+      uint256[2] calldata c)
+    external
+  {
+      bytes32 proofHash = getProofHash(a, b, c);
+      Submission storage submission = submissions[proofHash];
+      require(submission.sType != SubmissionType.Invalid, "Corresponding hash of proof doesnt exist");
+      require(submission.submittedAt + cooldown >= now, "Note cannot be challenged anymore");
+      require(submission.sType == SubmissionType.Deposit, "Submission Type is not deposit");
+
+      DepositNotes20.challenge(a, b, c, proofHash);
   }
   /**
   * @dev Commit a particular proof once the challenge period has ended
