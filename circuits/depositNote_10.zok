@@ -1,12 +1,12 @@
-import "hashes/sha256/512bitPacked.code" as sha256packed
-import "hashes/sha256/1024bit.code" as sha256
-import "utils/pack/nonStrictUnpack256.code" as unpack256
-import "utils/pack/pack256.code" as pack256
-import "ecc/proofOfOwnership.code" as proofOfOwnership
-import "ecc/babyjubjubParams.code" as context
-import "utils/pack/unpack128.code" as unpack128
+import "hashes/sha256/512bitPacked.zok" as sha256packed
+import "hashes/sha256/1024bit.zok" as sha256
+import "utils/pack/nonStrictUnpack256.zok" as unpack256
+import "utils/pack/pack256.zok" as pack256
+import "ecc/proofOfOwnership.zok" as proofOfOwnership
+import "ecc/babyjubjubParams.zok" as context
+import "utils/pack/unpack128.zok" as unpack128
 
-def main(field[2] oh, field[10] sh, field[10] rh, field[2] ch, field[4] mpk, field noteNum, field value, private field oValue, private field oNonce, private field[5] sNonce, private field[5] rNonce, private field cNonce, private field[4] pk, private field sk, private field[4] rpk) -> (field):
+def main(field[2] oh, field[20] sh, field[20] rh, field[2] ch, field[4] mpk, field noteNum, field value, private field oValue, private field oNonce, private field[10] sNonce, private field[10] rNonce, private field cNonce, private field[4] pk, private field sk, private field[4] rpk) -> (field):
 
   1 == if oValue >= (noteNum * value) then 1 else 0 fi
   field change = oValue - noteNum * value
@@ -46,6 +46,27 @@ def main(field[2] oh, field[10] sh, field[10] rh, field[2] ch, field[4] mpk, fie
   h[0] == sh[8]
   h[1] == sh[9]
 
+  h = sha256packed([mpkHash[0],mpkHash[1],value,sNonce[5]])
+  h[0] == sh[10]
+  h[1] == sh[11]
+
+  h = sha256packed([mpkHash[0],mpkHash[1],value,sNonce[6]])
+  h[0] == sh[12]
+  h[1] == sh[13]
+
+  h = sha256packed([mpkHash[0],mpkHash[1],value,sNonce[7]])
+  h[0] == sh[14]
+  h[1] == sh[15]
+
+  h = sha256packed([mpkHash[0],mpkHash[1],value,sNonce[8]])
+  h[0] == sh[16]
+  h[1] == sh[17]
+
+  h = sha256packed([mpkHash[0],mpkHash[1],value,sNonce[9]])
+  h[0] == sh[18]
+  h[1] == sh[19]
+
+
   //deposit notes for receiver
   rpkHash = sha256packed(rpk)
   h = sha256packed([rpkHash[0],rpkHash[1],value,rNonce[0]])
@@ -67,6 +88,26 @@ def main(field[2] oh, field[10] sh, field[10] rh, field[2] ch, field[4] mpk, fie
   h = sha256packed([rpkHash[0],rpkHash[1],value,rNonce[4]])
   h[0] == rh[8]
   h[1] == rh[9]
+
+  h = sha256packed([rpkHash[0],rpkHash[1],value,rNonce[5]])
+  h[0] == rh[10]
+  h[1] == rh[11]
+
+  h = sha256packed([rpkHash[0],rpkHash[1],value,rNonce[6]])
+  h[0] == rh[12]
+  h[1] == rh[13]
+
+  h = sha256packed([rpkHash[0],rpkHash[1],value,rNonce[7]])
+  h[0] == rh[14]
+  h[1] == rh[15]
+
+  h = sha256packed([rpkHash[0],rpkHash[1],value,rNonce[8]])
+  h[0] == rh[16]
+  h[1] == rh[17]
+
+  h = sha256packed([rpkHash[0],rpkHash[1],value,rNonce[9]])
+  h[0] == rh[18]
+  h[1] == rh[19]
 
   //A note for sender's change
   h = sha256packed([pkHash[0],pkHash[1],change,cNonce])
