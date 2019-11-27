@@ -11,17 +11,41 @@ I ported the ["optimistic-zkdai" project](https://github.com/atvanguard/optimist
 3.
 
 
+# Requirements
+
+Please download libraries for testing.
+1. Zokrates
+2. truffle
+3. geth
+4. ...
 
 
 
 # Test
 
 1. open a terminal and enter the below command.
+```bash
 ganache-cli --allowUnlimitedContractSize --gasLimit 900000000
 // node --max-old-space-size=4096 /home/boo/.nvm/versions/node/v10.16.0/bin/ganache-cli --allowUnlimitedContractSize --gasLimit 900000000
+```
 
 2. open a new ternminal and enter the below command.
-truffle develop
+```bash
+truffle test ./test/spendNotes.js
+```
 
-3. To get gas usage of each functions in LightningZKP, enter the below command.
-test ./test/spendNotes.js
+# Raspberry Pi setting
+
+1. Installing the rust using rustup
+```bash
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+```
+
+2. Install Zokrates
+```bash
+git clone https://github.com/ZoKrates/ZoKrates
+cd ZoKrates
+rustup toolchain install nightly
+cargo +nightly build --release
+cd target/release
+```
