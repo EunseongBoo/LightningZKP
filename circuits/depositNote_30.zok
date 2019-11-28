@@ -1,0 +1,281 @@
+import "hashes/sha256/512bitPacked.zok" as sha256packed
+import "hashes/sha256/1024bit.zok" as sha256
+import "utils/pack/nonStrictUnpack256.zok" as unpack256
+import "utils/pack/pack256.zok" as pack256
+import "ecc/proofOfOwnership.zok" as proofOfOwnership
+import "ecc/babyjubjubParams.zok" as context
+import "utils/pack/unpack128.zok" as unpack128
+
+def main(field[2] oh, field[60] sh, field[60] rh, field[2] ch, field[4] mpk, field noteNum, field value, private field oValue, private field oNonce, private field[30] sNonce, private field[30] rNonce, private field cNonce, private field[4] pk, private field sk, private field[4] rpk) -> (field):
+
+  1 == if oValue >= (noteNum * value) then 1 else 0 fi
+  field change = oValue - noteNum * value
+
+  //prove the sender's pk
+  context = context()
+  a = unpack128(pk[0])
+  b = unpack128(pk[1])
+  c = unpack128(pk[2])
+  d = unpack128(pk[3])
+  //proofOfOwnership([pack256([...a,...b]),pack256([...c,...d])],sk,context) == 1
+  field out = proofOfOwnership([pack256([...a,...b]),pack256([...c,...d])],sk,context)
+
+  pkHash = sha256packed(pk)
+  h = sha256packed([pkHash[0],pkHash[1],oValue,oNonce])
+  h[0] == oh[0]
+  h[1] == oh[1]
+
+  //deposit notes for sender
+  mpkHash = sha256packed(mpk)
+  h = sha256packed([mpkHash[0],mpkHash[1],value,sNonce[0]])
+  h[0] == sh[0]
+  h[1] == sh[1]
+
+  h = sha256packed([mpkHash[0],mpkHash[1],value,sNonce[1]])
+  h[0] == sh[2]
+  h[1] == sh[3]
+
+  h = sha256packed([mpkHash[0],mpkHash[1],value,sNonce[2]])
+  h[0] == sh[4]
+  h[1] == sh[5]
+
+  h = sha256packed([mpkHash[0],mpkHash[1],value,sNonce[3]])
+  h[0] == sh[6]
+  h[1] == sh[7]
+
+  h = sha256packed([mpkHash[0],mpkHash[1],value,sNonce[4]])
+  h[0] == sh[8]
+  h[1] == sh[9]
+
+  h = sha256packed([mpkHash[0],mpkHash[1],value,sNonce[5]])
+  h[0] == sh[10]
+  h[1] == sh[11]
+
+  h = sha256packed([mpkHash[0],mpkHash[1],value,sNonce[6]])
+  h[0] == sh[12]
+  h[1] == sh[13]
+
+  h = sha256packed([mpkHash[0],mpkHash[1],value,sNonce[7]])
+  h[0] == sh[14]
+  h[1] == sh[15]
+
+  h = sha256packed([mpkHash[0],mpkHash[1],value,sNonce[8]])
+  h[0] == sh[16]
+  h[1] == sh[17]
+
+  h = sha256packed([mpkHash[0],mpkHash[1],value,sNonce[9]])
+  h[0] == sh[18]
+  h[1] == sh[19]
+
+  //
+  h = sha256packed([mpkHash[0],mpkHash[1],value,sNonce[10]])
+  h[0] == sh[20]
+  h[1] == sh[21]
+
+  h = sha256packed([mpkHash[0],mpkHash[1],value,sNonce[11]])
+  h[0] == sh[22]
+  h[1] == sh[23]
+
+  h = sha256packed([mpkHash[0],mpkHash[1],value,sNonce[12]])
+  h[0] == sh[24]
+  h[1] == sh[25]
+
+  h = sha256packed([mpkHash[0],mpkHash[1],value,sNonce[13]])
+  h[0] == sh[26]
+  h[1] == sh[27]
+
+  h = sha256packed([mpkHash[0],mpkHash[1],value,sNonce[14]])
+  h[0] == sh[28]
+  h[1] == sh[29]
+
+  h = sha256packed([mpkHash[0],mpkHash[1],value,sNonce[15]])
+  h[0] == sh[30]
+  h[1] == sh[31]
+
+  h = sha256packed([mpkHash[0],mpkHash[1],value,sNonce[16]])
+  h[0] == sh[32]
+  h[1] == sh[33]
+
+  h = sha256packed([mpkHash[0],mpkHash[1],value,sNonce[17]])
+  h[0] == sh[34]
+  h[1] == sh[35]
+
+  h = sha256packed([mpkHash[0],mpkHash[1],value,sNonce[18]])
+  h[0] == sh[36]
+  h[1] == sh[37]
+
+  h = sha256packed([mpkHash[0],mpkHash[1],value,sNonce[19]])
+  h[0] == sh[38]
+  h[1] == sh[39]
+
+  h = sha256packed([mpkHash[0],mpkHash[1],value,sNonce[20]])
+  h[0] == sh[40]
+  h[1] == sh[41]
+
+  h = sha256packed([mpkHash[0],mpkHash[1],value,sNonce[21]])
+  h[0] == sh[42]
+  h[1] == sh[43]
+
+  h = sha256packed([mpkHash[0],mpkHash[1],value,sNonce[22]])
+  h[0] == sh[44]
+  h[1] == sh[45]
+
+  h = sha256packed([mpkHash[0],mpkHash[1],value,sNonce[23]])
+  h[0] == sh[46]
+  h[1] == sh[47]
+
+  h = sha256packed([mpkHash[0],mpkHash[1],value,sNonce[24]])
+  h[0] == sh[48]
+  h[1] == sh[49]
+
+  h = sha256packed([mpkHash[0],mpkHash[1],value,sNonce[25]])
+  h[0] == sh[50]
+  h[1] == sh[51]
+
+  h = sha256packed([mpkHash[0],mpkHash[1],value,sNonce[26]])
+  h[0] == sh[52]
+  h[1] == sh[53]
+
+  h = sha256packed([mpkHash[0],mpkHash[1],value,sNonce[27]])
+  h[0] == sh[54]
+  h[1] == sh[55]
+
+  h = sha256packed([mpkHash[0],mpkHash[1],value,sNonce[28]])
+  h[0] == sh[56]
+  h[1] == sh[57]
+
+  h = sha256packed([mpkHash[0],mpkHash[1],value,sNonce[29]])
+  h[0] == sh[58]
+  h[1] == sh[59]
+
+
+    //deposit notes for receiver
+    rpkHash = sha256packed(rpk)
+    h = sha256packed([rpkHash[0],rpkHash[1],value,rNonce[0]])
+    h[0] == rh[0]
+    h[1] == rh[1]
+
+    h = sha256packed([rpkHash[0],rpkHash[1],value,rNonce[1]])
+    h[0] == rh[2]
+    h[1] == rh[3]
+
+    h = sha256packed([rpkHash[0],rpkHash[1],value,rNonce[2]])
+    h[0] == rh[4]
+    h[1] == rh[5]
+
+    h = sha256packed([rpkHash[0],rpkHash[1],value,rNonce[3]])
+    h[0] == rh[6]
+    h[1] == rh[7]
+
+    h = sha256packed([rpkHash[0],rpkHash[1],value,rNonce[4]])
+    h[0] == rh[8]
+    h[1] == rh[9]
+
+    h = sha256packed([rpkHash[0],rpkHash[1],value,rNonce[5]])
+    h[0] == rh[10]
+    h[1] == rh[11]
+
+    h = sha256packed([rpkHash[0],rpkHash[1],value,rNonce[6]])
+    h[0] == rh[12]
+    h[1] == rh[13]
+
+    h = sha256packed([rpkHash[0],rpkHash[1],value,rNonce[7]])
+    h[0] == rh[14]
+    h[1] == rh[15]
+
+    h = sha256packed([rpkHash[0],rpkHash[1],value,rNonce[8]])
+    h[0] == rh[16]
+    h[1] == rh[17]
+
+    h = sha256packed([rpkHash[0],rpkHash[1],value,rNonce[9]])
+    h[0] == rh[18]
+    h[1] == rh[19]
+
+    //
+
+    h = sha256packed([rpkHash[0],rpkHash[1],value,rNonce[10]])
+    h[0] == rh[20]
+    h[1] == rh[21]
+
+    h = sha256packed([rpkHash[0],rpkHash[1],value,rNonce[11]])
+    h[0] == rh[22]
+    h[1] == rh[23]
+
+    h = sha256packed([rpkHash[0],rpkHash[1],value,rNonce[12]])
+    h[0] == rh[24]
+    h[1] == rh[25]
+
+    h = sha256packed([rpkHash[0],rpkHash[1],value,rNonce[13]])
+    h[0] == rh[26]
+    h[1] == rh[27]
+
+    h = sha256packed([rpkHash[0],rpkHash[1],value,rNonce[14]])
+    h[0] == rh[28]
+    h[1] == rh[29]
+
+    h = sha256packed([rpkHash[0],rpkHash[1],value,rNonce[15]])
+    h[0] == rh[30]
+    h[1] == rh[31]
+
+    h = sha256packed([rpkHash[0],rpkHash[1],value,rNonce[16]])
+    h[0] == rh[32]
+    h[1] == rh[33]
+
+    h = sha256packed([rpkHash[0],rpkHash[1],value,rNonce[17]])
+    h[0] == rh[34]
+    h[1] == rh[35]
+
+    h = sha256packed([rpkHash[0],rpkHash[1],value,rNonce[18]])
+    h[0] == rh[36]
+    h[1] == rh[37]
+
+    h = sha256packed([rpkHash[0],rpkHash[1],value,rNonce[19]])
+    h[0] == rh[38]
+    h[1] == rh[39]
+
+    h = sha256packed([rpkHash[0],rpkHash[1],value,rNonce[20]])
+    h[0] == rh[40]
+    h[1] == rh[41]
+
+  h = sha256packed([rpkHash[0],rpkHash[1],value,rNonce[21]])
+  h[0] == rh[42]
+  h[1] == rh[43]
+
+  h = sha256packed([rpkHash[0],rpkHash[1],value,rNonce[22]])
+  h[0] == rh[44]
+  h[1] == rh[45]
+
+  h = sha256packed([rpkHash[0],rpkHash[1],value,rNonce[23]])
+  h[0] == rh[46]
+  h[1] == rh[47]
+
+  h = sha256packed([rpkHash[0],rpkHash[1],value,rNonce[24]])
+  h[0] == rh[48]
+  h[1] == rh[49]
+
+  h = sha256packed([rpkHash[0],rpkHash[1],value,rNonce[25]])
+  h[0] == rh[50]
+  h[1] == rh[51]
+
+  h = sha256packed([rpkHash[0],rpkHash[1],value,rNonce[26]])
+  h[0] == rh[52]
+  h[1] == rh[53]
+
+  h = sha256packed([rpkHash[0],rpkHash[1],value,rNonce[27]])
+  h[0] == rh[54]
+  h[1] == rh[55]
+
+  h = sha256packed([rpkHash[0],rpkHash[1],value,rNonce[28]])
+  h[0] == rh[56]
+  h[1] == rh[57]
+
+  h = sha256packed([rpkHash[0],rpkHash[1],value,rNonce[29]])
+  h[0] == rh[58]
+  h[1] == rh[59]
+
+  //A note for sender's change
+  h = sha256packed([pkHash[0],pkHash[1],change,cNonce])
+  h[0] == ch[0]
+  h[1] == ch[1]
+
+  return 1

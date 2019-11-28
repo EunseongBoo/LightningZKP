@@ -29,7 +29,7 @@ function printZokratesCommand(params) {
   console.log(cmd);
 }
 
-function getCreateNoteParams(_spk, _ssk, _mpk, _rpk, _ovalue, _nvalue, _notenum, _ononce, _snonce0, _snonce1, _snonce2, _snonce3, _snonce4, _snonce5, _snonce6, _snonce7, _snonce8, _snonce9, _snonce10, _snonce11, _snonce12, _snonce13, _snonce14, _snonce15, _snonce16, _snonce17, _snonce18, _snonce19, _rnonce0, _rnonce1, _rnonce2, _rnonce3, _rnonce4, _rnonce5, _rnonce6, _rnonce7, _rnonce8, _rnonce9, _rnonce10,  _rnonce11,  _rnonce12,  _rnonce13,  _rnonce14,  _rnonce15,  _rnonce16,  _rnonce17,  _rnonce18, _rnonce19, _cnonce) {
+function getCreateNoteParams(_spk, _ssk, _mpk, _rpk, _ovalue, _nvalue, _notenum, _ononce, _snonce0, _snonce1, _snonce2, _snonce3, _snonce4, _snonce5, _snonce6, _snonce7, _snonce8, _snonce9, _snonce10, _snonce11, _snonce12, _snonce13, _snonce14, _snonce15, _snonce16, _snonce17, _snonce18, _snonce19, _snonce20, _snonce21, _snonce22, _snonce23, _snonce24, _snonce25, _snonce26, _snonce27, _snonce28, _snonce29, _rnonce0, _rnonce1, _rnonce2, _rnonce3, _rnonce4, _rnonce5, _rnonce6, _rnonce7, _rnonce8, _rnonce9, _rnonce10,  _rnonce11,  _rnonce12,  _rnonce13,  _rnonce14,  _rnonce15,  _rnonce16,  _rnonce17,  _rnonce18, _rnonce19, _rnonce20,  _rnonce21,  _rnonce22,  _rnonce23,  _rnonce24,  _rnonce25,  _rnonce26,  _rnonce27,  _rnonce28, _rnonce29,_cnonce) {
   console.log(arguments)
   let spk = new BN(_spk, 16).toString(16); // 64 bytes = 512 bits, sender's public key = spk
   let ssk = new BN(_ssk, 16).toString(16); //sender's secret key = ssk
@@ -73,6 +73,16 @@ function getCreateNoteParams(_spk, _ssk, _mpk, _rpk, _ovalue, _nvalue, _notenum,
   let snonce18 = new BN(_snonce17, 16).toString(16, 32);
   let snonce19 = new BN(_snonce18, 16).toString(16, 32);
   let snonce20 = new BN(_snonce19, 16).toString(16, 32);
+  let snonce21 = new BN(_snonce20, 16).toString(16, 32); // sender note's nonce
+  let snonce22 = new BN(_snonce21, 16).toString(16, 32);
+  let snonce23 = new BN(_snonce22, 16).toString(16, 32);
+  let snonce24 = new BN(_snonce23, 16).toString(16, 32);
+  let snonce25 = new BN(_snonce24, 16).toString(16, 32);
+  let snonce26 = new BN(_snonce25, 16).toString(16, 32); // sender note's nonce
+  let snonce27 = new BN(_snonce26, 16).toString(16, 32);
+  let snonce28 = new BN(_snonce27, 16).toString(16, 32);
+  let snonce29 = new BN(_snonce28, 16).toString(16, 32);
+  let snonce30 = new BN(_snonce29, 16).toString(16, 32);
   let rnonce1 = new BN(_rnonce0, 16).toString(16, 32); // receiver note's nonce
   let rnonce2 = new BN(_rnonce1, 16).toString(16, 32);
   let rnonce3 = new BN(_rnonce2, 16).toString(16, 32);
@@ -93,6 +103,16 @@ function getCreateNoteParams(_spk, _ssk, _mpk, _rpk, _ovalue, _nvalue, _notenum,
   let rnonce18 = new BN(_rnonce17, 16).toString(16, 32);
   let rnonce19 = new BN(_rnonce18, 16).toString(16, 32);
   let rnonce20 = new BN(_rnonce19, 16).toString(16, 32);
+  let rnonce21 = new BN(_rnonce20, 16).toString(16, 32); // receiver note's nonce
+  let rnonce22 = new BN(_rnonce21, 16).toString(16, 32);
+  let rnonce23 = new BN(_rnonce22, 16).toString(16, 32);
+  let rnonce24 = new BN(_rnonce23, 16).toString(16, 32);
+  let rnonce25 = new BN(_rnonce24, 16).toString(16, 32);
+  let rnonce26 = new BN(_rnonce25, 16).toString(16, 32); // receiver note's nonce
+  let rnonce27 = new BN(_rnonce26, 16).toString(16, 32);
+  let rnonce28 = new BN(_rnonce27, 16).toString(16, 32);
+  let rnonce29 = new BN(_rnonce28, 16).toString(16, 32);
+  let rnonce30 = new BN(_rnonce29, 16).toString(16, 32);
   let cnonce = new BN(_cnonce, 16).toString(16, 32); //change note's nonce
 
   // calcuale public key hash
@@ -122,6 +142,16 @@ function getCreateNoteParams(_spk, _ssk, _mpk, _rpk, _ovalue, _nvalue, _notenum,
   let snote18 = mpkHash + nvalue + snonce18;
   let snote19 = mpkHash + nvalue + snonce19;
   let snote20 = mpkHash + nvalue + snonce20;
+  let snote21 = mpkHash + nvalue + snonce21;
+  let snote22 = mpkHash + nvalue + snonce22;
+  let snote23 = mpkHash + nvalue + snonce23;
+  let snote24 = mpkHash + nvalue + snonce24;
+  let snote25 = mpkHash + nvalue + snonce25;
+  let snote26 = mpkHash + nvalue + snonce26;
+  let snote27 = mpkHash + nvalue + snonce27;
+  let snote28 = mpkHash + nvalue + snonce28;
+  let snote29 = mpkHash + nvalue + snonce29;
+  let snote30 = mpkHash + nvalue + snonce30;
   let rnote1 = rpkHash + nvalue + rnonce1;
   let rnote2 = rpkHash + nvalue + rnonce2;
   let rnote3 = rpkHash + nvalue + rnonce3;
@@ -142,6 +172,16 @@ function getCreateNoteParams(_spk, _ssk, _mpk, _rpk, _ovalue, _nvalue, _notenum,
   let rnote18 = rpkHash + nvalue + rnonce18;
   let rnote19 = rpkHash + nvalue + rnonce19;
   let rnote20 = rpkHash + nvalue + rnonce20;
+  let rnote21 = rpkHash + nvalue + rnonce21;
+  let rnote22 = rpkHash + nvalue + rnonce22;
+  let rnote23 = rpkHash + nvalue + rnonce23;
+  let rnote24 = rpkHash + nvalue + rnonce24;
+  let rnote25 = rpkHash + nvalue + rnonce25;
+  let rnote26 = rpkHash + nvalue + rnonce26;
+  let rnote27 = rpkHash + nvalue + rnonce27;
+  let rnote28 = rpkHash + nvalue + rnonce28;
+  let rnote29 = rpkHash + nvalue + rnonce29;
+  let rnote30 = rpkHash + nvalue + rnonce30;
   let cnote = spkHash + cvalue + cnonce;
 
   //calculate notes hash
@@ -166,6 +206,16 @@ function getCreateNoteParams(_spk, _ssk, _mpk, _rpk, _ovalue, _nvalue, _notenum,
   let sh18 = getNoteHash(snote18);
   let sh19 = getNoteHash(snote19);
   let sh20 = getNoteHash(snote20);
+  let sh21 = getNoteHash(snote21);
+  let sh22 = getNoteHash(snote22);
+  let sh23 = getNoteHash(snote23);
+  let sh24 = getNoteHash(snote24);
+  let sh25 = getNoteHash(snote25);
+  let sh26 = getNoteHash(snote26);
+  let sh27 = getNoteHash(snote27);
+  let sh28 = getNoteHash(snote28);
+  let sh29 = getNoteHash(snote29);
+  let sh30 = getNoteHash(snote30);
   let rh1 = getNoteHash(rnote1);
   let rh2 = getNoteHash(rnote2);
   let rh3 = getNoteHash(rnote3);
@@ -186,11 +236,21 @@ function getCreateNoteParams(_spk, _ssk, _mpk, _rpk, _ovalue, _nvalue, _notenum,
   let rh18 = getNoteHash(rnote18);
   let rh19 = getNoteHash(rnote19);
   let rh20 = getNoteHash(rnote20);
+  let rh21 = getNoteHash(rnote21);
+  let rh22 = getNoteHash(rnote22);
+  let rh23 = getNoteHash(rnote23);
+  let rh24 = getNoteHash(rnote24);
+  let rh25 = getNoteHash(rnote25);
+  let rh26 = getNoteHash(rnote26);
+  let rh27 = getNoteHash(rnote27);
+  let rh28 = getNoteHash(rnote28);
+  let rh29 = getNoteHash(rnote29);
+  let rh30 = getNoteHash(rnote30);
   let ch = getNoteHash(cnote);
 
   //let publicParams = [oh, sh1, sh2, rh1, rh2, ch, mpk.slice(0,32), mpk.slice(32, 64), mpk.slice(64, 96), mpk.slice(96), notenum, nvalue];
-  let publicParams = oh.concat(sh1, sh2, sh3, sh4, sh5, sh6,sh7,sh8,sh9,sh10, sh11, sh12, sh13, sh14, sh15, sh16, sh17, sh18, sh19, sh20, rh1, rh2, rh3, rh4, rh5, rh6, rh7, rh8, rh9,rh10, rh11, rh12, rh13, rh14, rh15, rh16, rh17, rh18, rh19, rh20, ch, [mpk.slice(0,32), mpk.slice(32, 64), mpk.slice(64, 96), mpk.slice(96), notenum, nvalue]);
-  let privateParams = [ovalue, ononce, snonce1, snonce2, snonce3, snonce4, snonce5, snonce6, snonce7, snonce8, snonce9, snonce10,  snonce11,  snonce12,  snonce13,  snonce14,  snonce15,  snonce16,  snonce17,  snonce18,  snonce19,  snonce20, rnonce1, rnonce2, rnonce3, rnonce4, rnonce5, rnonce6, rnonce7, rnonce8, rnonce9, rnonce10, rnonce11, rnonce12, rnonce13, rnonce14, rnonce15, rnonce16, rnonce17, rnonce18, rnonce19, rnonce20, cnonce, spk.slice(0,32), spk.slice(32,64), spk.slice(64,96), spk.slice(96), ssk, rpk.slice(0,32), rpk.slice(32,64), rpk.slice(64,96), rpk.slice(96)]
+  let publicParams = oh.concat(sh1, sh2, sh3, sh4, sh5, sh6,sh7,sh8,sh9,sh10, sh11, sh12, sh13, sh14, sh15, sh16, sh17, sh18, sh19, sh20, sh21, sh22, sh23, sh24, sh25, sh26, sh27, sh28, sh29, sh30,rh1, rh2, rh3, rh4, rh5, rh6, rh7, rh8, rh9,rh10, rh11, rh12, rh13, rh14, rh15, rh16, rh17, rh18, rh19, rh20, rh21, rh22, rh23, rh24, rh25, rh26, rh27, rh28, rh29, rh30, ch, [mpk.slice(0,32), mpk.slice(32, 64), mpk.slice(64, 96), mpk.slice(96), notenum, nvalue]);
+  let privateParams = [ovalue, ononce, snonce1, snonce2, snonce3, snonce4, snonce5, snonce6, snonce7, snonce8, snonce9, snonce10,  snonce11,  snonce12,  snonce13,  snonce14,  snonce15,  snonce16,  snonce17,  snonce18,  snonce19,  snonce20, snonce21,  snonce22,  snonce23,  snonce24,  snonce25,  snonce26,  snonce27,  snonce28,  snonce29,  snonce30, rnonce1, rnonce2, rnonce3, rnonce4, rnonce5, rnonce6, rnonce7, rnonce8, rnonce9, rnonce10, rnonce11, rnonce12, rnonce13, rnonce14, rnonce15, rnonce16, rnonce17, rnonce18, rnonce19, rnonce20, rnonce21, rnonce22, rnonce23, rnonce24, rnonce25, rnonce26, rnonce27, rnonce28, rnonce29, rnonce30, cnonce, spk.slice(0,32), spk.slice(32,64), spk.slice(64,96), spk.slice(96), ssk, rpk.slice(0,32), rpk.slice(32,64), rpk.slice(64,96), rpk.slice(96)]
   //let privateParams = [pubKey.slice(0, 32), pubKey.slice(32, 64), pubKey.slice(64,96), pubKey.slice(96), ononce, secKey];
   //let privateParams = [pubKey.slice(0, 64), pubKey.slice(64), nonce];
   //let pubKeyHash = getPublicKeyHash(pubKey.slice(0, 32) + pubKey.slice(32, 64) + pubKey.slice(64,96) + pubKey.slice(96));
@@ -201,10 +261,7 @@ function getCreateNoteParams(_spk, _ssk, _mpk, _rpk, _ovalue, _nvalue, _notenum,
   //console.log("Private length:", privateParams.length);
 
   printZokratesCommand(publicParams.concat(privateParams));
-  console.log("original hash :" + oh);
-  console.log("pubKeyHash :" + spkHash);
-  console.log("value: " + ovalue);
-  console.log("nonce:" + ononce);
+
   //console.log("oh:",oh);
   //console.log("public[0]:",publicParams[0].length);
     /*
@@ -236,7 +293,7 @@ getCreateNoteParams(
   '4d65845c7426d420f8618b052ccba1e9d819ade834c9acd933f023bd1cb8bf67509e3c79b8d9aae49bd9316fe9d8fd3e8863a444a97731e12fe8d573b2f34789', //rpk
   50, // oValue
   1, // Value
-  20, // NoteNum
+  30, // NoteNum
   'c517f646255d5492089b881965cbd3da', // ononce
   'c517f646255d5492089b881965cbd3db', // sNonce[0]
   'c517f646255d5492089b881965cbd3dc', // sNonce[1]
@@ -258,6 +315,16 @@ getCreateNoteParams(
   'c517f646255d5492089b881965cbddff', // sNonce[17]
   'c517f646255d5492089b881965cbdeff', // sNonce[18]
   'c517f646255d5492089b881965cbdfff', // sNonce[19]
+  'c517f641255d5492089b881965cb83fb', // sNonce[20]
+  'c517f641255d5492089b881965cbd3fc', // sNonce[21]
+  'c517f641255d5492089b881965cbd3fd', // sNonce[22]
+  'c517f641255d5492089b881965cbd3fe', // sNonce[23]
+  'c517f641255d5492089b881965cbdaff', // sNonce[24]
+  'c517f641255d5492089b881965cbdbff', // sNonce[25]
+  'c517f641255d5492089b881965cbdcff', // sNonce[26]
+  'c517f641255d5492089b881965cbddff', // sNonce[27]
+  'c517f641255d5492089b881965cbdeff', // sNonce[28]
+  'c517f641255d5492089b881965cbdfff', // sNonce[29]
   'c517f646255d5492089b881965cbd3aa', // rNonce[0]
   'c517f646255d5492089b881965cbd3ab', // rNonce[1]
   'c517f646255d5492089b881965cbd3ac', // sNonce[2]
@@ -278,5 +345,15 @@ getCreateNoteParams(
   'c527f646255d5492089b881965cbdcac', // sNonce[17]
   'c527f646255d5492089b881965cbddad', // sNonce[18]
   'c527f646255d5492089b881965cbdeae', // sNonce[19]
+  'c517f646255d5492289b881965cbd3ba', // rNonce[20]
+  'c517f646255d5492289b881965cbd3cb', // rNonce[21]
+  'c517f646255d5492289b881965cbd3dc', // sNonce[22]
+  'c517f646255d5492289b881965cbd3ed', // sNonce[23]
+  'c517f646255d5492289b881965cbd3fe', // sNonce[24]
+  'c527f646255d5492289b881965cbdaaa', // rNonce[25]
+  'c527f646255d5492289b881965cbdbab', // rNonce[26]
+  'c527f646255d5492289b881965cbdcac', // sNonce[27]
+  'c527f646255d5492289b881965cbddad', // sNonce[28]
+  'c527f646255d5492289b881965cbdeae', // sNonce[29]
   'c517f646255d5492089b881965cbd3ff' // cNonce
 )

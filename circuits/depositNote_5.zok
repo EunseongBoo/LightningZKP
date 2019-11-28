@@ -17,7 +17,8 @@ def main(field[2] oh, field[10] sh, field[10] rh, field[2] ch, field[4] mpk, fie
   b = unpack128(pk[1])
   c = unpack128(pk[2])
   d = unpack128(pk[3])
-  proofOfOwnership([pack256([...a,...b]),pack256([...c,...d])],sk,context) == 1
+  //proofOfOwnership([pack256([...a,...b]),pack256([...c,...d])],sk,context) == 1
+  field out = proofOfOwnership([pack256([...a,...b]),pack256([...c,...d])],sk,context)
 
   pkHash = sha256packed(pk)
   h = sha256packed([pkHash[0],pkHash[1],oValue,oNonce])
