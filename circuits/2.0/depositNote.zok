@@ -1,0 +1,47 @@
+import "hashes/sha256/512bitPacked.zok" as sha256packed
+//import "hashes/sha256/1024bit.zok" as sha256
+import "hashes/sha256/256bitPadded.zok" as sha256
+import "utils/pack/nonStrictUnpack256.zok" as unpack256
+import "utils/pack/pack256.zok" as pack256
+import "utils/pack/pack128.zok" as pack128
+import "ecc/proofOfOwnership.zok" as proofOfOwnership
+import "ecc/babyjubjubParams.zok" as context
+import "utils/pack/unpack128.zok" as unpack128
+
+
+def main(field[2] oh, field[2] sh, field[2] rh, field[2] ch, field[4] mpk, field noteNum, field value, private field oValue, private field oNonce, private field sNonce, private field rNonce, private field cNonce, private field[4] pk, private field sk, private field[4] rpk) -> (field):
+
+  1 == if oValue >= (noteNum * value) then 1 else 0 fi
+  field change = oValue - noteNum * value
+
+  //prove the sender's pk
+  context = context()
+  a = unpack128(pk[0])
+  b = unpack128(pk[1])
+  c = unpack128(pk[2])
+  d = unpack128(pk[3])
+  //proofOfOwnership([pack256([...a,...b]),pack256([...c,...d])],sk,context) == 1
+  field out = proofOfOwnership([pack256([...a,...b]),pack256([...c,...d])],sk,context)
+
+  pkHash = sha256packed(pk)
+  h = sha256packed([pkHash[0],pkHash[1],oValue,oNonce])
+  h[0] == oh[0]
+  h[1] == oh[1]
+
+  //hash seed for sender's deposit notes
+  mpkHash = sha256packed(mpk)
+  sh_ = sha256packed([mpkHash[0],mpkHash[1],value,sNonce])
+  sh_[0] == sh[0]
+  sh_[1] == sh[1]
+
+  //hash seed for receiver's deposit notes
+  rpkHash = sha256packed(rpk)
+  rh_ = sha256packed([rpkHash[0],rpkHash[1],value,rNonce])
+  rh_[0] == rh[0]
+  rh_[1] == rh[1]
+
+  h = sha256packed([pkHash[0],pkHash[1],change,cNonce])
+  h[0] == ch[0]
+  h[1] == ch[1]
+
+  return 1
