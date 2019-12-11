@@ -31,7 +31,7 @@ ganache-cli --allowUnlimitedContractSize --gasLimit 900000000
 
 2. open a new ternminal and enter the below command.
 ```bash
-truffle test ./test/spendNotes.js
+truffle test ./test/test.js
 ```
 
 # Raspberry Pi setting
@@ -48,4 +48,13 @@ cd ZoKrates
 rustup toolchain install nightly
 cargo +nightly build --release
 cd target/release
+```
+
+3. Set the PATH for Zokrates.
+```bash
+vim ~/.bashrc
+
+//write two phrases at the bottom of the file.
+export PATH=$PATH:$HOME/Zokrates/target/release
+export ZOKRATES_HOME=$HOME/Zokrates/zokrates_stdlib/stdlib
 ```

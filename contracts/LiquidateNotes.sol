@@ -39,7 +39,7 @@ contract LiquidateNotes is LiquidateNoteVerifier, ZkDaiBase {
     internal
   {
       Submission storage submission = submissions[proofHash];
-      bytes32 note = calcNoteHash(submission.publicInput[0], submission.publicInput[1]);
+      bytes32 note = concat(submission.publicInput[0], submission.publicInput[1]);
       require(notes[note] == State.Committed, "Note is either invalid or already spent");
 
       notes[note] = State.Spent;

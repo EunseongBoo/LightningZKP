@@ -36,7 +36,7 @@ contract MintNotes is MintNoteVerifier, ZkDaiBase {
   {
       Submission storage submission = submissions[proofHash];
       // check that the first note (among public params) is not already minted
-      bytes32 note = calcNoteHash(submission.publicInput[0], submission.publicInput[1]);
+      bytes32 note = concat(submission.publicInput[0], submission.publicInput[1]);
       require(notes[note] == State.Invalid, "Note was already minted");
       notes[note] = State.Committed;
 

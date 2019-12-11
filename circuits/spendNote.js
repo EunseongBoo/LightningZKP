@@ -1,25 +1,9 @@
+const util = require('ethereumjs-util')
 const crypto = require('crypto');
 const BN = require('bn.js');
-
 const SCALING_FACTOR = new BN('1000000000000000000');
 
-function getPublicKeyHash(pk) {
-  const buf = Buffer.from(pk, 'hex');
-  const digest = crypto.createHash('sha256').update(buf).digest('hex');
-  console.log('PK Hash('+pk+') :', digest);
-  return digest
-}
-
-function getNoteHash(encodedNote) {
-  const buf = Buffer.from(encodedNote, 'hex');
-  const digest = crypto.createHash('sha256').update(buf).digest('hex');
-  console.log('digest', digest)
-  // split into 128 bits each
-  return [digest.slice(0, 32), digest.slice(32)]
-}
-
 function printZokratesCommand(params) {
-  console.log(params)
   let cmd = 'zokrates compute-witness -a '
   params.forEach(p => {
     cmd += `${new BN(p, 16).toString(10)} `
@@ -27,47 +11,50 @@ function printZokratesCommand(params) {
   console.log(cmd);
 }
 
-function getCreateNoteParams(_pubKey, _secKey, _rpubKey, _value, _value2, _value3, _nonce, _nonce2, _nonce3) {
-  console.log(arguments)
-  let pubKey = new BN(_pubKey, 16).toString(16); // 32 bytes = 256 bits
+function sha256(encodedNote) {
+  const buf = Buffer.from(encodedNote, 'hex');
+  const digest = crypto.createHash('sha256').update(buf).digest('hex');
+  return [digest.slice(0, 32), digest.slice(32)]
+}
+
+function getCreateNoteParams(_pubKey, _secKey, _rsecKey, _value, _value2, _value3, _nonce, _nonce2, _nonce3) {
+  let pubKey = new BN(_pubKey, 16).toString(16);
   let secKey = new BN(_secKey, 16).toString(16);
-  let rpubKey = new BN(_rpubKey, 16).toString(16);
+  let rsecKey = new BN(_rsecKey, 16).toString(16);
   let value = new BN(_value, 16).mul(SCALING_FACTOR).toString(16, 32); // 16 bytes = 128 bits
   let value2 = new BN(_value2, 16).mul(SCALING_FACTOR).toString(16, 32);
   let value3 = new BN(_value3, 16).mul(SCALING_FACTOR).toString(16, 32);
   let nonce = new BN(_nonce, 16).toString(16, 32); // 16 bytes = 128 bits
   let nonce2 = new BN(_nonce2, 16).toString(16, 32); // 16 bytes = 128 bits
   let nonce3 = new BN(_nonce3, 16).toString(16, 32); // 16 bytes = 128 bits
-  let privateParams = [pubKey.slice(0,32), pubKey.slice(32, 64), pubKey.slice(64, 96), pubKey.slice(96), secKey, rpubKey.slice(0,32), rpubKey.slice(32, 64), rpubKey.slice(64, 96), rpubKey.slice(96), value, nonce, value2, nonce2, value3, nonce3];
 
-  let pubKeyHash = getPublicKeyHash(pubKey.slice(0, 32) + pubKey.slice(32, 64) + pubKey.slice(64,96) + pubKey.slice(96));
-  let rpubKeyHash = getPublicKeyHash(rpubKey.slice(0, 32) + rpubKey.slice(32, 64) + rpubKey.slice(64,96) + rpubKey.slice(96));
-  let note = pubKeyHash + value + nonce;
-  let note0 = rpubKeyHash + value2 + nonce2;
-  let note1 = pubKeyHash + value3 + nonce3;
-  console.log('note', note);
+  let secKeyHash = sha256(secKey.slice(0,32) + secKey.slice(32));
+  let rsecKeyHash = sha256(rsecKey.slice(0,32) + rsecKey.slice(32));
 
-  noteHash2 = getNoteHash(note0);
-  noteHash3 = getNoteHash(note1);
+  let note = secKeyHash[0] + secKeyHash[1] + value; //original note
+  let note2 = rsecKeyHash[0] + rsecKeyHash[1]  + value2; //receiver note
+  let note3 = secKeyHash[0] + secKeyHash[1]  + value3; //change note
 
-  let publicParams = getNoteHash(note).concat(noteHash2).concat(noteHash3);
-  printZokratesCommand(publicParams.concat(privateParams));
-  printZokratesCommand(publicParams.concat(privateParams));
-  console.log("original hash :" + getNoteHash(note));
-  console.log("pubKeyHash :" + pubKeyHash);
-  console.log("value: " + value);
-  console.log("nonce:" + nonce);
+  let h = sha256(note);
+  let h2 = sha256(note2);
+  let h3 = sha256(note3);
+
+  let nh = sha256(h[0] + h[1] + nonce);
+  let nh2 = sha256(h2[0] + h2[1] + nonce2);
+  let nh3 = sha256(h3[0] + h3[1] + nonce3);
+
+  let privateParams = [nh[0], nh[1], nh2[0], nh2[1], nh3[0], nh3[1], secKey.slice(0,32), secKey.slice(32), rsecKeyHash[0], rsecKeyHash[1], value, value2, value3, nonce, nonce2, nonce3];
+  printZokratesCommand(privateParams);
 }
-//(field[2] oh, field[2] n0h, field[2] n1h, private field [4] spk, private field ssk, private field [4] rpk, private field oVal, private field oNonce, private field n0Val, private field n0Nonce, private field n1Val, private field n1Nonce)
-// this will serve as an invalid proof
+
 getCreateNoteParams(
   '6e145ccef1033dea239875dd00dfb4fee6e3348b84985c92f103444683bae07b83b5c38e5e2b0c8529d7fa3f64d46daa1ece2d9ac14cab9477d042c84c32ccd0', // pk
   'f8f8a2f43c8376ccb0871305060d7b27b0554d2cc72bccf41b2705608452f315', // sk
-  '4d65845c7426d420f8618b052ccba1e9d819ade834c9acd933f023bd1cb8bf67509e3c79b8d9aae49bd9316fe9d8fd3e8863a444a97731e12fe8d573b2f34789', //rpk
-  50, // oValue
-  25, //nValue
-  25,  //nValue2
-  'c517f646255d5492089b881965cbd3da', // oNonce
-  'c517f646255d5492089b881965cbd3db', // nNonce1
-  'c517f646255d5492089b881965cbd3dc' // nNonce2
+  '44c0c9e3532f9691c9a7ece9785061c57aed5c5bcc2d5c15b544e20ccaf92033', // recevier's sk
+  50, // value
+  10,
+  40,
+  'c517f646255d5492089b881965cbd3da', // nonce
+  'c517f646255d5492089b881965cbd3db', // nonce2
+  'c517f646255d5492089b881965cbd3dc', // nonce3
 )

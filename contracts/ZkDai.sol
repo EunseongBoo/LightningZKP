@@ -4,12 +4,9 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "./MintNotes.sol";
 import "./SpendNotes.sol";
 import "./LiquidateNotes.sol";
-import "./DepositNotes2.sol";
-import "./DepositNotes5.sol";
-import "./DepositNotes10.sol";
-import "./DepositNotes20.sol";
+import "./DepositNotes.sol";
 
-contract ZkDai is MintNotes, SpendNotes, DepositNotes2, DepositNotes5, DepositNotes10, DepositNotes20, LiquidateNotes {
+contract ZkDai is MintNotes, SpendNotes, DepositNotes, LiquidateNotes {
 
   modifier validStake(uint256 _stake)
   {
@@ -64,54 +61,17 @@ contract ZkDai is MintNotes, SpendNotes, DepositNotes2, DepositNotes5, DepositNo
   }
 
 
-  function deposit_2(
+  function deposit(
     uint256[2] calldata a,
     uint256[2][2] calldata b,
     uint256[2] calldata c,
-    uint256[19] calldata input)
+    uint256[17] calldata input)
   external
   payable
   validStake(msg.value)
   {
-    DepositNotes2.submit(a, b, c, input);
+    DepositNotes.submit(a, b, c, input);
   }
-
-  function deposit_5(
-    uint256[2] calldata a,
-    uint256[2][2] calldata b,
-    uint256[2] calldata c,
-    uint256[31] calldata input)
-  external
-  payable
-  validStake(msg.value)
-  {
-    DepositNotes5.submit(a, b, c, input);
-  }
-
-  function deposit_10(
-    uint256[2] calldata a,
-    uint256[2][2] calldata b,
-    uint256[2] calldata c,
-    uint256[51] calldata input)
-  external
-  payable
-  validStake(msg.value)
-  {
-    DepositNotes10.submit(a, b, c, input);
-  }
-
-  function deposit_20(
-    uint256[2] calldata a,
-    uint256[2][2] calldata b,
-    uint256[2] calldata c,
-    uint256[91] calldata input)
-  external
-  payable
-  validStake(msg.value)
-  {
-    DepositNotes20.submit(a, b, c, input);
-  }
-
   /**
   * @dev Liquidate a note to transfer the equivalent amount of dai to the recipient
   * @param to Recipient of the dai tokens
@@ -154,7 +114,7 @@ contract ZkDai is MintNotes, SpendNotes, DepositNotes2, DepositNotes5, DepositNo
       } else if (submission.sType == SubmissionType.Liquidate) {
         LiquidateNotes.challenge(a, b, c, proofHash);
       } else if (submission.sType == SubmissionType.Deposit) {
-        DepositNotes2.challenge(a, b, c, proofHash);
+        DepositNotes.challenge(a, b, c, proofHash);
       }
   }
 
@@ -173,7 +133,7 @@ contract ZkDai is MintNotes, SpendNotes, DepositNotes2, DepositNotes5, DepositNo
       SpendNotes.challenge(a, b, c, proofHash);
   }
 
-  function challenge_deposit_2(
+  function challenge_deposit(
       uint256[2] calldata a,
       uint256[2][2] calldata b,
       uint256[2] calldata c)
@@ -185,52 +145,7 @@ contract ZkDai is MintNotes, SpendNotes, DepositNotes2, DepositNotes5, DepositNo
       require(submission.submittedAt + cooldown >= now, "Note cannot be challenged anymore");
       require(submission.sType == SubmissionType.Deposit, "Submission Type is not deposit");
 
-      DepositNotes2.challenge(a, b, c, proofHash);
-  }
-
-  function challenge_deposit_5(
-      uint256[2] calldata a,
-      uint256[2][2] calldata b,
-      uint256[2] calldata c)
-    external
-  {
-      bytes32 proofHash = getProofHash(a, b, c);
-      Submission storage submission = submissions[proofHash];
-      require(submission.sType != SubmissionType.Invalid, "Corresponding hash of proof doesnt exist");
-      require(submission.submittedAt + cooldown >= now, "Note cannot be challenged anymore");
-      require(submission.sType == SubmissionType.Deposit, "Submission Type is not deposit");
-
-      DepositNotes5.challenge(a, b, c, proofHash);
-  }
-
-  function challenge_deposit_10(
-      uint256[2] calldata a,
-      uint256[2][2] calldata b,
-      uint256[2] calldata c)
-    external
-  {
-      bytes32 proofHash = getProofHash(a, b, c);
-      Submission storage submission = submissions[proofHash];
-      require(submission.sType != SubmissionType.Invalid, "Corresponding hash of proof doesnt exist");
-      require(submission.submittedAt + cooldown >= now, "Note cannot be challenged anymore");
-      require(submission.sType == SubmissionType.Deposit, "Submission Type is not deposit");
-
-      DepositNotes10.challenge(a, b, c, proofHash);
-  }
-
-  function challenge_deposit_20(
-      uint256[2] calldata a,
-      uint256[2][2] calldata b,
-      uint256[2] calldata c)
-    external
-  {
-      bytes32 proofHash = getProofHash(a, b, c);
-      Submission storage submission = submissions[proofHash];
-      require(submission.sType != SubmissionType.Invalid, "Corresponding hash of proof doesnt exist");
-      require(submission.submittedAt + cooldown >= now, "Note cannot be challenged anymore");
-      require(submission.sType == SubmissionType.Deposit, "Submission Type is not deposit");
-
-      DepositNotes20.challenge(a, b, c, proofHash);
+      DepositNotes.challenge(a, b, c, proofHash);
   }
   /**
   * @dev Commit a particular proof once the challenge period has ended
@@ -249,7 +164,7 @@ contract ZkDai is MintNotes, SpendNotes, DepositNotes2, DepositNotes5, DepositNo
       } else if (submission.sType == SubmissionType.Liquidate) {
         liquidateCommit(proofHash);
       } else if (submission.sType == SubmissionType.Deposit) {
-        DepositNotes2.depositCommit_2(proofHash);
+        DepositNotes.depositCommit(proofHash);
       }
   }
 }

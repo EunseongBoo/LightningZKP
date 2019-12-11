@@ -1,35 +1,89 @@
-import "hashes/sha256/512bitPacked.zok" as sha256packed
+import "hashes/sha256/IVconstants" as IVconstants
+import "hashes/sha256/shaRoundNoBoolCheck" as sha256
 import "ecc/proofOfOwnership.zok" as proofOfOwnership
 import "ecc/babyjubjubParams.zok" as context
+import "utils/pack/pack128.zok" as pack128
 import "utils/pack/unpack128.zok" as unpack128
-import "utils/pack/pack256.zok" as pack256
 
-def main(field[2] oh, field[2] n0h, field[2] n1h, private field [4] spk, private field ssk, private field [4] rpk, private field oVal, private field oNonce, private field n0Val, private field n0Nonce, private field n1Val, private field n1Nonce) -> (field):
-  oVal == n0Val + n1Val
 
-  //check pk&sk
-  context = context()
-  a = unpack128(spk[0])
-  b = unpack128(spk[1])
-  c = unpack128(spk[2])
-  d = unpack128(spk[3])
-  //proofOfOwnership([pack256([...a,...b]),pack256([...c,...d])],ssk,context) == 1
-  field out = proofOfOwnership([pack256([...a,...b]),pack256([...c,...d])],sk,context)
+def sha256_3(field a_, field b_) -> (field[2]):
+  field[128] a = unpack128(a_)
+  field[128] b = unpack128(b_)
 
-  h = sha256packed(spk)
-  oh_ = sha256packed([h[0],h[1],oVal,oNonce])
-  oh[0] == oh_[0]
-  oh[1] == oh_[1]
+  // sha256 padding for 256 bits (128 bits x 2)
+  // add dummy block (single "1" followed by "0" + total length)
+  // total length of message is 256 bits
+  field[256] dummyblock = [ \
+        1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, \
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, \
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, \
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, \
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, \
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, \
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, \
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, \
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, \
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, \
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, \
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, \
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, \
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, \
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, \
+        0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0]
 
-  //for change note
-  n1h_ = sha256packed([h[0],h[1],n1Val,n1Nonce])
-  n1h[0] == n1h_[0]
-  n1h[1] == n1h_[1]
+  field[256] lhs = [...a, ...b]
 
-  //for receiver's note
-  h = sha256packed(rpk)
-  n0h_ = sha256packed([h[0],h[1],n0Val,n0Nonce])
-  n0h[0] == n0h_[0]
-  n0h[1] == n0h_[1]
+  IV =  IVconstants()
+  field[256] r =  sha256(lhs, dummyblock, IV)
+
+  field res0 = pack128(r[..128])
+  field res1 = pack128(r[128..])
+
+  return [res0, res1]
+
+def sha256_3(field a_, field b_, field c_) -> (field[2]):
+  field[128] a = unpack128(a_)
+  field[128] b = unpack128(b_)
+  field[128] c = unpack128(c_)
+
+  // sha256 padding for 384 bits (128 bits x 3)
+  // add dummy block (single "1" followed by "0" + total length)
+  // total length of message is 384 bits (64bits)
+  field[128] dummyblock = [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0]
+
+  field[256] lhs = [...a, ...b]
+  field[256] rhs = [...c, ...dummyblock]
+
+  IV =  IVconstants()
+  field[256] r =  sha256(lhs, rhs, IV)
+
+  field res0 = pack128(r[..128])
+  field res1 = pack128(r[128..])
+
+  return [res0, res1]
+
+def main(field[2] oh, field[2] rh, field[2] ch, private field[2] sk, private field[2] rskHash, private field oValue,  private field rValue, private field cValue, private field oNonce, private field rNonce, private field cNonce) -> (field):
+
+  //check the balance
+  oValue == rValue + cValue
+
+  //original note hash
+  field[2] skHash = sha256_3(sk[0],sk[1])
+  field[2] h = sha256_3(skHash[0], skHash[1], oValue)
+  field[2] oh_ = sha256_3(h[0], h[1], oNonce)
+  oh_[0] == oh[0]
+  oh_[1] == oh[1]
+
+  //receiver note hash
+  h = sha256_3(rskHash[0], rskHash[1], rValue)
+  field[2] rh_ = sha256_3(h[0], h[1], rNonce)
+  rh_[0] == rh[0]
+  rh_[1] == rh[1]
+
+  //change note hash
+  h = sha256_3(skHash[0], skHash[1], cValue)
+  field[2] ch_ = sha256_3(h[0], h[1], cNonce)
+  ch_[0] == ch[0]
+  ch_[1] == ch[1]
 
   return 1

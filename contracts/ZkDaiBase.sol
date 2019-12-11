@@ -52,16 +52,16 @@ contract ZkDaiBase {
 
   ///////////////The fucntion must be modified///////////////
   ///////////////It can use only for testing in now/////////
-  function calcNoteHash(uint256 _a, uint256 _b)
+  function concat(uint256 _a, uint256 _b)
     internal
     pure
     returns(bytes32 note)
   {
-      //bytes32 a = bytes32(_a);
-      //bytes32 b = bytes32(_b);
-      //bytes32 memory _note;
-      //assembly { mstore(add(note, 16), _a) }
-      note = bytes32(_a);
+      bytes16 a = bytes16(uint128(_a));
+      bytes16 b = bytes16(uint128(_b));
+
+      note = bytes32 (uint256 (uint128 (a)) << 128 | uint128 (b));
+
       return note;
   }
 

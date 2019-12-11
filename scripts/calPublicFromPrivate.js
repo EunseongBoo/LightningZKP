@@ -17,3 +17,5 @@ console.log("\n MPK \n");
 cal('0x01dcf0f9bc5eecb87b4d16022a5e563922b5b39c34f50a308de4a7aa26e33349');
 console.log("\n receiver \n");
 cal('0x44c0c9e3532f9691c9a7ece9785061c57aed5c5bcc2d5c15b544e20ccaf92033');
+console.log("\n test \n");
+cal('0x7abcea3f35fa4229874e55bb29a0da13700de365e2b6e4d41edbb718519089c')

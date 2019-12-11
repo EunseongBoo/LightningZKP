@@ -61,11 +61,11 @@ contract SpendNotes is SpendNoteVerifier, ZkDaiBase {
     //pure
     returns(bytes32[3] memory notesHash)
   {
-      notesHash[0] = calcNoteHash(input[0], input[1]);
+      notesHash[0] = concat(input[0], input[1]);
       emit Calc(notesHash[0]);
-      notesHash[1] = calcNoteHash(input[2], input[3]);
+      notesHash[1] = concat(input[2], input[3]);
       emit Calc(notesHash[1]);
-      notesHash[2] = calcNoteHash(input[4], input[5]);
+      notesHash[2] = concat(input[4], input[5]);
       emit Calc(notesHash[2]);
   }
 

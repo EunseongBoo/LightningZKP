@@ -1,23 +1,37 @@
 import "hashes/sha256/512bitPacked.zok" as sha256packed
+import "hashes/sha256/IVconstants" as IVconstants
+import "hashes/sha256/shaRoundNoBoolCheck" as sha256
 import "ecc/proofOfOwnership.zok" as proofOfOwnership
 import "ecc/babyjubjubParams.zok" as context
+import "utils/pack/pack128.zok" as pack128
 import "utils/pack/unpack128.zok" as unpack128
-import "utils/pack/pack256.zok" as pack256
 
-def main(field[2] nh, field value, private field[4] pk, private field sk, private field nonce) -> (field):
+def sha256_3(field a_, field b_, field c_) -> (field[2]):
+  field[128] a = unpack128(a_)
+  field[128] b = unpack128(b_)
+  field[128] c = unpack128(c_)
 
-  //prove the sender's pk
-  context = context()
-  a = unpack128(pk[0])
-  b = unpack128(pk[1])
-  c = unpack128(pk[2])
-  d = unpack128(pk[3])
-  //proofOfOwnership([pack256([...a,...b]),pack256([...c,...d])],sk,context) == 1
-  field out = proofOfOwnership([pack256([...a,...b]),pack256([...c,...d])],sk,context)
+  // sha256 padding for 384 bits (128 bits x 3)
+  // add dummy block (single "1" followed by "0" + total length)
+  // total length of message is 384 bits (64bits)
+  field[128] dummyblock = [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0]
 
-  //check a hash of a new note.
-  h = sha256packed(pk)
-  h = sha256packed([h[0],h[1],value,nonce])
-  h[0] == nh[0]
-  h[1] == nh[1]
+  field[256] lhs = [...a, ...b]
+  field[256] rhs = [...c, ...dummyblock]
+
+  IV =  IVconstants()
+  field[256] r =  sha256(lhs, rhs, IV)
+
+  field res0 = pack128(r[..128])
+  field res1 = pack128(r[128..])
+
+  return [res0, res1]
+
+def main(field[2] oh, field oValue, private field[2] skhash, private field oNonce) -> (field):
+
+  field[2] h = sha256_3(skhash[0], skhash[1], oValue)
+  field[2] oh_ = sha256_3(h[0], h[1], oNonce)
+  oh_[0] == oh[0]
+  oh_[1] == oh[1]
+
   return 1
