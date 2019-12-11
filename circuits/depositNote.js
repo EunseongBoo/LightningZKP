@@ -63,7 +63,7 @@ function getCreateNoteParams(_pubKey, _secKey, _mpubKey, _msecKey, _rsecKey, _oV
     var rNonce_ =  new BN(_rNonce, 16).add(bni).toString(16, 32);
     sh[i] = sha256(shSeed[0] + shSeed[1] + sNonce_);
     rh[i] = sha256(rhSeed[0] + rhSeed[1] + rNonce_);
-    console.log(sh[i]);
+  //  console.log(sh[i]);
   }
 
   var publicParams = [oh[0], oh[1], ch[0], ch[1], shSeed[0], shSeed[1], rhSeed[0], rhSeed[1]];
@@ -74,7 +74,7 @@ function getCreateNoteParams(_pubKey, _secKey, _mpubKey, _msecKey, _rsecKey, _oV
   let privateParams = [secKey.slice(0,32), secKey.slice(32), msecKeyHash[0], msecKeyHash[1], rsecKeyHash[0], rsecKeyHash[1], oValue, cValue, oNonce, cNonce];
 
   publicParams = publicParams.concat(privateParams);
-  //printZokratesCommand(publicParams);
+  printZokratesCommand(publicParams);
   //console.log("sh: " + sha256(shSeed[0] + shSeed[1] + sNonce));
   //console.log("context: "+ shSeed[0] + " "+ " " +shSeed[1] + " " + sNonce);
 }
