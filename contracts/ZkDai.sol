@@ -83,7 +83,7 @@ contract ZkDai is MintNotes, SpendNotes, DepositNotes, LiquidateNotes {
       uint256[2] calldata a,
       uint256[2][2] calldata b,
       uint256[2] calldata c,
-      uint256[4] calldata input)
+      uint256[8] calldata input)
     external
     payable
     validStake(msg.value)
@@ -97,7 +97,7 @@ contract ZkDai is MintNotes, SpendNotes, DepositNotes, LiquidateNotes {
   *         otherwise note(s) are committed/spent and stake is transferred back to proof submitter.
   * @notice params: a, a_p, b, b_p, c, c_p, h, k zkSnark parameters of the challenged proof
   */
-  function challenge(
+  function challenge_mint(
       uint256[2] calldata a,
       uint256[2][2] calldata b,
       uint256[2] calldata c)
@@ -107,15 +107,10 @@ contract ZkDai is MintNotes, SpendNotes, DepositNotes, LiquidateNotes {
       Submission storage submission = submissions[proofHash];
       require(submission.sType != SubmissionType.Invalid, "Corresponding hash of proof doesnt exist");
       require(submission.submittedAt + cooldown >= now, "Note cannot be challenged anymore");
-      if (submission.sType == SubmissionType.Mint) {
-        MintNotes.challenge(a, b, c, proofHash);
-      } else if (submission.sType == SubmissionType.Spend) {
-        SpendNotes.challenge(a, b, c, proofHash);
-      } else if (submission.sType == SubmissionType.Liquidate) {
-        LiquidateNotes.challenge(a, b, c, proofHash);
-      } else if (submission.sType == SubmissionType.Deposit) {
-        DepositNotes.challenge(a, b, c, proofHash);
-      }
+      require(submission.sType == SubmissionType.Mint, "Submission Type is not Mint");
+
+      MintNotes.challenge(a, b, c, proofHash);
+
   }
 
   function challenge_spend(
@@ -131,6 +126,21 @@ contract ZkDai is MintNotes, SpendNotes, DepositNotes, LiquidateNotes {
       require(submission.sType == SubmissionType.Spend, "Submission Type is not Spend");
 
       SpendNotes.challenge(a, b, c, proofHash);
+  }
+
+  function challenge_liquidate(
+      uint256[2] calldata a,
+      uint256[2][2] calldata b,
+      uint256[2] calldata c)
+    external
+  {
+      bytes32 proofHash = getProofHash(a, b, c);
+      Submission storage submission = submissions[proofHash];
+      require(submission.sType != SubmissionType.Invalid, "Corresponding hash of proof doesnt exist");
+      require(submission.submittedAt + cooldown >= now, "Note cannot be challenged anymore");
+      require(submission.sType == SubmissionType.Liquidate, "Submission Type is not Liquidate");
+
+      LiquidateNotes.challenge(a, b, c, proofHash);
   }
 
   function challenge_deposit(
@@ -166,5 +176,13 @@ contract ZkDai is MintNotes, SpendNotes, DepositNotes, LiquidateNotes {
       } else if (submission.sType == SubmissionType.Deposit) {
         DepositNotes.depositCommit(proofHash);
       }
+  }
+
+  //function commit_signedTx(bytes32 poolId, uint8 num, bytes32 msgHash, uint8 v, bytes32 r, bytes32 s) public
+  //function commit_signedTx(bytes32 poolId, uint8 num, bytes32 msgHash, uint8 v, bytes32 r, bytes32 s) public
+  function commit_signedTx(string memory message, uint8 v, bytes32 r, bytes32 s) public
+  {
+      //DepositNotes.commit_singedTx(poolId, num, msgHash, v, r, s);
+      DepositNotes.commit_singedTx(message, v, r, s);
   }
 }

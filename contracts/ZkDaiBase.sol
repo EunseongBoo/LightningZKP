@@ -66,7 +66,7 @@ contract ZkDaiBase {
   }
 
 
-  function getMpkAddress(uint256 _a, uint256 _b, uint256 _c, uint256 _d)
+  function getAddress(uint256 _a, uint256 _b, uint256 _c, uint256 _d)
     internal
     pure
     returns (address mpkAddress)
@@ -102,4 +102,40 @@ contract ZkDaiBase {
         out |= bytes32(b[offset + i] & 0xFF) >> (i * 8);
       }
   }
+
+  function stringToUint(string memory s) public pure returns (uint8 result) {
+    bytes memory b = bytes(s);
+    uint i;
+    result = 0;
+    for (i = 66; i < b.length; i++) {
+        uint8 c = uint8(b[i]);
+        if (c >= 48 && c <= 57) {
+            result = result * 10 + (c - 48);
+        }
+    }
+  }
+  // Convert an hexadecimal character to their value
+  function fromHexChar(uint8 c) public pure returns (uint8) {
+      if (byte(c) >= byte('0') && byte(c) <= byte('9')) {
+          return c - uint8(byte('0'));
+      }
+      if (byte(c) >= byte('a') && byte(c) <= byte('f')) {
+          return 10 + c - uint8(byte('a'));
+      }
+      if (byte(c) >= byte('A') && byte(c) <= byte('F')) {
+          return 10 + c - uint8(byte('A'));
+      }
+  }
+
+
+  // Convert an hexadecimal string to raw bytes
+  function hexStringToBytes(string memory s) public pure returns (bytes memory) {
+      bytes memory ss = bytes(s);
+      bytes memory r = new bytes(32);
+      for (uint i=0; i<32; i++) {
+          r[i] = byte(fromHexChar(uint8(ss[i*2+2])) * 16 + fromHexChar(uint8(ss[i*2+3])));
+      }
+      return r;
+  }
+  
 }

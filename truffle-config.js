@@ -84,8 +84,8 @@ module.exports = {
     reporter: 'eth-gas-reporter',
     reporterOptions : {
       currency: "USD",
-      showTimeSpent: true,
-      //outputFile: "./result/gas_reporter/gas_result_createNote"
+      //showTimeSpent: true,
+      //outputFile: "./result/gas_reporter/gas_result_depositNote10_10",
      } // See options below
   },
 

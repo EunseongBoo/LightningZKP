@@ -87,7 +87,7 @@ getCreateNoteParams(
   '44c0c9e3532f9691c9a7ece9785061c57aed5c5bcc2d5c15b544e20ccaf92033', // recevier's sk
   50, // oValue
   1, // dValue
-  10, // depositNum
+  20, // depositNum
   'c517f646255d5492089b881965cbd3da', // oNonce
   'c517f646255d5492089b881965cbd3db', // sNonce
   'c517f646255d5492089b881965cbd3db', // rNonce

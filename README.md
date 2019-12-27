@@ -17,8 +17,8 @@ Please download libraries for testing.
 1. Zokrates
 2. truffle
 3. geth
-4. ...
-
+4. npm install web3
+5. npm i ethereumjs-wallet
 
 
 # Test

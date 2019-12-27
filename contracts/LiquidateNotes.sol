@@ -6,7 +6,7 @@ import "./ZkDaiBase.sol";
 
 
 contract LiquidateNotes is LiquidateNoteVerifier, ZkDaiBase {
-  uint8 internal constant NUM_PUBLIC_INPUTS = 4;
+  uint8 internal constant NUM_PUBLIC_INPUTS = 8;
 
   /**
   * @dev Hashes the submitted proof and adds it to the submissions mapping that tracks
@@ -17,16 +17,20 @@ contract LiquidateNotes is LiquidateNoteVerifier, ZkDaiBase {
       uint256[2] memory a,
       uint256[2][2] memory b,
       uint256[2] memory c,
-      uint256[4] memory input)
+      uint256[NUM_PUBLIC_INPUTS] memory input)
     internal
   {
+      // get receiver address from zk-snark proof.
+      address liqAddress = getAddress(input[3], input[4], input[5], input[6]);
+      //check if 'receiver address' and 'to' match
+      require(liqAddress == to);
+
       bytes32 proofHash = getProofHash(a, b, c);
-      uint256[] memory publicInput = new uint256[](NUM_PUBLIC_INPUTS + 1);
+      uint256[] memory publicInput = new uint256[](NUM_PUBLIC_INPUTS);
       for(uint8 i = 0; i < NUM_PUBLIC_INPUTS; i++) {
         publicInput[i] = input[i];
       }
       // last element is the beneficiary to whom the liquidated dai will be transferred
-      publicInput[NUM_PUBLIC_INPUTS] = uint256(to);
       submissions[proofHash] = Submission(msg.sender, SubmissionType.Liquidate, now, publicInput);
       emit Submitted(msg.sender, proofHash);
   }
@@ -44,8 +48,8 @@ contract LiquidateNotes is LiquidateNoteVerifier, ZkDaiBase {
 
       notes[note] = State.Spent;
 
-      submission.submitter.transfer(stake);
-      address to = address(uint160(submission.publicInput[NUM_PUBLIC_INPUTS])); // see submit above
+      //submission.submitter.transfer(stake);
+      address to = getAddress(submission.publicInput[3], submission.publicInput[4], submission.publicInput[5], submission.publicInput[6]);
       uint256 value = submission.publicInput[2];
 
       delete submissions[proofHash];
@@ -53,6 +57,7 @@ contract LiquidateNotes is LiquidateNoteVerifier, ZkDaiBase {
         dai.transfer(to, value),
         "daiToken transfer failed"
       );
+      //emit Transfer(address(this),to,value);
       emit NoteStateChange(note, State.Spent);
   }
 

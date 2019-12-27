@@ -15,7 +15,8 @@ contract DepositBase is ZkDaiBase {
   struct DepositPool {
     address mpkAddress;
     uint expiredTime;
-    uint8 maxNotesNum; //init: NUM_DEPOSIT_NOTES/2
+    uint value; //value of ecah note
+    uint8 maxNotesNum; //init: depositNum
     uint8 lastNotesNum; // init:0
     bytes32[] senderNotes;
     bytes32[] receiverNotes;
@@ -23,7 +24,7 @@ contract DepositBase is ZkDaiBase {
   //maps poolID to DepositNotes
   mapping(bytes32 => DepositPool) public depositPools;
 
-  event Deposited(address mpkAddress, bytes32 poolId);
+  event Deposited(address mpkAddress, bytes32 poolId, uint dValue, uint8 depositNum, bytes32 rhSeed);
 
   /* Commit paymentTx */
  function recoverAddress(bytes32 msgHash, uint8 v, bytes32 r, bytes32 s) public view returns (address) {
