@@ -34,13 +34,13 @@ contract ZkDai is MintNotes, SpendNotes, DepositNotes, LiquidateNotes {
       uint256[4] calldata input)
     external
     payable
-    validStake(msg.value)
   {
       require(
         dai.transferFrom(msg.sender, address(this), uint256(input[2]) /* value */),
         "daiToken transfer failed"
       );
-      MintNotes.submit(a, b, c, input);
+      MintNotes.verify(a, b, c, input);
+      //MintNotes.submit(a, b, c, input);
   }
 
   /**
@@ -55,9 +55,8 @@ contract ZkDai is MintNotes, SpendNotes, DepositNotes, LiquidateNotes {
       uint256[7] calldata input)
     external
     payable
-    validStake(msg.value)
   {
-      SpendNotes.submit(a, b, c, input);
+      SpendNotes.verify(a, b, c, input);
   }
 
 
@@ -68,9 +67,8 @@ contract ZkDai is MintNotes, SpendNotes, DepositNotes, LiquidateNotes {
     uint256[17] calldata input)
   external
   payable
-  validStake(msg.value)
   {
-    DepositNotes.submit(a, b, c, input);
+    DepositNotes.verify(a, b, c, input);
   }
   /**
   * @dev Liquidate a note to transfer the equivalent amount of dai to the recipient
@@ -86,100 +84,11 @@ contract ZkDai is MintNotes, SpendNotes, DepositNotes, LiquidateNotes {
       uint256[8] calldata input)
     external
     payable
-    validStake(msg.value)
   {
-      LiquidateNotes.submit(to, a, b, c,input);
+      LiquidateNotes.verify(to, a, b, c,input);
   }
 
-  /**
-  * @dev Challenge the mint or spend proofs and claim the stake amount if challenge passes.
-  * @notice If challenge passes, the challenger claims the stake amount,
-  *         otherwise note(s) are committed/spent and stake is transferred back to proof submitter.
-  * @notice params: a, a_p, b, b_p, c, c_p, h, k zkSnark parameters of the challenged proof
-  */
-  function challenge_mint(
-      uint256[2] calldata a,
-      uint256[2][2] calldata b,
-      uint256[2] calldata c)
-    external
-  {
-      bytes32 proofHash = getProofHash(a, b, c);
-      Submission storage submission = submissions[proofHash];
-      require(submission.sType != SubmissionType.Invalid, "Corresponding hash of proof doesnt exist");
-      require(submission.submittedAt + cooldown >= now, "Note cannot be challenged anymore");
-      require(submission.sType == SubmissionType.Mint, "Submission Type is not Mint");
 
-      MintNotes.challenge(a, b, c, proofHash);
-
-  }
-
-  function challenge_spend(
-      uint256[2] calldata a,
-      uint256[2][2] calldata b,
-      uint256[2] calldata c)
-    external
-  {
-      bytes32 proofHash = getProofHash(a, b, c);
-      Submission storage submission = submissions[proofHash];
-      require(submission.sType != SubmissionType.Invalid, "Corresponding hash of proof doesnt exist");
-      require(submission.submittedAt + cooldown >= now, "Note cannot be challenged anymore");
-      require(submission.sType == SubmissionType.Spend, "Submission Type is not Spend");
-
-      SpendNotes.challenge(a, b, c, proofHash);
-  }
-
-  function challenge_liquidate(
-      uint256[2] calldata a,
-      uint256[2][2] calldata b,
-      uint256[2] calldata c)
-    external
-  {
-      bytes32 proofHash = getProofHash(a, b, c);
-      Submission storage submission = submissions[proofHash];
-      require(submission.sType != SubmissionType.Invalid, "Corresponding hash of proof doesnt exist");
-      require(submission.submittedAt + cooldown >= now, "Note cannot be challenged anymore");
-      require(submission.sType == SubmissionType.Liquidate, "Submission Type is not Liquidate");
-
-      LiquidateNotes.challenge(a, b, c, proofHash);
-  }
-
-  function challenge_deposit(
-      uint256[2] calldata a,
-      uint256[2][2] calldata b,
-      uint256[2] calldata c)
-    external
-  {
-      bytes32 proofHash = getProofHash(a, b, c);
-      Submission storage submission = submissions[proofHash];
-      require(submission.sType != SubmissionType.Invalid, "Corresponding hash of proof doesnt exist");
-      require(submission.submittedAt + cooldown >= now, "Note cannot be challenged anymore");
-      require(submission.sType == SubmissionType.Deposit, "Submission Type is not deposit");
-
-      DepositNotes.challenge(a, b, c, proofHash);
-  }
-  /**
-  * @dev Commit a particular proof once the challenge period has ended
-  * @param proofHash Hash of the proof that needs to be committed
-  */
-  function commit(bytes32 proofHash)
-    public
-  {
-      Submission storage submission = submissions[proofHash];
-      require(submission.sType != SubmissionType.Invalid, "proofHash is invalid");
-      require(submission.submittedAt + cooldown < now, "Note is still hot");
-      if (submission.sType == SubmissionType.Mint) {
-        mintCommit(proofHash);
-      } else if (submission.sType == SubmissionType.Spend) {
-        spendCommit(proofHash);
-      } else if (submission.sType == SubmissionType.Liquidate) {
-        liquidateCommit(proofHash);
-      } else if (submission.sType == SubmissionType.Deposit) {
-        DepositNotes.depositCommit(proofHash);
-      }
-  }
-
-  //function commit_signedTx(bytes32 poolId, uint8 num, bytes32 msgHash, uint8 v, bytes32 r, bytes32 s) public
-  //function commit_signedTx(bytes32 poolId, uint8 num, bytes32 msgHash, uint8 v, bytes32 r, bytes32 s) public
   function commit_signedTx(string memory message, uint8 v, bytes32 r, bytes32 s) public
   {
       //DepositNotes.commit_singedTx(poolId, num, msgHash, v, r, s);

@@ -7,69 +7,35 @@ import "./verifiers/MintNoteVerifier.sol";
 contract MintNotes is MintNoteVerifier, ZkDaiBase {
   uint8 internal constant NUM_PUBLIC_INPUTS = 4;
 
-  /**
-  * @dev Hashes the submitted proof and adds it to the submissions mapping that tracks
-  *      submission time, type, public inputs of the zkSnark and the submitter
-  */
-  function submit(
-      uint256[2] memory a,
-      uint256[2][2] memory b,
-      uint256[2] memory c,
-      uint256[4] memory input)
+  function mintCommit(uint256 noteHash1, uint256 noteHash2)
     internal
   {
-      bytes32 proofHash = getProofHash(a, b, c);
-      uint256[] memory publicInput = new uint256[](4);
-      for(uint8 i = 0; i < NUM_PUBLIC_INPUTS; i++) {
-        publicInput[i] = input[i];
-      }
-      submissions[proofHash] = Submission(msg.sender, SubmissionType.Mint, now, publicInput);
-      emit Submitted(msg.sender, proofHash);
-  }
-
-  /**
-  * @dev Commits the proof i.e. Mints the note that originally came with the proof.
-  * @param proofHash Hash of the proof to be committed
-  */
-  function mintCommit(bytes32 proofHash)
-    internal
-  {
-      Submission storage submission = submissions[proofHash];
+      //Submission storage submission = submissions[proofHash];
       // check that the first note (among public params) is not already minted
-      bytes32 note = concat(submission.publicInput[0], submission.publicInput[1]);
+      bytes32 note = concat(noteHash1, noteHash2);
       require(notes[note] == State.Invalid, "Note was already minted");
       notes[note] = State.Committed;
 
-      delete submissions[proofHash];
-      submission.submitter.transfer(stake);
       emit NoteStateChange(note, State.Committed);
   }
 
   /**
   * @dev Challenge the proof for mint step
   * @notice params: a, a_p, b, b_p, c, c_p, h, k zkSnark parameters of the challenged proof
-  * @param proofHash Hash of the proof
   */
-  function challenge(
+  function verify(
       uint256[2] memory a,
       uint256[2][2] memory b,
       uint256[2] memory c,
-      bytes32 proofHash)
+      uint256[4] memory input)
     internal
   {
-      Submission storage submission = submissions[proofHash];
-      uint256[NUM_PUBLIC_INPUTS] memory input;
-      for(uint i = 0; i < NUM_PUBLIC_INPUTS; i++) {
-        input[i] = submission.publicInput[i];
-      }
       if (!MintNoteVerifier.mintVerifyTx(a, b, c, input)) {
-        // challenge passed
-        delete submissions[proofHash];
-        msg.sender.transfer(stake);
-        emit Challenged(msg.sender, proofHash);
+        //verification fail
+        emit VerificationFail(msg.sender);
       } else {
-        // challenge failed
-        mintCommit(proofHash);
+        //verification success
+        mintCommit(input[0], input[1]);
       }
   }
 }

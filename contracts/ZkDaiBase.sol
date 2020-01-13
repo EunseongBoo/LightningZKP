@@ -21,7 +21,7 @@ contract ZkDaiBase {
   enum State {Invalid, Committed, Spent, Deposit}
   // maps note to State
   mapping(bytes32 => State) public notes;
-
+  event VerificationFail(address submitter);
   event NoteStateChange(bytes32 note, State state);
   event Submitted(address submitter, bytes32 proofHash);
   event Deposited(address mpkAddress, bytes32 poolId);
@@ -137,5 +137,5 @@ contract ZkDaiBase {
       }
       return r;
   }
-  
+
 }

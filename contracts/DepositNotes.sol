@@ -7,49 +7,21 @@ import "./SignVerifier.sol";
 
 contract DepositNotes is DepositNoteVerifier, ZkDaiBase, DepositBase, SignVerifier {
   uint8 internal constant NUM_PUBLIC_INPUTS = 17;
-  //uint8 internal constant NUM_DEPOSIT; //deposit_note_num * 2 (sender and receiver)
-  //uint8 internal constant NUM_ALL_NOTES = 2 + NUM_DEPOSIT_NOTES; //2 (original note + change note) + deposit notes
-  //uint8 internal constant MPK_INDEX = (NUM_DEPOSIT_NOTES+2)*2; // (NUM_DEPOSIT_NOTES + original note + change note) * 2 (2 public input is needed for one note hash value)
-  /**
-  * @dev Hashes the submitted proof and adds it to the submissions mapping that tracks
-  *      submission time, type, public inputs of the zkSnark and the submitter
-  */
-  function submit(
-      uint256[2] memory a,
-      uint256[2][2] memory b,
-      uint256[2] memory c,
-      uint256[NUM_PUBLIC_INPUTS] memory input)
-    internal
-  {
-      bytes32 proofHash = getProofHash(a, b, c);
-      uint256[] memory publicInput = new uint256[](NUM_PUBLIC_INPUTS);
-      for(uint8 i = 0; i < NUM_PUBLIC_INPUTS; i++) {
-        publicInput[i] = input[i];
-      }
-      submissions[proofHash] = Submission(msg.sender, SubmissionType.Deposit, now, publicInput);
-      emit Submitted(msg.sender, proofHash);
-  }
 
-  event TTest(bytes32 s);
-  event TTest2(bytes s);
-  /**
-  * @dev Commits the proof i.e. Marks the input note as Spent and mints two new output notes that came with the proof.
-  * @param proofHash Hash of the proof to be committed
-  */
-  function depositCommit(bytes32 proofHash)
+
+  function depositCommit(uint256[17] memory input)
     internal
   {
-      Submission storage submission = submissions[proofHash];
-      //emit TTest(submission.publicInput[0]);
-      bytes32 oh = concat(submission.publicInput[0], submission.publicInput[1]);
-      bytes32 ch = concat(submission.publicInput[2], submission.publicInput[3]);
-      bytes32 shSeed = concat(submission.publicInput[4], submission.publicInput[5]);
-      bytes32 rhSeed = concat(submission.publicInput[6], submission.publicInput[7]);
-      address mpkAddress = getAddress(submission.publicInput[8], submission.publicInput[9], submission.publicInput[10], submission.publicInput[11]);//8,9,10,11 mpk
-      uint depositNum = submission.publicInput[12]; //depositNum
-      uint dValue = submission.publicInput[13];
-      uint sNonce = submission.publicInput[14];
-      uint rNonce = submission.publicInput[15];
+      
+      bytes32 oh = concat(input[0],input[1]);
+      bytes32 ch = concat(input[2], input[3]);
+      bytes32 shSeed = concat(input[4], input[5]);
+      bytes32 rhSeed = concat(input[6], input[7]);
+      address mpkAddress = getAddress(input[8], input[9],input[10], input[11]);//8,9,10,11 mpk
+      uint depositNum = input[12]; //depositNum
+      uint dValue = input[13];
+      uint sNonce = input[14];
+      uint rNonce = input[15];
 
       bytes32[] memory sh = new bytes32[](depositNum);
       bytes32[] memory rh = new bytes32[](depositNum);
@@ -75,9 +47,6 @@ contract DepositNotes is DepositNoteVerifier, ZkDaiBase, DepositBase, SignVerifi
         notes[rh[i]] = State.Deposit;
       }
       notes[ch] = State.Committed; // Change the state of a "change note".
-
-      delete submissions[proofHash];
-      submission.submitter.transfer(stake); //check
 
       emit NoteStateChange(oh, State.Spent);
       for(uint i=1; i<depositNum; i++){
@@ -113,29 +82,21 @@ contract DepositNotes is DepositNoteVerifier, ZkDaiBase, DepositBase, SignVerifi
   /**
   * @dev Challenge the proof for spend step
   * @notice params: a, a_p, b, b_p, c, c_p, h, k zkSnark parameters of the challenged proof
-  * @param proofHash Hash of the proof
   */
-  function challenge(
+  function verify(
       uint256[2] memory a,
       uint256[2][2] memory b,
       uint256[2] memory c,
-      bytes32 proofHash)
+      uint256[17] memory input)
     internal
   {
-      Submission storage submission = submissions[proofHash];
-      uint256[NUM_PUBLIC_INPUTS] memory input;
-      for(uint i = 0; i < NUM_PUBLIC_INPUTS; i++) {
-        input[i] = submission.publicInput[i];
-      }
       if (!DepositNoteVerifier.verifyTx(a, b, c, input))
       {
-        // challenge passed
-        delete submissions[proofHash];
-        msg.sender.transfer(stake);
-        emit Challenged(msg.sender, proofHash);
+        //Verification Fail
+        emit VerificationFail(msg.sender);
       } else {
-        // challenge failed
-        depositCommit(proofHash);
+        //Verification Success
+        depositCommit(input);
       }
   }
 

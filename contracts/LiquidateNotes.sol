@@ -1,92 +1,50 @@
 pragma solidity ^0.5.2;
 
-//import {Verifier as LiquidateNoteVerifier} from "./verifiers/LiquidateNoteVerifier.sol";
 import {Verifier as LiquidateNoteVerifier} from "./verifiers/LiquidateNoteVerifier.sol";
 import "./ZkDaiBase.sol";
 
-
 contract LiquidateNotes is LiquidateNoteVerifier, ZkDaiBase {
   uint8 internal constant NUM_PUBLIC_INPUTS = 8;
-
-  /**
-  * @dev Hashes the submitted proof and adds it to the submissions mapping that tracks
-  *      submission time, type, public inputs of the zkSnark and the submitter
-  */
-  function submit(
-      address to,
-      uint256[2] memory a,
-      uint256[2][2] memory b,
-      uint256[2] memory c,
-      uint256[NUM_PUBLIC_INPUTS] memory input)
-    internal
-  {
-      // get receiver address from zk-snark proof.
-      address liqAddress = getAddress(input[3], input[4], input[5], input[6]);
-      //check if 'receiver address' and 'to' match
-      require(liqAddress == to);
-
-      bytes32 proofHash = getProofHash(a, b, c);
-      uint256[] memory publicInput = new uint256[](NUM_PUBLIC_INPUTS);
-      for(uint8 i = 0; i < NUM_PUBLIC_INPUTS; i++) {
-        publicInput[i] = input[i];
-      }
-      // last element is the beneficiary to whom the liquidated dai will be transferred
-      submissions[proofHash] = Submission(msg.sender, SubmissionType.Liquidate, now, publicInput);
-      emit Submitted(msg.sender, proofHash);
-  }
-
   /**
   * @dev Commits the proof i.e. Mints the note that originally came with the proof.
-  * @param proofHash Hash of the proof to be committed
   */
-  function liquidateCommit(bytes32 proofHash)
+  function liquidateCommit(address to, uint256[8] memory input)
     internal
   {
-      Submission storage submission = submissions[proofHash];
-      bytes32 note = concat(submission.publicInput[0], submission.publicInput[1]);
+      bytes32 note = concat(input[0], input[1]);
       require(notes[note] == State.Committed, "Note is either invalid or already spent");
-
       notes[note] = State.Spent;
 
-      //submission.submitter.transfer(stake);
-      address to = getAddress(submission.publicInput[3], submission.publicInput[4], submission.publicInput[5], submission.publicInput[6]);
-      uint256 value = submission.publicInput[2];
+      address to_ = getAddress(input[3], input[4], input[5], input[6]); //get to_ address from proof public input
+      require(to_ == to);
+      uint256 value = input[2];
 
-      delete submissions[proofHash];
       require(
         dai.transfer(to, value),
         "daiToken transfer failed"
       );
-      //emit Transfer(address(this),to,value);
+
       emit NoteStateChange(note, State.Spent);
   }
 
   /**
-  * @dev Challenge the proof for mint step
-  * @notice params: a, a_p, b, b_p, c, c_p, h, k zkSnark parameters of the challenged proof
-  * @param proofHash Hash of the proof
+  * @dev Verification the proof
   */
-  function challenge(
+  function verify(
+      address to,
       uint256[2] memory a,
       uint256[2][2] memory b,
       uint256[2] memory c,
-      bytes32 proofHash)
+      uint256[8] memory input)
     internal
     {
-      Submission storage submission = submissions[proofHash];
-      uint256[NUM_PUBLIC_INPUTS] memory input;
-      for(uint i = 0; i < NUM_PUBLIC_INPUTS; i++) {
-        input[i] = submission.publicInput[i];
-      }
-      // zk circuit for mint and liquidate is same
+      // zk circuit for liquidate
       if (!liquidateVerifyTx(a, b, c, input)) {
-        // challenge passed
-        delete submissions[proofHash];
-        msg.sender.transfer(stake);
-        emit Challenged(msg.sender, proofHash);
+        //verification fail
+        emit VerificationFail(msg.sender);
       } else {
-        // challenge failed
-        liquidateCommit(proofHash);
+        //verification success
+        liquidateCommit(to,input);
       }
   }
 }
