@@ -1,0 +1,94 @@
+import "hashes/sha256/IVconstants" as IVconstants
+import "hashes/sha256/shaRoundNoBoolCheck" as sha256
+import "ecc/proofOfOwnership.zok" as proofOfOwnership
+import "ecc/babyjubjubParams.zok" as context
+import "utils/pack/pack128.zok" as pack128
+import "utils/pack/unpack128.zok" as unpack128
+
+
+def sha256_3(field a_, field b_) -> (field[2]):
+  field[128] a = unpack128(a_)
+  field[128] b = unpack128(b_)
+
+  // sha256 padding for 256 bits (128 bits x 2)
+  // add dummy block (single "1" followed by "0" + total length)
+  // total length of message is 256 bits
+  field[256] dummyblock = [ \
+        1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, \
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, \
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, \
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, \
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, \
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, \
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, \
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, \
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, \
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, \
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, \
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, \
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, \
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, \
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, \
+        0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0]
+
+  field[256] lhs = [...a, ...b]
+
+  IV =  IVconstants()
+  field[256] r =  sha256(lhs, dummyblock, IV)
+
+  field res0 = pack128(r[..128])
+  field res1 = pack128(r[128..])
+
+  return [res0, res1]
+
+def sha256_3(field a_, field b_, field c_) -> (field[2]):
+  field[128] a = unpack128(a_)
+  field[128] b = unpack128(b_)
+  field[128] c = unpack128(c_)
+
+  // sha256 padding for 384 bits (128 bits x 3)
+  // add dummy block (single "1" followed by "0" + total length)
+  // total length of message is 384 bits (64bits)
+  field[128] dummyblock = [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0]
+
+  field[256] lhs = [...a, ...b]
+  field[256] rhs = [...c, ...dummyblock]
+
+  IV =  IVconstants()
+  field[256] r =  sha256(lhs, rhs, IV)
+
+  field res0 = pack128(r[..128])
+  field res1 = pack128(r[128..])
+
+  return [res0, res1]
+
+def main(field[2] oh, field[2] ch, field[2] shSeed, field[2] rhSeed, field[4] mpk, field depositNum, field sNonce, field rNonce, private field dValue, private field[2] sk, private field[2] mskHash, private field[2] rskHash, private field oValue, private field cValue, private field oNonce, private field cNonce) -> (field):
+
+  //check the balance
+  1 == if oValue >= (depositNum * dValue) then 1 else 0 fi
+  field change = oValue - depositNum * dValue
+
+  //original note
+  field[2] skHash = sha256_3(sk[0],sk[1])
+  field[2] h = sha256_3(skHash[0], skHash[1], oValue)
+  field[2] oh_ = sha256_3(h[0], h[1], oNonce)
+  oh_[0] == oh[0]
+  oh_[1] == oh[1]
+
+  //sender note for deposit
+  h = sha256_3(mskHash[0],mskHash[1], dValue)
+  h[0] == shSeed[0]
+  h[1] == shSeed[1]
+
+  //receiver note for deposit
+  h = sha256_3(rskHash[0], rskHash[1], dValue)
+  h[0] == rhSeed[0]
+  h[1] == rhSeed[1]
+
+  //change note
+  h = sha256_3(skHash[0], skHash[1], cValue)
+  field[2] ch_ = sha256_3(h[0], h[1], cNonce)
+  ch_[0] == ch[0]
+  ch_[1] == ch[1]
+
+  return 1

@@ -19,5 +19,8 @@
     "solc": "^0.5.12",
     "truffle-flattener": "^1.4.2",
     "web3": "^1.2.1"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0"
   }
 }

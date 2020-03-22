@@ -7,7 +7,7 @@ contract ZkDaiBase {
   uint256 public cooldown;
   uint256 public stake;
   ERC20 public dai;
-
+  uint constant bitLength = 216;
   enum SubmissionType {Invalid, Mint, Spend, Liquidate, Deposit}
   struct Submission {
     address payable submitter;
@@ -32,6 +32,7 @@ contract ZkDaiBase {
   * @dev Calculates the keccak256 of the zkSnark parameters
   * @return proofHash
   */
+
   function getProofHash(
       uint256[2] memory a,
       uint256[2][2] memory b,

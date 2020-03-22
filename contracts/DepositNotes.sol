@@ -6,60 +6,43 @@ import "./DepositBase.sol";
 import "./SignVerifier.sol";
 
 contract DepositNotes is DepositNoteVerifier, ZkDaiBase, DepositBase, SignVerifier {
-  uint8 internal constant NUM_PUBLIC_INPUTS = 17;
+  event Test1(bytes32 cm, bool forReceiver, bytes32 salt);
+  event Deposited(address mpkAddress, bytes32 poolId, uint8 depositNum, bytes32 first_sh, bytes32 first_rh);
 
+  uint8 internal constant NUM_PUBLIC_INPUTS = 25;
 
-  function depositCommit(uint256[17] memory input)
+  function zeroMSBs(bytes32 value) private pure returns (bytes32) {
+    uint256 shift = 256 - bitLength;
+    return (value<<shift)>>shift;
+  }
+
+  function depositCommit(uint256[23] memory input, address mpkAddress)
     internal
   {
-      
-      bytes32 oh = concat(input[0],input[1]);
-      bytes32 ch = concat(input[2], input[3]);
-      bytes32 shSeed = concat(input[4], input[5]);
-      bytes32 rhSeed = concat(input[6], input[7]);
-      address mpkAddress = getAddress(input[8], input[9],input[10], input[11]);//8,9,10,11 mpk
-      uint depositNum = input[12]; //depositNum
-      uint dValue = input[13];
-      uint sNonce = input[14];
-      uint rNonce = input[15];
+
+      bytes32 shSeed = concat(input[5], input[6]);
+      bytes32 rhSeed = concat(input[7], input[8]);
+      require(shSeed != rhSeed, "The new commitments (shSeed and rhSeed) must be different!");
+
+      uint depositNum = input[13]; //depositNum
+
+      uint sNonce = uint(concat(input[18], input[19]));
+      uint rNonce = uint(concat(input[20], input[21]));
 
       bytes32[] memory sh = new bytes32[](depositNum);
       bytes32[] memory rh = new bytes32[](depositNum);
 
-      for(uint i=0; i<depositNum; i++){
-        sh[i] = getDepositHash(shSeed, sNonce+i);
-        rh[i] = getDepositHash(rhSeed, rNonce+i);
+      for(uint256 i=0; i<depositNum; i++){
+
+        sh[i] = zeroMSBs(bytes32(sha256(abi.encodePacked(shSeed, sNonce +i))));
+        rh[i] = zeroMSBs(bytes32(sha256(abi.encodePacked(rhSeed, rNonce +i))));
       }
-
-      // check that the first note (among public params) is committed and
-      require(notes[oh] == State.Committed, "Note is either invalid or already spent");
-
-      // check that the deposit notes is already minted.
-      for(uint i=0; i<depositNum; i++){
-        require(notes[sh[i]] == State.Invalid, "New note is already minted");
-        require(notes[rh[i]] == State.Invalid, "New note is already minted");
-      }
-      require(notes[ch] == State.Invalid, "Change note is already minted");
-
-      notes[oh] = State.Spent; // Change the state of an original note.
-      for(uint i=0; i<depositNum; i++){
-        notes[sh[i]] = State.Deposit;
-        notes[rh[i]] = State.Deposit;
-      }
-      notes[ch] = State.Committed; // Change the state of a "change note".
-
-      emit NoteStateChange(oh, State.Spent);
-      for(uint i=1; i<depositNum; i++){
-        emit NoteStateChange(sh[i], State.Deposit); //
-        emit NoteStateChange(rh[i], State.Deposit);
-      }
-      emit NoteStateChange(ch, State.Committed);
-
+      //emit Test1(rh[0],true, bytes32(rNonce));
       //create pool ID
-      bytes32 poolId = keccak256(abi.encodePacked(oh,now));
+      bytes32 poolId = keccak256(abi.encodePacked(rh[0],now));
       uint aliveTime = 5 minutes; //pool's alive time
-      depositPools[poolId] = DepositPool(mpkAddress, dValue, now + aliveTime, uint8(depositNum), 0, sh, rh);
-      emit Deposited(mpkAddress, poolId, dValue, uint8(depositNum), rhSeed); // notification for data seller.
+      depositPools[poolId] = DepositPool(mpkAddress, now + aliveTime, uint8(depositNum), 0, sh, rh);
+      emit Deposited(mpkAddress, poolId, uint8(depositNum), sh[0], rh[0]); // notification for data seller.
   }
 
   function getDepositHash(bytes32 seed, uint nonce) internal returns (bytes32 notes) {
@@ -87,68 +70,17 @@ contract DepositNotes is DepositNoteVerifier, ZkDaiBase, DepositBase, SignVerifi
       uint256[2] memory a,
       uint256[2][2] memory b,
       uint256[2] memory c,
-      uint256[17] memory input)
-    internal
+      uint256[23] memory input)
+    internal returns (bool r)
   {
-      if (!DepositNoteVerifier.verifyTx(a, b, c, input))
+      if (!DepositNoteVerifier.depositVerifyTx(a, b, c, input))
       {
         //Verification Fail
         emit VerificationFail(msg.sender);
-      } else {
-        //Verification Success
-        depositCommit(input);
-      }
+        return false;
+      } return true;
   }
 
-  function commit_singedTx(string memory message, uint8 v, bytes32 r, bytes32 s) public {
-    // message is mpkAddress(0xasdasqwasda) + nonce(0~255);
-    require((bytes(message).length >= 67) && (bytes(message).length <= 69), "message length is too long or too short");
-    bytes memory temp = hexStringToBytes(message);
-    //require(temp.length != 32);
-    //emit Test3(bytes(message).length);
-    bytes32 poolId;
-    assembly {
-      poolId := mload(add(temp, 32))
-    }
-    uint8 num = stringToUint(message);
-
-    DepositPool memory dp = depositPools[poolId];
-    require(dp.mpkAddress == verifyString(message, v, r, s),"signature verification failed");
-    commitDepositNotes(poolId, num);
-  }
-
-  function commitDepositNotes(bytes32 poolId, uint8 num) internal {
-    DepositPool storage dp = depositPools[poolId];
-    require(dp.expiredTime >= now ,"Pool is expired");
-    require((num <= dp.maxNotesNum) && (num > dp.lastNotesNum), "transferNotesNum is lower than lastNotesNum or bigger than maxNotesNum");
-
-    //change recevier's deposit notes' state to avaliable
-    //and change sender's deposit notes' state to spent
-    //The number of notes changed = transferNotesNum - lastNotesNum
-    for(uint i = dp.lastNotesNum; i < num; i++){
-      notes[dp.receiverNotes[i]] = State.Committed;
-      notes[dp.senderNotes[i]] = State.Spent;
-      emit NoteStateChange(dp.receiverNotes[i], State.Committed);
-      emit NoteStateChange(dp.senderNotes[i], State.Spent);
-    }
-    dp.lastNotesNum = num;
-  }
-
-  //check Pool is expired. If pool is expired, then change the remain sender notes' state to avaliable. Also change the remain reciever notes' state to spent(unavailable).
-  function ClaimExpiredPool(bytes32 poolId) public { //ClaimExpiredPool
-
-    DepositPool storage dp = depositPools[poolId];
-    require(dp.expiredTime < now, "Not expired yet");
-
-    //If pool is expired, then return change to sender
-    for(uint i = dp.lastNotesNum; i < dp.maxNotesNum; i++){
-      notes[dp.receiverNotes[i]] = State.Spent;
-      notes[dp.senderNotes[i]] = State.Committed;
-      emit NoteStateChange(dp.receiverNotes[i], State.Spent);
-      emit NoteStateChange(dp.senderNotes[i], State.Committed);
-    }
-
-    delete depositPools[poolId];
-  }
+  //check Pool is expired. If pool is expired, then change the remain sender notes' state to avaliable. Also change the remain reciever notes' state to spent(unavailable
 
 }

@@ -1,0 +1,81 @@
+
+import "hashes/sha256/1024bit.zok" as sha256of1024
+import "hashes/sha256/512bit.zok" as sha256of512
+import "hashes/sha256/256bitPadded.zok" as sha256of256
+import "hashes/sha256/512bitPadded.zok" as sha256of512Pad
+import "utils/pack/unpack128.zok" as unpack128
+import "utils/pack/nonStrictUnpack256.zok" as unpack256
+
+def concatenate128x256x256(field[128] a, field[256] b, field[256] c)->(field[640]):
+	return [...a, ...b, ...c]
+
+def concatenate128x256(field[128] a, field[256] b)->(field[384]):
+	return [...a, ...b]
+
+def concatenate216x216(field[216] a, field[216] b)->(field[432]):
+	return [...a, ...b]
+
+def shaPad432To512(field[432] a)->(field[512]):
+	return [...a, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,1,0,1,1,0,0,0,0]
+
+// Provides the padding (only!) for a 640-bit message.
+def shaPad640To1024()->(field[384]):
+	return [1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	1,	0,	1,	0,	0,	0,	0,	0,	0,	0]
+
+// Provides the padding (only!) for a 768-bit message.
+def shaPad384To512()->(field[128]):
+	return [1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	1,	1,	0,	0,	0,	0,	0,	0,	0]
+
+//'truncate' a 256 bit hash down to 216 bits, returning as 256 bits padded with zeros
+//obviously this is easy to adjust to accommodate other bit lengths than 216.
+//This approach lets us use a 256 padding scheme for the sha hashing, rather than a 216 bit
+//scheme, which is more flexible should we wish to change the 216 bits to something else -
+// we won't need to recalculate all the padding values!
+def zeroMSBs(field[256] sha)->(field[256]):
+	return [...[0;40], ...sha[40..256]]
+
+
+// Inputs for main are:
+// - value (public) is the 128 bit coin value
+// - publicKey (private) is the public key of the commitment derived by hashing the Secret Key Sk of the commitment. IT IS KEPT PRIVATE FOR ZK!!!
+// - salt (private) is the salt for the commitment
+// - commitment (public) is the commitment
+
+// Each field element passed to main() can be at most 128bits, to make use of unpack128() so most variables occupy two fields (except the publicInputHash, which we maximize as 248-bits)
+
+def main(field publicInputHash, private field value, private field  publicKeyHigh, private field  publicKeyLow, private field saltHigh, private field saltLow, private field commitmentHigh, private field commitmentLow)->(field):
+
+
+	//Unpack the inputs of main() to 128 bits. UWe'll unpack each field to its own 128 bit string for simplicity for now. The unpacked binary string is in big endian format, left-padded with 0's. (NOTE: THIS METHOD OF PADDING IS DIFFERENT FROM THE PADDING REQUIRED FOR SHA256 - i.e. unpack128() padding is very different from that produced by shaPad64To512())
+	//unpack128 unpacks a field element to 128 field elements.
+	//the coin value is only 128 bits - no one will want more money than that.
+
+	field[256] publicInputHashBits = unpack256(publicInputHash)
+
+	field[128] valueBits = unpack128(value)
+
+	field[128] saltHighBits = unpack128(saltHigh)
+	field[128] saltLowBits = unpack128(saltLow)
+	field[256] saltBits = [...saltHighBits, ...saltLowBits]
+
+	field[128] publicKeyHighBits = unpack128(publicKeyHigh)
+	field[128] publicKeyLowBits = unpack128(publicKeyLow)
+	field[256] publicKeyBits = [...publicKeyHighBits, ...publicKeyLowBits]
+
+	field[128] commitmentHighBits = unpack128(commitmentHigh)
+	field[128] commitmentLowBits = unpack128(commitmentLow)
+	field[256] commitmentBits = [...commitmentHighBits, ...commitmentLowBits]
+
+
+	field[384] padding640To1024 = shaPad640To1024()
+	field[128] padding384To512 = shaPad384To512()
+
+
+	// Compute commitment = H(H(value|publicKey)|salt):
+  //field[512] preimage512 = [...publicKeyBits, ...publicKeyBits]
+  hash = sha256of512Pad(publicKeyBits, publicKeyBits)
+  field[256] commitmentBitsCheck = hash
+	commitmentBits == commitmentBitsCheck
+
+
+	return 1
