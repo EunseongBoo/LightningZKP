@@ -454,6 +454,8 @@ contract('mintNote', function(accounts) {
     }
   }
 
+
+  /*
   it('Create and LZKP',async function(){
     let preimage = utils.concatenateThenHash(value1, pk1);
     cm1 = utils.zeroMSBs(utils.concatenateThenHash(preimage, salt1));
@@ -580,8 +582,8 @@ contract('mintNote', function(accounts) {
     // Call the verifyString function
     let signedTx = await zkdai.commit_signedTx(msg, sig.v, sig.r, sig.s);
     console.log(signedTx.logs);
-    
-  })
+
+  })*/
 
   /*
   it('Create and pour4', async function() {
@@ -687,8 +689,399 @@ contract('mintNote', function(accounts) {
     //cmIndex4 = pour.logs[1].args.commitment_index.toString();
 
   })*/
+  it('Gas estimation for Mint4 and Burn4 (20 iteration)', async function() {
+
+    let preimage = utils.concatenateThenHash(value1, pk1);
+    cm1 = utils.zeroMSBs(utils.concatenateThenHash(preimage, salt1));
+
+    await dai.approve(zkdai.address, parseInt(value1,16));
+    const mint1 = await zkdai.mint(mint_proof1.a, mint_proof1.b, mint_proof1.c, mint_inputs1, value1, cm1, {value:web3.utils.toBN(SCALING_FACTOR)});
+
+    cmIndex1 = mint1.logs[1].args.commitment_index.toString();
+    merkleIndex1 = mint1.logs[1].args.merkle_index.toString();
+
+    preimage = utils.concatenateThenHash(value2, pk2);
+    cm2 = utils.zeroMSBs(utils.concatenateThenHash(preimage, salt2));
 
 
+    for(let i =0; i<20; i++){
+    //await dai.approve(zkdai.address, web3.utils.toBN(parseInt(50,16) * 10**18));
+      await dai.approve(zkdai.address, parseInt(value1,16));
+      cm_temp = utils.zeroMSBs(utils.concatenateThenHash(cm1, new BN(salt1.slice(2),16).addn(i).toString(16).padStart(64,'0')));
+      const mint1 = await zkdai.mint(mint_proof1.a, mint_proof1.b, mint_proof1.c, mint_inputs1, value1, cm_temp);
+
+    }
+
+    //////////////
+    const root1 = await zkdai.roots(merkleIndex1);
+    //console.log(`Merkle Root: ${root}`);
+
+    nullifier1 = utils.zeroMSBs(utils.concatenateThenHash(salt1, sk1));
+
+    const path1 = await computePath_miniMerkle(
+      cm1,
+      cmIndex1,
+      merkleIndex1,
+    );
+
+    const payTo = "0x06644cDeB4899a5f8f5f655aFffAfB4F0625B304";
+    const publicInputHash = utils.zeroMSBs(utils.concatenateThenHash(root, nullifier1, value1, payTo));
+
+    let publicInputHash_ = utils.hexToFieldPreserve(publicInputHash.toString(16),248,1,1); //1
+    let payTo_ = utils.hexToFieldPreserve(payTo.toString(16),128,2,1); //2
+    const root_ = utils.hexToFieldPreserve(root1.toString(16),128,2,1); //2
+    let nullifier1_ = utils.hexToFieldPreserve(nullifier1.toString(16), 128,2,1); //2
+    let value1_ = utils.hexToFieldPreserve(value1.toString(16),128,1,1); //1
+    let sk1_ = utils.hexToFieldPreserve(sk1.toString(16),128,2,1); //2
+    let salt1_ = utils.hexToFieldPreserve(salt1.toString(16),128,2,1); //2
+    const path1_ =  path1.path.map(el => utils.hexToFieldPreserve(el, MERKLE_HASHLENGTH * 8,1, 1)); //32
+    const positions1_ = utils.hexToFieldPreserve(path1.positions, 128, 1, 1); //1
+
+    let params = [publicInputHash_, payTo_, value1_, sk1_, salt1_, path1_.slice(1), positions1_, nullifier1_, root_];
+
+    for(let i =0; i<20; i++){
+    //await dai.approve(zkdai.address, web3.utils.toBN(parseInt(50,16) * 10**18));
+      const burn = await zkdai.burn_mini(burn4_proof.a, burn4_proof.b, burn4_proof.c, burn4_inputs, merkleIndex1, root1, nullifier1, value1, payTo, {
+        gas: 5000000,
+        gasPrice: 10,
+      });
+    }
+
+
+  })
+  /*it('Create and pour4 (20 iterations)', async function() {
+    let preimage = utils.concatenateThenHash(value1, pk1);
+    cm1 = utils.zeroMSBs(utils.concatenateThenHash(preimage, salt1));
+
+    preimage = utils.concatenateThenHash(value2, pk2);
+    cm2 = utils.zeroMSBs(utils.concatenateThenHash(preimage, salt2));
+
+    //await dai.approve(zkdai.address, web3.utils.toBN(parseInt(50,16) * 10**18));
+    await dai.approve(zkdai.address, parseInt(value1,16));
+
+    //const mint = await zkdai.mint(mint_proof.a, mint_proof.b, mint_proof.c, mint_inputs, value1, cm1, {value:web3.utils.toBN(SCALING_FACTOR)});
+    const mint1 = await zkdai.mint(mint_proof1.a, mint_proof1.b, mint_proof1.c, mint_inputs1, value1, cm1);
+    console.log(mint1.logs);
+    cmIndex1 = mint1.logs[1].args.commitment_index.toString();
+    merkleIndex1 = mint1.logs[1].args.merkle_index.toString();
+
+    await dai.approve(zkdai.address, parseInt(value2,16));
+    const mint2 = await zkdai.mint(mint_proof2.a, mint_proof2.b, mint_proof2.c, mint_inputs2, value2, cm2);
+    console.log(mint2.logs);
+    cmIndex2 = mint2.logs[1].args.commitment_index.toString();
+    merkleIndex2 = mint2.logs[1].args.merkle_index.toString();
+
+    for(let i =0; i<20; i++){
+    //await dai.approve(zkdai.address, web3.utils.toBN(parseInt(50,16) * 10**18));
+      await dai.approve(zkdai.address, parseInt(value1,16));
+      cm_temp = utils.zeroMSBs(utils.concatenateThenHash(cm1, new BN(salt1.slice(2),16).addn(i).toString(16).padStart(64,'0')));
+      const mint1 = await zkdai.mint(mint_proof1.a, mint_proof1.b, mint_proof1.c, mint_inputs1, value1, cm_temp);
+    }
+
+    //===============Pour====================//
+
+    const root = await zkdai.latestRoot();
+    const root1 = await zkdai.roots(merkleIndex1);
+    const root2 = await zkdai.roots(merkleIndex2);
+    //console.log(`Merkle Root: ${root}`);
+
+    nullifier1 = utils.zeroMSBs(utils.concatenateThenHash(salt1, sk1));
+    nullifier2 = utils.zeroMSBs(utils.concatenateThenHash(salt2, sk2));
+
+    preimage = utils.concatenateThenHash(value3, pk3);
+    cm3 = utils.zeroMSBs(utils.concatenateThenHash(preimage, salt3));
+
+    preimage = utils.concatenateThenHash(value4, pk4);
+    cm4 = utils.zeroMSBs(utils.concatenateThenHash(preimage, salt4));
+
+    //console.log("leafIndex1: ", mint1.logs[2].args.leafIndex.toString());
+    //console.log("leafIndex2: ", mint2.logs[2].args.leafIndex.toString());
+    /// it needs to be implemented in smart contract
+
+    const path1 = await computePath_miniMerkle(
+      cm1,
+      cmIndex1,
+      merkleIndex1,
+    );
+
+    const path2 = await computePath_miniMerkle(
+      cm2,
+      cmIndex2,
+      merkleIndex2,
+    );
+
+    console.log('root1', root1);
+    console.log('root1', root1.length);
+    console.log('root1', root1.slice(1));
+    console.log('root1', root1.slice(2));
+    console.log('root1', root1.slice(3));
+    console.log('root1', root1.slice(2,34));
+    console.log('root1', root1.slice(2,34).length);
+    console.log('root1', root1.slice(34,66));
+    console.log('root1', root2.slice(0,2) +root2.slice(34,66));
+
+    const publicInputHash = utils.zeroMSBs(utils.concatenateThenHash(root1.slice(0,34), root2.slice(0,2) +root2.slice(34,66), nullifier1, nullifier2, cm3, cm4));
+
+    let publicInputHash_ = utils.hexToFieldPreserve(publicInputHash.toString(16),248,1,1); //1
+    const root1_ = utils.hexToFieldPreserve(root1.toString(16),128,2,1); //2
+    const root2_ = utils.hexToFieldPreserve(root2.toString(16),128,2,1); //2
+    let cm3_ = utils.hexToFieldPreserve(cm3.toString(16), 128,2,1); //2
+    let cm4_ = utils.hexToFieldPreserve(cm4.toString(16), 128,2,1); //2
+    let nullifier1_ = utils.hexToFieldPreserve(nullifier1.toString(16), 128,2,1); //2
+    let nullifier2_ = utils.hexToFieldPreserve(nullifier2.toString(16), 128,2,1); //2
+    let value1_ = utils.hexToFieldPreserve(value1.toString(16),128,1,1); //1
+    let sk1_ = utils.hexToFieldPreserve(sk1.toString(16),128,2,1); //2
+    let salt1_ = utils.hexToFieldPreserve(salt1.toString(16),128,2,1); //2
+    const path1_ =  path1.path.map(el => utils.hexToFieldPreserve(el, MERKLE_HASHLENGTH * 8,1, 1)); //32
+    const positions1_ = utils.hexToFieldPreserve(path1.positions, 128, 1, 1); //1
+    let value2_ = utils.hexToFieldPreserve(value2.toString(16),128,1,1); //1
+    let sk2_ = utils.hexToFieldPreserve(sk2.toString(16),128,2,1); //2
+    let salt2_ = utils.hexToFieldPreserve(salt2.toString(16),128,2,1); //2
+    const path2_ =  path2.path.map(el => utils.hexToFieldPreserve(el, MERKLE_HASHLENGTH * 8,1, 1)); //32
+    const positions2_ = utils.hexToFieldPreserve(path2.positions, 128, 1, 1); //1
+    let value3_ = utils.hexToFieldPreserve(value3.toString(16),128,1,1); //1
+    let pk3_ = utils.hexToFieldPreserve(pk3.toString(16),128,2,1); //2
+    let salt3_ = utils.hexToFieldPreserve(salt3.toString(16),128,2,1); //2
+    let value4_ = utils.hexToFieldPreserve(value4.toString(16),128,1,1); //1
+    let pk4_ = utils.hexToFieldPreserve(pk4.toString(16),128,2,1); //2
+    let salt4_ = utils.hexToFieldPreserve(salt4.toString(16),128,2,1); //2
+
+    let params = [publicInputHash_, root1_, root2_, cm3_, cm4_, nullifier1_, nullifier2_, value1_, sk1_, salt1_, path1_.slice(1), positions1_, value2_, sk2_, salt2_, path2_.slice(1), positions2_, value3_, pk3_, salt3_, value4_, pk4_, salt4_];
+
+    printZokratesCommand(params);
+
+    for (let i=0; i<20; i++){
+        const pour = await zkdai.pour_miniMerkle(pour4_proof.a, pour4_proof.b, pour4_proof.c, pour4_inputs, merkleIndex1, merkleIndex2, root1, root2, nullifier1, nullifier2, cm3, cm4);
+    }
+
+
+  })*/
+
+  /*it('Gas consumption of Transfer and Burn (20 iterations)', async function() {
+
+    let preimage = utils.concatenateThenHash(value1, pk1);
+    cm1 = utils.zeroMSBs(utils.concatenateThenHash(preimage, salt1));
+
+    preimage = utils.concatenateThenHash(value2, pk2);
+    cm2 = utils.zeroMSBs(utils.concatenateThenHash(preimage, salt2));
+
+    //await dai.approve(zkdai.address, web3.utils.toBN(parseInt(50,16) * 10**18));
+    await dai.approve(zkdai.address, parseInt(value1,16));
+
+    //const mint = await zkdai.mint(mint_proof.a, mint_proof.b, mint_proof.c, mint_inputs, value1, cm1, {value:web3.utils.toBN(SCALING_FACTOR)});
+    const mint1 = await zkdai.mint(mint_proof1.a, mint_proof1.b, mint_proof1.c, mint_inputs1, value1, cm1);
+    //console.log(mint1.logs);
+    cmIndex1 = mint1.logs[1].args.commitment_index.toString();
+
+    await dai.approve(zkdai.address, parseInt(value2,16));
+    const mint2 = await zkdai.mint(mint_proof2.a, mint_proof2.b, mint_proof2.c, mint_inputs2, value2, cm2);
+    //console.log(mint2.logs);
+    cmIndex2 = mint2.logs[1].args.commitment_index.toString();
+
+    for(let i =0; i<20; i++){
+    //await dai.approve(zkdai.address, web3.utils.toBN(parseInt(50,16) * 10**18));
+      await dai.approve(zkdai.address, parseInt(value1,16));
+      cm_temp = utils.zeroMSBs(utils.concatenateThenHash(cm1, new BN(salt1.slice(2),16).addn(i).toString(16).padStart(64,'0')));
+      const mint1 = await zkdai.mint(mint_proof1.a, mint_proof1.b, mint_proof1.c, mint_inputs1, value1, cm_temp);
+    }
+    //===============Pour====================//
+    const root = await zkdai.latestRoot();
+    //console.log(`Merkle Root: ${root}`);
+
+    nullifier1 = utils.zeroMSBs(utils.concatenateThenHash(salt1, sk1));
+    nullifier2 = utils.zeroMSBs(utils.concatenateThenHash(salt2, sk2));
+
+    preimage = utils.concatenateThenHash(value3, pk3);
+    cm3 = utils.zeroMSBs(utils.concatenateThenHash(preimage, salt3));
+
+    preimage = utils.concatenateThenHash(value4, pk4);
+    cm4 = utils.zeroMSBs(utils.concatenateThenHash(preimage, salt4));
+
+    //console.log("leafIndex1: ", mint1.logs[2].args.leafIndex.toString());
+    //console.log("leafIndex2: ", mint2.logs[2].args.leafIndex.toString());
+    /// it needs to be implemented in smart contract
+    const path1 = await computePath(
+      cm1,
+      cmIndex1,
+    );
+
+    const path2 = await computePath(
+      cm2,
+      cmIndex2,
+    );
+
+    checkRoot(cm1, path1, root);
+    checkRoot(cm2, path2, root);
+
+    const publicInputHash = utils.zeroMSBs(utils.concatenateThenHash(root, nullifier1, nullifier2, cm3, cm4));
+
+    let publicInputHash_ = utils.hexToFieldPreserve(publicInputHash.toString(16),248,1,1); //1
+    const root_ = utils.hexToFieldPreserve(root.toString(16),128,2,1); //2
+    let cm3_ = utils.hexToFieldPreserve(cm3.toString(16), 128,2,1); //2
+    let cm4_ = utils.hexToFieldPreserve(cm4.toString(16), 128,2,1); //2
+    let nullifier1_ = utils.hexToFieldPreserve(nullifier1.toString(16), 128,2,1); //2
+    let nullifier2_ = utils.hexToFieldPreserve(nullifier2.toString(16), 128,2,1); //2
+    let value1_ = utils.hexToFieldPreserve(value1.toString(16),128,1,1); //1
+    let sk1_ = utils.hexToFieldPreserve(sk1.toString(16),128,2,1); //2
+    let salt1_ = utils.hexToFieldPreserve(salt1.toString(16),128,2,1); //2
+    const path1_ =  path1.path.map(el => utils.hexToFieldPreserve(el, MERKLE_HASHLENGTH * 8,1, 1)); //32
+    const positions1_ = utils.hexToFieldPreserve(path1.positions, 128, 1, 1); //1
+    let value2_ = utils.hexToFieldPreserve(value2.toString(16),128,1,1); //1
+    let sk2_ = utils.hexToFieldPreserve(sk2.toString(16),128,2,1); //2
+    let salt2_ = utils.hexToFieldPreserve(salt2.toString(16),128,2,1); //2
+    const path2_ =  path2.path.map(el => utils.hexToFieldPreserve(el, MERKLE_HASHLENGTH * 8,1, 1)); //32
+    const positions2_ = utils.hexToFieldPreserve(path2.positions, 128, 1, 1); //1
+    let value3_ = utils.hexToFieldPreserve(value3.toString(16),128,1,1); //1
+    let pk3_ = utils.hexToFieldPreserve(pk3.toString(16),128,2,1); //2
+    let salt3_ = utils.hexToFieldPreserve(salt3.toString(16),128,2,1); //2
+    let value4_ = utils.hexToFieldPreserve(value4.toString(16),128,1,1); //1
+    let pk4_ = utils.hexToFieldPreserve(pk4.toString(16),128,2,1); //2
+    let salt4_ = utils.hexToFieldPreserve(salt4.toString(16),128,2,1); //2
+
+    let params = [publicInputHash_, root_, cm3_, cm4_, nullifier1_, nullifier2_, value1_, sk1_, salt1_, path1_.slice(1), positions1_, value2_, sk2_, salt2_, path2_.slice(1), positions2_, value3_, pk3_, salt3_, value4_, pk4_, salt4_];
+
+    //printZokratesCommand(params);
+    const payTo = "0x06644cDeB4899a5f8f5f655aFffAfB4F0625B304";
+    for (let i=0; i<20; i++){
+        const pour = await zkdai.spend(pour_proof.a, pour_proof.b, pour_proof.c, pour_inputs, root, nullifier1, nullifier2, cm3, cm4);
+        const burn = await zkdai.burn(burn_proof.a, burn_proof.b, burn_proof.c, burn_inputs, root, nullifier1, value1, payTo, {
+          gas: 5000000,
+          gasPrice: 10,
+        });
+    }
+    //const pour = await zkdai.spend(pour_proof.a, pour_proof.b, pour_proof.c, pour_inputs, root, nullifier1, nullifier2, cm3, cm4);
+    //console.log(pour.logs);
+    //cmIndex3 = pour.logs[1].args.commitment_index.toString();
+    //cmIndex4 = pour.logs[1].args.commitment_index.toString();
+
+  })*/
+
+  /*it('Create and LZKP (20 iterations)',async function(){
+    let preimage = utils.concatenateThenHash(value1, pk1);
+    cm1 = utils.zeroMSBs(utils.concatenateThenHash(preimage, salt1));
+
+    preimage = utils.concatenateThenHash(value2, pk2);
+    cm2 = utils.zeroMSBs(utils.concatenateThenHash(preimage, salt2));
+
+    //await dai.approve(zkdai.address, web3.utils.toBN(parseInt(50,16) * 10**18));
+    await dai.approve(zkdai.address, parseInt(value1,16));
+
+    //const mint = await zkdai.mint(mint_proof.a, mint_proof.b, mint_proof.c, mint_inputs, value1, cm1, {value:web3.utils.toBN(SCALING_FACTOR)});
+    const mint1 = await zkdai.mint(mint_proof1.a, mint_proof1.b, mint_proof1.c, mint_inputs1, value1, cm1);
+    console.log(mint1.logs);
+    cmIndex1 = mint1.logs[1].args.commitment_index.toString();
+    merkleIndex1 = mint1.logs[1].args.merkle_index.toString();
+
+    await dai.approve(zkdai.address, parseInt(value2,16));
+    const mint2 = await zkdai.mint(mint_proof2.a, mint_proof2.b, mint_proof2.c, mint_inputs2, value2, cm2);
+    console.log(mint2.logs);
+    cmIndex2 = mint2.logs[1].args.commitment_index.toString();
+    merkleIndex2 = mint2.logs[1].args.merkle_index.toString();
+
+    for(let i =0; i<20; i++){
+    //await dai.approve(zkdai.address, web3.utils.toBN(parseInt(50,16) * 10**18));
+      await dai.approve(zkdai.address, parseInt(value1,16));
+      cm_temp = utils.zeroMSBs(utils.concatenateThenHash(cm1, new BN(salt1.slice(2),16).addn(i).toString(16).padStart(64,'0')));
+      const mint1 = await zkdai.mint(mint_proof1.a, mint_proof1.b, mint_proof1.c, mint_inputs1, value1, cm_temp);
+    }
+
+    //===============Pour====================//
+
+    //const root = await zkdai.latestRoot();
+    const root1 = await zkdai.roots(merkleIndex1);
+    const root2 = await zkdai.roots(merkleIndex2);
+    //console.log(`Merkle Root: ${root}`);
+
+    nullifier1 = utils.zeroMSBs(utils.concatenateThenHash(salt1, sk1));
+    nullifier2 = utils.zeroMSBs(utils.concatenateThenHash(salt2, sk2));
+
+    cm3_seed = utils.concatenateThenHash(dvalue, pk3);
+    cm3 = utils.zeroMSBs(utils.concatenateThenHash(cm3_seed, salt3));
+
+    cm4_seed = utils.concatenateThenHash(dvalue, pk4);
+    cm4 = utils.zeroMSBs(utils.concatenateThenHash(cm4_seed, salt4));
+
+    preimage = utils.concatenateThenHash(value5, pk5);
+    cm5 = utils.zeroMSBs(utils.concatenateThenHash(preimage, salt5));
+
+    //console.log("leafIndex1: ", mint1.logs[2].args.leafIndex.toString());
+    //console.log("leafIndex2: ", mint2.logs[2].args.leafIndex.toString());
+    /// it needs to be implemented in smart contract
+
+    const path1 = await computePath_miniMerkle(
+      cm1,
+      cmIndex1,
+      merkleIndex1,
+    );
+
+    const path2 = await computePath_miniMerkle(
+      cm2,
+      cmIndex2,
+      merkleIndex2,
+    );
+
+    //checkRoot4(cm1, path1, root1);
+    //checkRoot4(cm2, path2, root2);
+
+
+    const publicInputHash = utils.concatenateThenHash(root1, nullifier1, nullifier2, cm5);
+
+    let publicInputHash_ = utils.hexToFieldPreserve(publicInputHash.toString(16),248,1,1); //1
+    const root1_ = utils.hexToFieldPreserve(root1.toString(16),128,2,1); //2
+    const root2_ = utils.hexToFieldPreserve(root2.toString(16),128,2,1); //2
+    let cm3_seed_ = utils.hexToFieldPreserve(cm3_seed.toString(16), 128,2,1); //2
+    let cm4_seed_ = utils.hexToFieldPreserve(cm4_seed.toString(16), 128,2,1); //2
+    let nullifier1_ = utils.hexToFieldPreserve(nullifier1.toString(16), 128,2,1); //2
+    let nullifier2_ = utils.hexToFieldPreserve(nullifier2.toString(16), 128,2,1); //2
+    let value1_ = utils.hexToFieldPreserve(value1.toString(16),128,1,1); //1
+    let sk1_ = utils.hexToFieldPreserve(sk1.toString(16),128,2,1); //2
+    let salt1_ = utils.hexToFieldPreserve(salt1.toString(16),128,2,1); //2
+    const path1_ =  path1.path.map(el => utils.hexToFieldPreserve(el, MERKLE_HASHLENGTH * 8,1, 1)); //32
+    const positions1_ = utils.hexToFieldPreserve(path1.positions, 128, 1, 1); //1
+    let value2_ = utils.hexToFieldPreserve(value2.toString(16),128,1,1); //1
+    let sk2_ = utils.hexToFieldPreserve(sk2.toString(16),128,2,1); //2
+    let salt2_ = utils.hexToFieldPreserve(salt2.toString(16),128,2,1); //2
+    const path2_ =  path2.path.map(el => utils.hexToFieldPreserve(el, MERKLE_HASHLENGTH * 8,1, 1)); //32
+    const positions2_ = utils.hexToFieldPreserve(path2.positions, 128, 1, 1); //1
+    let value3_ = utils.hexToFieldPreserve(value3.toString(16),128,1,1); //1
+    let pk3_ = utils.hexToFieldPreserve(pk3.toString(16),128,2,1); //2
+    let salt3_ = utils.hexToFieldPreserve(salt3.toString(16),128,2,1); //2
+    let value4_ = utils.hexToFieldPreserve(value4.toString(16),128,1,1); //1
+    let pk4_ = utils.hexToFieldPreserve(pk4.toString(16),128,2,1); //2
+    let salt4_ = utils.hexToFieldPreserve(salt4.toString(16),128,2,1); //2
+
+    let mpk_address_ = utils.hexToFieldPreserve(mpk_address.toString(16),128,2,1);
+    let depositNum_ = utils.hexToFieldPreserve(depositNum.toString(16),128,1,1);
+    let dvalue_ = utils.hexToFieldPreserve(dvalue.toString(16),128,1,1);
+
+    let value5_ = utils.hexToFieldPreserve(value5.toString(16),128,1,1); //1
+    let pk5_ = utils.hexToFieldPreserve(pk5.toString(16),128,2,1); //2
+    let salt5_ = utils.hexToFieldPreserve(salt5.toString(16),128,2,1); //2
+    let cm5_ = utils.hexToFieldPreserve(cm5.toString(16), 128,2,1);;
+
+    let params = [publicInputHash_, root1_, root2_, cm3_seed_, cm4_seed_, cm5_, mpk_address_, depositNum_, dvalue_, nullifier1_, nullifier2_, salt3_, salt4_, value1_, sk1_, salt1_, path1_.slice(1), positions1_, value2_, sk2_, salt2_, path2_.slice(1), positions2_, pk3_, pk4_, value5_, pk5_, salt5_];
+
+    //printZokratesCommand(params);
+    //const pour = await zkdai.lzkp(lzkp_proof.a, lzkp_proof.b, lzkp_proof.c, lzkp_inputs, merkleIndex1, merkleIndex2, root1, root2, nullifier1, nullifier2, cm3_seed, cm4_seed, cm5, mpk, depositNum, dvalue, salt3, salt4);
+
+    let num = 90;
+    for (let i=0; i<20; i++){
+      //const lzkp = await zkdai.lzkp(lzkp_proof.a, lzkp_proof.b, lzkp_proof.c, lzkp_inputs, merkleIndex1, merkleIndex2, root1, root2, nullifier1, nullifier2, cm5, mpk_address, new BN(depositNum.slice(2),16).addn(0).toString(16).padStart(32,'0'));
+      const lzkp = await zkdai.lzkp(lzkp_proof.a, lzkp_proof.b, lzkp_proof.c, lzkp_inputs, merkleIndex1, merkleIndex2, root1, root2, nullifier1, nullifier2, cm5, mpk_address, num);
+      //console.log(lzkp.logs);
+      let poolId = lzkp.logs[2].args.poolId;
+      var msg = poolId+num;
+      let flatSig = await wallet_mpk.signMessage(msg);
+      // For Solidity, we need the expanded-format of a signature
+      let sig = ethers.utils.splitSignature(flatSig);
+      // Call the verifyString function
+      let signedTx = await zkdai.commit_signedTx(msg, sig.v, sig.r, sig.s);
+      console.log(signedTx.logs);
+    }
+
+  })*/
+
+  /*
   it('Create and burn_4 a note', async function() {
 
     let preimage = utils.concatenateThenHash(value1, pk1);
@@ -752,7 +1145,7 @@ contract('mintNote', function(accounts) {
     //cmIndex3 = pour.logs[1].args.commitment_index.toString();
     //cmIndex4 = pour.logs[1].args.commitment_index.toString();
 
-  })
+  })*/
 
   /*
   it('Create and burn a note', async function() {
@@ -913,7 +1306,6 @@ contract('mintNote', function(accounts) {
 
   /*
   it('Create and Pour', async function() {
-
     let preimage = utils.concatenateThenHash(value1, pk1);
     cm1 = utils.zeroMSBs(utils.concatenateThenHash(preimage, salt1));
 

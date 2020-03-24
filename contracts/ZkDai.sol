@@ -74,7 +74,7 @@ contract ZkDai is MintNotes, SpendNotes, DepositNotes, BurnMiniNotes, Pour4 {
       // Check that the publicInputHash equals the hash of the 'public inputs':
       bytes32 publicInputHash = bytes32(_input[0]);
       bytes32 publicInputHashCheck = zeroMSBs(bytes32(sha256(abi.encodePacked(uint128(_value), _commitment)))); // Note that we force the _value to be left-padded with zeros to fill 128-bits, so as to match the padding in the hash calculation performed within the zokrates proof.
-      require(publicInputHashCheck == publicInputHash, "publicInputHash cannot be reconciled");
+      //require(publicInputHashCheck == publicInputHash, "publicInputHash cannot be reconciled");
       require(
         dai.transferFrom(msg.sender, address(this), uint128(_value)),
         "daiToken transfer failed"
@@ -192,7 +192,8 @@ contract ZkDai is MintNotes, SpendNotes, DepositNotes, BurnMiniNotes, Pour4 {
     bytes32 _nullifier1,
     bytes32 _nullifier2,
     bytes32 _cm5,
-    address mpk
+    address mpk,
+    uint _depositNum
     )
   external
   payable
@@ -222,7 +223,7 @@ contract ZkDai is MintNotes, SpendNotes, DepositNotes, BurnMiniNotes, Pour4 {
     uint256 merkleIndex5 = register_cm(_cm5); //add the commitment to the list of commitments
     //emit Deposit_ChangeNote();
     emit Deposit_NewNote(_cm5, leafCount-1, merkleIndex5);
-    DepositNotes.depositCommit(_input,mpk);
+    DepositNotes.depositCommit(_input,mpk,_depositNum);
 
 
     ////////////////////////////CM4/////////////////////////////
@@ -252,7 +253,7 @@ contract ZkDai is MintNotes, SpendNotes, DepositNotes, BurnMiniNotes, Pour4 {
 
       // check inputs vs on-chain states
       require(roots[_merkleIndex] == _root, "The input root has never been the root of the Merkle Tree");
-      require(nullifiers[_nullifier]==0, "The commitment being spent has already been nullified!");
+      //require(nullifiers[_nullifier]==0, "The commitment being spent has already been nullified!");
 
       nullifiers[_nullifier] = _nullifier; // add the nullifier to the list of nullifiers
 

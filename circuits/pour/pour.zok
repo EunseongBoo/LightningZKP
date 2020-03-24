@@ -295,7 +295,7 @@ def main(field publicInputHash, field[2] root, field[2] cm3, field[2] cm4, field
   preimage512 = [...hash, ...salt3Bits]
   hash = sha256of512Pad(preimage512[0..256], preimage512[256..512])
   field[256] commitment3BitsCheck = zeroMSBs(hash) // commitment3
-
+	
   // And commitment4
   preimage384 = [...value4Bits, ...publicKey4Bits]
   preimage512 = shaPad384To512(preimage384)

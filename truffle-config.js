@@ -85,7 +85,7 @@ module.exports = {
     reporterOptions : {
       currency: "USD",
       showTimeSpent: true,
-      //outputFile: "./result/gas_reporter/gas_result_depositNote10_10",
+      outputFile: "./result/gas_reporter/gas_lzkp",
      } // See options below
   },
 
@@ -97,7 +97,7 @@ module.exports = {
       // settings: {          // See the solidity docs for advice about optimization and evmVersion
       optimizer: {
           enabled: true,
-         runs: 200
+         runs: 100
       },
       //  evmVersion: "byzantium"
       // }

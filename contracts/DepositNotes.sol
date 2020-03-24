@@ -16,7 +16,7 @@ contract DepositNotes is DepositNoteVerifier, ZkDaiBase, DepositBase, SignVerifi
     return (value<<shift)>>shift;
   }
 
-  function depositCommit(uint256[23] memory input, address mpkAddress)
+  function depositCommit(uint256[23] memory input, address mpkAddress, uint depositNum)
     internal
   {
 
@@ -24,7 +24,7 @@ contract DepositNotes is DepositNoteVerifier, ZkDaiBase, DepositBase, SignVerifi
       bytes32 rhSeed = concat(input[7], input[8]);
       require(shSeed != rhSeed, "The new commitments (shSeed and rhSeed) must be different!");
 
-      uint depositNum = input[13]; //depositNum
+      //uint depositNum = input[13]; //depositNum
 
       uint sNonce = uint(concat(input[18], input[19]));
       uint rNonce = uint(concat(input[20], input[21]));
